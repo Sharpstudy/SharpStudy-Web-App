@@ -16,8 +16,8 @@ const nextConfig = {
 		JWT_SECRET: "asdfghjklnbvcxzqwertyuiopmkioprewqasderfgnujm",
 		AWS_SES_USER: "...",
 		AWS_SES_PASSWORD: ".....",
-		CLOUD_NAME: "cloudname",
-		UPLOAD_PRESETS: "presets",
+		CLOUD_NAME: "dvoomq0ii",
+		UPLOAD_PRESETS: "zhphafwx",
 		CLOUDINARY_URL:
 			"https://api.cloudinary.com/v1_1/dvoomq0ii/image/upload",
 		CLOUDINARY_VIDEO_URL:
