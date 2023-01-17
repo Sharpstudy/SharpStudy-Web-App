@@ -42,7 +42,7 @@ const index = ({ courses, categories, user }) => {
 				</div>
 			</div>
 
-			<div className="feature-dcourses-area bg-color-f6fafb pt-100 pb-70">
+			{/* <div className="feature-dcourses-area bg-color-f6fafb pt-100 pb-70">
 				<div className="container">
 					<div className="title-btn d-flex justify-content-between align-items-center">
 						<motion.div
@@ -66,9 +66,9 @@ const index = ({ courses, categories, user }) => {
 					className="courses-shape"
 					alt="Image"
 				/>
-			</div>
+			</div> */}
 
-			<div className="feature-dcourses-area bg-color-f6fafb pb-70">
+			{/* <div className="feature-dcourses-area bg-color-f6fafb pb-70">
 				<div className="container">
 					<div className="title-btn d-flex justify-content-between align-items-center wow animate__animated animate__fadeInUp delay-0-2s">
 						<motion.div
@@ -88,7 +88,7 @@ const index = ({ courses, categories, user }) => {
 					</div>
 					<CoursesList courses={courses} user={user} />
 				</div>
-			</div>
+			</div> */}
 
 			<Categories categories={categories} />
 			<Transform />
