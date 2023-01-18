@@ -1,5 +1,5 @@
 $body-color: #646464;
-$main-color: #098b99;
+$main-color: #286bad;
 $heading-color: #0d0c0c;
 $optional-color: #fec400;
 $white-color: #ffffff;
@@ -380,7 +380,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             padding-left: 0;
         }
     }
-    
+
     /* Page Banner BG Style */
     .pages-banner-content {
         h2 {
@@ -394,7 +394,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             }
         }
     }
-    
+
     /* Search Result Style */
     .search-result {
         text-align: center;
@@ -571,7 +571,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
                 }
             }
         }
-        
+
     }
     .instructor-details-content {
         max-width: 100%;
@@ -697,7 +697,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             }
         }
     }
-  
+
     /* Testimonials Style */
     .testimonials-slide-list-two {
         .testimonial-info {
@@ -735,7 +735,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             line-height: 36px;
         }
     }
-    
+
     /* Sidebar Style */
     .sidebar-wrap {
         margin-bottom: 30px;
@@ -910,8 +910,8 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             order: 0;
         }
     }
-    
-    
+
+
 
 }
 
@@ -1439,7 +1439,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
     }
-      
+
     /* Cart Style */
     .cart-total {
         padding: 20px;
@@ -1519,14 +1519,14 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             }
         }
     }
-    
+
     /* Error Style */
     .error-content {
         h3 {
             font-size: 25px;
         }
     }
-    
+
     /* Coming Soon Style */
     .coming-soon-content {
         padding: 40px;
@@ -1659,7 +1659,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
             font-size: 15px;
         }
     }
-    
+
 
     /* Banner Area */
     .banner-area {
@@ -2010,7 +2010,7 @@ $box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.05);
 
 /* Mobile and iPad Navbar */
 @media only screen and (max-width: 991px) {
-    
+
     .navbar-area {
         border-bottom: 1px solid #efefef;
         z-index: 2;

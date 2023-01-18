@@ -16,16 +16,16 @@ const nextConfig = {
 		JWT_SECRET: "asdfghjklnbvcxzqwertyuiopmkioprewqasderfgnujm",
 		AWS_SES_USER: "...",
 		AWS_SES_PASSWORD: ".....",
-		CLOUD_NAME: "cloudname",
-		UPLOAD_PRESETS: "presets",
+		CLOUD_NAME: "dvoomq0ii",
+		UPLOAD_PRESETS: "zhphafwx",
 		CLOUDINARY_URL:
-			"https://api.cloudinary.com/v1_1/cloudname/image/upload",
+			"https://api.cloudinary.com/v1_1/dvoomq0ii/image/upload",
 		CLOUDINARY_VIDEO_URL:
-			"https://api.cloudinary.com/v1_1/cloudname/video/upload",
+			"https://api.cloudinary.com/v1_1/dvoomq0ii/video/upload",
 		CLOUDINARY_ZIP_URL:
-			"https://api.cloudinary.com/v1_1/cloudname/raw/upload",
-		STRIPE_SECRET_KEY: "sk_test_....",
-		STRIPE_PUBLISHABLE_KEY: "pk_test_.....",
+			"https://api.cloudinary.com/v1_1/dvoomq0ii/raw/upload",
+		STRIPE_SECRET_KEY: "sk_test_51MR86LFhxR0VYolQfG7Gl91HS5uQHaNkmiQI8WVr8uHT3HEor3qJaIsnW65Q5FxSeiLPB0BOmFPA2vSgv2Uj1KTm006oH9ZxHD",
+		STRIPE_PUBLISHABLE_KEY: "pk_test_51MR86LFhxR0VYolQvZbXEvfZ0IWno5uFXYYVmvyE2olwhYK2hMDt6os2j3SYl5Ht4WUuTcOogQsNFjnGPNl1kSoA00tCgbSpT1",
 	},
 };
 

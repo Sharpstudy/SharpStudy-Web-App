@@ -43,7 +43,7 @@ const Banner = () => {
 							<motion.img
 								initial={{ scale: 0 }}
 								animate={{ scale: 1 }}
-								src="/images/banner/banner-img-1.png"
+								src="https://udemo-html.netlify.app/assets/images/banner/banner_img_4.png"
 								alt="banner"
 							/>
 						</div>
@@ -66,9 +66,9 @@ const Banner = () => {
 								animate="visible"
 								variants={pVariants}
 							>
-								We have <span>40k+</span> Online courses &{" "}
+							Limitless learning <span>40k+</span> Online courses &{" "}
 								<span>500K+</span> Online registered student.
-								Find your desired Courses from them.
+								Study whenever you like.
 							</motion.p>
 
 							<SearchForm

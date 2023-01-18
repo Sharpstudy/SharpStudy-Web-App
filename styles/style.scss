@@ -6,7 +6,7 @@ is the file you need to edit to change the look of the template.
 
 This files table contents are outlined below>>>>>
 
-******************************************* 
+*******************************************
 ** - DEFAULT AREA STYLE - **
 
 ** - Default Btn Area Style
@@ -44,11 +44,11 @@ Default Style
 $body-font-family: 'Josefin Sans', sans-serif;
 
 $body-color: #646464;
-$main-color: #098b99;
+$main-color: #286bad;
 $heading-color: #0d0c0c;
 $optional-color: #fec400;
 $white-color: #ffffff;
-$black-color: #000000; 
+$black-color: #000000;
 $font-size: 16px;
 $transition: all ease .5s;
 $border-radius: 5px;
@@ -72,7 +72,7 @@ a {
 	}
 }
 button {
-    outline: 0 !important; 
+    outline: 0 !important;
 	box-shadow: none;
 	border: none;
 	padding: 0;
@@ -101,7 +101,7 @@ p {
 	&:last-child {
         margin-bottom: 0;
     }
-} 
+}
 img {
     max-width: 100%;
     height: auto;
@@ -132,7 +132,7 @@ img {
         box-shadow: unset;
     }
 }
-textarea {   
+textarea {
     &.form-control {
         height: auto;
     }
@@ -180,7 +180,7 @@ textarea {
 /*
 Bg-color Style*/
 .bg-color-0f6c76 {
-	background-color: #0f6c76
+	background-color: #286bad
 }
 .bg-color-f6fafb {
 	background-color: #f6fafb;
@@ -204,7 +204,7 @@ Default Btn Area Style*/
 	overflow: hidden;
 	display: inline-flex;
 	padding: 16px 40px 12px;
-	background: linear-gradient(133.65deg, #6cc17e 2.24%, #098b99 100%);
+	background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 	border-radius: 3px;
 	border-radius: $border-radius;
 	font-weight: 600;
@@ -215,7 +215,7 @@ Default Btn Area Style*/
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(315deg, #098b99 0%, #057fa8 100%);
+		background: linear-gradient(315deg, #286bad 0%, #057fa8 100%);
 		opacity: 0;
 		transition: $transition;
 		z-index: -1;
@@ -275,7 +275,7 @@ Section Title Area Style*/
 		margin-bottom: 10px;
 		font-weight: 600;
 		text-transform: capitalize;
-		background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+		background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
@@ -283,7 +283,7 @@ Section Title Area Style*/
 	}
 	h2 {
 		font-size: 40px;
-		margin-bottom: 15px; 
+		margin-bottom: 15px;
 		letter-spacing: -1px;
 		line-height: 60px;
 		span {
@@ -449,7 +449,7 @@ Navbar Area Style
 			display: none;
 		}
 	}
-} 
+}
 .desktop-nav {
 	position: relative;
 	z-index: 2;
@@ -637,7 +637,7 @@ Navbar Area Style
                                             li {
                                                 a {
                                                     color: $black-color;
-                                                    
+
                                                     &:hover, &:focus, &.active {
                                                         color: $main-color;
                                                     }
@@ -651,7 +651,7 @@ Navbar Area Style
                                                     li {
                                                         a {
                                                             color: $black-color;
-                                                            
+
                                                             &:hover, &:focus, &.active {
                                                                 color: $main-color;
                                                             }
@@ -665,7 +665,7 @@ Navbar Area Style
                                                             li {
                                                                 a {
                                                                     color: $black-color;
-                                                                    
+
                                                                     &:hover, &:focus, &.active {
 																		color: $main-color;
                                                                     }
@@ -829,7 +829,7 @@ Navbar Area Style
 							width: 17px;
 							height: 17px;
 							line-height: 18px;
-							background: linear-gradient(133.65deg, #6CC17E 2.24%, #098B99 100%);
+							background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 							color: $white-color;
 							text-align: center;
 							border-radius: 50%;
@@ -924,7 +924,7 @@ Navbar Area Style
 			color: $white-color;
 			background-color: #2e2e2e;
 			transition: $transition;
-	
+
 			&:before {
 				left: 0;
 				top: 50%;
@@ -940,7 +940,7 @@ Navbar Area Style
 			}
 			&.round {
 				border-radius: 50%;
-	
+
 				&:before {
 					border-radius: 50%;
 				}
@@ -956,7 +956,7 @@ Navbar Area Style
 	}
 }
 
-// Navbar toggler 
+// Navbar toggler
 .navbar-toggler {
     border: none;
     background: #eee !important;
@@ -992,7 +992,7 @@ Navbar Area Style
     }
     &.collapsed {
         .top-bar {
-            transform: rotate(0);      
+            transform: rotate(0);
             left: 0;
         }
         .middle-bar {
@@ -1197,7 +1197,7 @@ Banner Area Style
 			line-height: 56px;
 			color: #111111;
 			&::before {
-				background: linear-gradient(312.38deg, #6CC17E 2.65%, #098B99 98.23%);
+				background: linear-gradient(312.38deg, #286bad 2.65%, #286bad 98.23%);
 			}
 			padding: {
 				top: 0;
@@ -1376,7 +1376,7 @@ Courses Area Style
 		h4 {
 			font-size: 25px;
 			letter-spacing: -1px;
-			background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+			background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
 			background-clip: text;
@@ -1404,7 +1404,7 @@ Courses Area Style
 		}
 	}
 	.courses-hover-content {
-		background: linear-gradient(134.32deg, #6CC17E -19.8%, #098B99 100%);
+		background: linear-gradient(134.32deg, #286bad -19.8%, #286bad 100%);
 		border-radius: $border-radius;
 		position: absolute;
 		top: 0;
@@ -1476,7 +1476,7 @@ Courses Area Style
 				}
 				&.wish {
 					padding: 3px 11px;
-					background-image: linear-gradient(#0f6c76, #0f6c76);
+					background-image: linear-gradient(#286bad, #286bad);
 					i {
 						margin-left: 0;
 						color: $white-color;
@@ -1541,7 +1541,7 @@ Courses Area Style
 					right: 0;
 					width: 0;
 					height: 100%;
-					background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+					background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 					border-radius: 50%;
 					z-index: -1;
 					transition: $transition;
@@ -1602,7 +1602,7 @@ Courses Area Style
 					right: 0;
 					width: 0;
 					height: 100%;
-					background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+					background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 					border-radius: 50%;
 					z-index: -1;
 					transition: $transition;
@@ -1696,7 +1696,7 @@ Categorie Area Style
 		width: 0;
 		height: 100%;
 		z-index: -1;
-		background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+		background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 		border-radius: $border-radius;
 		transition: $transition;
 	}
@@ -1831,7 +1831,7 @@ Transform Area Style
 				}
 			}
 		}
-	}	
+	}
 	&:hover {
 		h3 {
 			a {
@@ -1858,7 +1858,7 @@ Transform Area Style
 		z-index: -1;
 		margin: auto;
 	}
-	
+
 }
 
 /*
@@ -1904,7 +1904,7 @@ Features Area Style
 			height: 60px;
 			line-height: 60px;
 			text-align: center;
-			background: linear-gradient(315deg, #098B99 0%, #057FA8 100%);
+			background: linear-gradient(315deg, #286bad 0%, #057FA8 100%);
 			box-shadow: 0px 2px 20px rgba(0, 113, 220, 0.1);
 			color: $white-color;
 			font-size: 25px;
@@ -1918,7 +1918,7 @@ Features Area Style
 			transition: $transition;
 		}
 	}
-	
+
 	&:hover {
 		transform: translateY(-5px);
 		.features-link {
@@ -2190,7 +2190,7 @@ Blog Area Style
 ======================================================*/
 .blog-post-area {
 	.single-blog {
-		.blog-content { 
+		.blog-content {
 			h3 {
 				font-size: 20px;
 				font-weight: 600;
@@ -2412,7 +2412,7 @@ Footer Area Style
 Pages Banner Area Style
 ======================================================*/
 .pages-banner-area {
-	background: linear-gradient(96.41deg, #6CC17E 10.61%, #098B99 70.66%);
+	background: linear-gradient(96.41deg, #286bad 10.61%, #286bad 70.66%);
 	position: relative;
 	z-index: 1;
 	overflow: hidden;
@@ -2634,7 +2634,7 @@ Sidebar Widget Area Style
 						background-image: url(/images/blog/blog-4.jpg);
 					}
 				}
-				
+
 			}
 			.info {
 				.title {
@@ -2807,7 +2807,7 @@ Instructor Details Area Style
 				height: 40px;
 				line-height: 40px;
 				text-align: center;
-				background: linear-gradient(133.65deg, #6CC17E 2.24%, #098B99 100%);
+				background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 				color: $white-color;
 				display: inline-block;
 				border-radius: 50px;
@@ -2968,7 +2968,7 @@ Cart Area Style
 	&:hover {
 		.single-cart-content {
 			.single-cart-contents {
-				h3 { 
+				h3 {
 					a {
 						color: $main-color;
 					}
@@ -3061,7 +3061,7 @@ Register Area Style
 			font-size: 18px;
 			border-radius: 50px;
 			&.active{
-				background: linear-gradient(133.65deg, #6CC17E 2.24%, #098B99 100%);
+				background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 				color: $white-color;
 			}
 		}
@@ -3106,9 +3106,9 @@ Contact Info Area Style
 	}
 }
 
-/* 
+/*
 Main Contact Area Style
-=====================================================*/ 
+=====================================================*/
 .contact-area {
 	position: relative;
 	z-index: 1;
@@ -3266,7 +3266,7 @@ FAQ Area CSS
 			font-weight: 600;
 			font-size: 18px;
 			&.active{
-				background: linear-gradient(133.65deg, #6CC17E 2.24%, #098B99 100%);
+				background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 				color: $white-color;
 			}
 		}
@@ -3459,7 +3459,7 @@ Blog Details Area CSS
 				height: 30px;
 				line-height: 30px;
 				text-align: center;
-				background: linear-gradient(133.65deg, #6CC17E 2.24%, #098B99 100%);
+				background: linear-gradient(133.65deg, #286bad 2.24%, #286bad 100%);
 				color: $white-color;
 				border-radius: 50px;
 				transition: $transition;
@@ -3571,7 +3571,7 @@ Blog Details Area CSS
 	}
 }
 
-/* 
+/*
 Checkout Area Style
 =====================================================*/
 .checkout-wrap {
@@ -3737,9 +3737,9 @@ Checkout Area Style
 	}
 }
 
-/* 
+/*
 Main Content Text Style
-=====================================================*/ 
+=====================================================*/
 .main-content-text {
 	h1, h2, h3, h4, h5, h6 {
 		margin-bottom: 15px;
@@ -4449,7 +4449,7 @@ Course Details Area Style
 				}
 			}
 		}
-		
+
 	}
 }
 
@@ -4556,7 +4556,7 @@ Course Details Area Style
 
             background-color: $white-color;
         }
-         
+
     }
 }
 
@@ -4822,19 +4822,19 @@ Preloader Area Style*/
 	}
 }
 @keyframes opacity-nine {
-    0%   { 
-        opacity: 1; 
+    0%   {
+        opacity: 1;
     }
-    95%  { 
-        opacity: 0.2; 
+    95%  {
+        opacity: 0.2;
     }
-    100% { 
-        opacity: 0.2; 
+    100% {
+        opacity: 0.2;
     }
 }
 
 /*
-Go Top Style*/ 
+Go Top Style*/
 .go-top {
 	position: fixed;
 	cursor: pointer;
@@ -4924,7 +4924,7 @@ Go Top Style*/
 		right: 3%;
 		top: 87%;
 		transform: scale(1);
-	} 
+	}
 }
 
 /*
@@ -5095,7 +5095,7 @@ Video wave Style*/
 }
 
 /*
-Go Top Style*/ 
+Go Top Style*/
 .go-top {
 	position: fixed;
 	cursor: pointer;
@@ -5185,7 +5185,7 @@ Go Top Style*/
 		right: 3%;
 		top: 84%;
 		transform: scale(1);
-	} 
+	}
 }
 
 /*
@@ -5329,7 +5329,7 @@ Animation Area Style*/
     .courses-content {
         border-radius: 0 0 5px 5px;
         padding: 30px;
- 
+
         h3 {
             margin-bottom: 12px;
             line-height: 1.5;
@@ -5656,7 +5656,7 @@ Checkout Area CSS
 }
 
 @media only screen and (max-width: 767px) {
-    .modal {    
+    .modal {
         .modal-dialog {
             max-width: 100%;
         }
@@ -5744,7 +5744,7 @@ Checkout Area CSS
     border-radius: 50%;
     position: relative;
     top: 4px;
-    
+
     &::after, &::before {
         content: '';
         display: block;
