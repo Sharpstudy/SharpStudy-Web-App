@@ -1,6 +1,6 @@
 const baseUrl =
 	process.env.NODE_ENV === "production"
-		? "https://edmy-react.hibootstrap.com"
+		? "https://sharp-study-web-dwiseryrt-sharpstudy.vercel.app"
 		: "http://localhost:3000";
 
 export default baseUrl;
