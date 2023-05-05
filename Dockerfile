@@ -22,6 +22,7 @@ RUN yarn build
 # COPY email-templates ./email-templates
 # COPY styles ./styles
 # COPY utils ./utils
+EXPOSE 3000
 CMD ["yarn", "start"]
 
 # # FROM node:14.17.0-alpine3.13
