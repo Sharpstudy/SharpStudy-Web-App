@@ -47,7 +47,7 @@ const auth = () => {
 										animate={{ scale: 0.9, x: 0 }}
 										exit={{ scale: 1 }}
 									>
-										Sign in to Edmy
+										Sign in to Sharpstudy
 									</motion.h2>
 								)}
 

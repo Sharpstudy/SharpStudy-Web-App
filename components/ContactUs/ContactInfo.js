@@ -41,13 +41,13 @@ const ContactInfo = () => {
 								<h3>mail Us</h3>
 								<ul>
 									<li>
-										<a href="mailto:hello@edmy.com">
-											hello@edmy.com
+										<a href="mailto:mike@evolvelab.co">
+											mike@evolvelab.co
 										</a>
 									</li>
 									<li>
-										<a href="mailto:info@edmy.com">
-											info@edmy.com
+										<a href="mailto:hello@sharpstudy.io">
+										hello@sharpstudy.io
 										</a>
 									</li>
 								</ul>
@@ -65,8 +65,7 @@ const ContactInfo = () => {
 							<div>
 								<h3>Visit Us</h3>
 								<p>
-									Cecilia Chapman, 711-2880 Nulla St.
-									Mississippi 96522
+									151 West Hasting St, Vancouver , B.C. V3C 4L8, Canada
 								</p>
 							</div>
 						</div>

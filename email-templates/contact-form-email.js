@@ -11,7 +11,7 @@ export const contactFormEmail = async (
 	// console.log(user.email)
 	const data = {
 		to: "shabbir@hibootstrap.com",
-		from: "Edmy Online Courses <hello@hibootstrap.com>",
+		from: "sharpstudy Online Courses <hello@sharpstudy.io>",
 		subject: "Contact Message",
 		html: `
         <!DOCTYPE html>
@@ -321,8 +321,8 @@ export const contactFormEmail = async (
                                     
                                     <p>
                                         Regards, <br />
-                                        Edmy Support Team <br />
-                                        All Rights Reserved by Edmy.com
+                                        sharpstudy Support Team <br />
+                                        All Rights Reserved by sharpstudy.io
                                     </p>
                                 </div>
                             </td>
@@ -341,7 +341,7 @@ export const contactFormEmail = async (
                             <tr>
                               <td style="text-align: center; padding-right: 0;">
                               <p style="text-align: center; margin-bottom: 0; margin-top: 5px">
-                                  <a href="http://Edmy.com/" target="_blank" style="color: #3056de">www.Edmy.com</a>
+                                  <a href="http://sharpstudy.io/" target="_blank" style="color: #3056de">www.sharpstudy.io</a>
                               </p>
                               </td>
                             </tr>
@@ -353,7 +353,7 @@ export const contactFormEmail = async (
                 </tr>
                 <tr>
                   <td class="bg_light" style="text-align: center;">
-                    <p>&copy;2022 Edmy Support</p>
+                    <p>&copy;2022 Sharpstudy Support</p>
                   </td>
                 </tr>
               </table>

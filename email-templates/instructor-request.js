@@ -11,7 +11,7 @@ export const instructorRequest = async (
 	// console.log(user.email)
 	const data = {
 		to: admin_email,
-		from: "Edmy Online Courses <hello@hibootstrap.com>",
+		from: "sharpstudy Online Courses <hello@sharpstudy.io>",
 		subject: "New Instructor Request",
 		html: `
         <!DOCTYPE html>
@@ -322,8 +322,8 @@ export const instructorRequest = async (
 
                                     <p>
                                         Regards, <br />
-                                        Edmy Support Team <br />
-                                        All Rights Reserved by Edmy.com
+                                        Sharpstudy Support Team <br />
+                                        All Rights Reserved by sharpstudy.com
                                     </p>
                                 </div>
                             </td>
@@ -342,7 +342,7 @@ export const instructorRequest = async (
                             <tr>
                               <td style="text-align: center; padding-right: 0;">
                               <p style="text-align: center; margin-bottom: 0; margin-top: 5px">
-                                  <a href="http://Edmy.com/" target="_blank" style="color: #3056de">www.Edmy.com</a>
+                                  <a href="http://sharpstudy.io/" target="_blank" style="color: #3056de">www.sharpstudy.com</a>
                               </p>
                               </td>
                             </tr>
@@ -354,7 +354,7 @@ export const instructorRequest = async (
                 </tr>
                 <tr>
                   <td class="bg_light" style="text-align: center;">
-                    <p>&copy;2022 Edmy Support</p>
+                    <p>&copy;2022 Sharpstudy Support</p>
                   </td>
                 </tr>
               </table>

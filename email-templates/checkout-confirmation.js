@@ -5,7 +5,7 @@ export const checkoutConfirmation = async (cartItems, name, email) => {
 	// console.log(user.email)
 	const data = {
 		to: email,
-		from: "Edmy Online Courses <hello@hibootstrap.com>",
+		from: "Sharpstudy learning <hello@sharpstudy.io>",
 		subject: "Checkout Confirmation",
 		html: `
         <!DOCTYPE html>

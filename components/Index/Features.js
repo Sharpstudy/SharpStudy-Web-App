@@ -19,7 +19,7 @@ const Features = () => {
 							<h3>Expert-Led Video Courses</h3>
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy through video.
+								of students on Sharpstudy through video.
 							</p>
 						</div>
 					</div>
@@ -33,7 +33,7 @@ const Features = () => {
 							<h3>In-Demand Trendy Topics</h3>
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy through video.
+								of students on Sharpstudy through video.
 							</p>
 						</div>
 					</div>
@@ -47,7 +47,7 @@ const Features = () => {
 							<h3>Segment Your Learning</h3>
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy through video.
+								of students on Sharpstudy through video.
 							</p>
 						</div>
 					</div>
@@ -62,7 +62,7 @@ const Features = () => {
 
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy through video.
+								of students on Sharpstudy through video.
 							</p>
 						</div>
 					</div>

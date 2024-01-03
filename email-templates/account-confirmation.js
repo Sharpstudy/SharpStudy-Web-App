@@ -5,7 +5,7 @@ export const confirmEmailAddress = async (user) => {
 	// console.log(user.email)
 	const data = {
 		to: user.email,
-		from: "Edmy Online Courses <hello@hibootstrap.com>",
+		from: "Sharpstudy Online Courses <hello@sharpstudy.io>",
 		subject: "Confirm Your Email Address",
 		html: `
         <!DOCTYPE html>
@@ -308,13 +308,13 @@ export const confirmEmailAddress = async (user) => {
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: left;">
                                     <h4>Dear ${user.first_name},</h4>
-                                    <p>Thanks for registering on the Edmy! Please click the below link to verify your email address and activate your account.</p>
+                                    <p>Thanks for registering on the sharpstudy! Please click the below link to verify your email address and activate your account.</p>
                                     <p><a href="${baseUrl}/confirm-email?token=${user.reset_password_token}&email=${user.email}" style="text-decoration: underline;">Confirm My Email Address</a></p>
 
                                     <p>
                                         Regards, <br />
-                                        Edmy Support Team <br />
-                                        All Rights Reserved by Edmy.com
+                                        sharpstudy Support Team <br />
+                                        All Rights Reserved by sharpstudy.io
                                     </p>
                                 </div>
                             </td>
@@ -333,7 +333,7 @@ export const confirmEmailAddress = async (user) => {
                             <tr>
                               <td style="text-align: center; padding-right: 0;">
                               <p style="text-align: center; margin-bottom: 0; margin-top: 5px">
-                                  <a href="http://edmy.com/" target="_blank" style="color: #3056de">www.edmy.com</a>
+                                  <a href="http://sharpstudy.io/" target="_blank" style="color: #3056de">www.sharpstudy.io</a>
                               </p>
                               </td>
                             </tr>
@@ -345,7 +345,7 @@ export const confirmEmailAddress = async (user) => {
                 </tr>
                 <tr>
                   <td class="bg_light" style="text-align: center;">
-                    <p>&copy;2022 Edmy Support</p>
+                    <p>&copy;2022 Sharpstudy Support</p>
                   </td>
                 </tr>
               </table>

@@ -13,7 +13,7 @@ const Teaching = () => {
 							</h2>
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy. We provide the tools and
+								of students on Sharpstudy. We provide the tools and
 								skills to teach what you love. And you can also
 								achieve your goal with us.
 							</p>

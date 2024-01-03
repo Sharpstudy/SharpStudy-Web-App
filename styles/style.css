@@ -1,5 +1,5 @@
 /*
-@File: Edmy Template Styles
+@File: SharpStudy Template Styles
 
 * This file contains the styling for the actual template, this
 is the file you need to edit to change the look of the template.
@@ -1328,7 +1328,7 @@ Banner Area Style
 }
 
 .banner-content h1 {
-  font-size: 70px;
+  font-size: 50px;
   color: #ffffff;
   margin-bottom: 20px;
   letter-spacing: -3px;

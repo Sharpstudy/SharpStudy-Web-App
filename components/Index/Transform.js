@@ -13,7 +13,7 @@ const Transform = () => {
 							</h2>
 							<p>
 								Instructors from around the world teach millions
-								of students on Edmy. We provide the tools and
+								of students on Sharpstudy. We provide the tools and
 								skills to teach what you love. And you can also
 								achieve your goal.
 							</p>
@@ -36,7 +36,7 @@ const Transform = () => {
 										<Link href="/learning/my-courses">
 											<a className="popup-youtube">
 												Watch Video From the Community
-												How Edmy Change Their Life
+												How Sharpstudy Change Their Life
 											</a>
 										</Link>
 									</h3>

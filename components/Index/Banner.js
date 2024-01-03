@@ -8,7 +8,7 @@ const Banner = () => {
 	const headingText = [
 		{
 			type: "heading",
-			text: "Improve Your Online Learning Experience Better Instantly",
+			text: "Unlock Your Potential: Master Key Skills, Achieve Your Goals.",
 		},
 	];
 
@@ -39,11 +39,11 @@ const Banner = () => {
 			<div className="container-fluid">
 				<div className="row align-items-center">
 					<div className="col-lg-6">
-						<div className="banner-img">
+						<div className="banner-imhtml.netlify.appg">
 							<motion.img
 								initial={{ scale: 0 }}
 								animate={{ scale: 1 }}
-								src="https://udemo-html.netlify.app/assets/images/banner/banner_img_4.png"
+								src="/images/workshops.png"
 								alt="banner"
 							/>
 						</div>

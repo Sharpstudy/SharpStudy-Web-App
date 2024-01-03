@@ -13,20 +13,18 @@ const Footer = () => {
 							<div className="single-footer-widget">
 								<a href="index.html" className="logo">
 									<img
-										src="/images/logo.png"
+										src="/images/sharpstudy.png"
 										className="main-logo"
-										alt="logo"
+										alt="Sharp Study Logo"
 									/>
 									<img
-										src="/images/white-logo.png"
+										src="/images/sharpstudy.png"
 										className="white-logo"
 										alt="logo"
 									/>
 								</a>
 								<p>
-									Lorem ipsum dolor sit amet, consectetur
-									adipiscing elit. Mattis mi suscipit bibendum
-									sit amet, consectetur.
+									SharpStudy Learning Inc. is a Project based cognetive skills development which uses advanced pedogogy for practival and enhanced learning.
 								</p>
 							</div>
 						</div>
@@ -122,18 +120,18 @@ const Footer = () => {
 								<ul className="info">
 									<li>
 										<span>Call Us:</span>{" "}
-										<a href="tel:1-885-665-2022">
-											1-885-665-2022
+										<a href="tel:16047670944">
+											1-604-767-0944
 										</a>
 									</li>
 									<li>
-										<span>Address:</span> +7011 Vermont Ave,
-										Los Angeles, CA 90044
+										<span>Address:</span> 151 West Hasting St,
+										Vancouver , B.C.  V3c 4L8 Canada
 									</li>
 									<li>
 										<span>Mail Us:</span>{" "}
-										<a href="mailto:hello@edmy.com">
-											hello@edmy.com
+										<a href="mailto:mike@evolvelab.co">
+											mike@evolvelab.co
 										</a>
 									</li>
 								</ul>
@@ -157,9 +155,9 @@ const Footer = () => {
 			<div className="copy-right-area bg-color-f6fafb">
 				<div className="container">
 					<p>
-						&copy; Edmy {currentYear} is Proudly Owned by{" "}
-						<a href="https://hibootstrap.com/" target="_blank">
-							HiBootstrap
+						&copy; Sharpstudy {currentYear} is Proudly Owned by{" "}
+						<a href="https://www.hypervers.co/" target="_blank">
+							Hypervers Solutions Inc.
 						</a>
 					</p>
 				</div>
