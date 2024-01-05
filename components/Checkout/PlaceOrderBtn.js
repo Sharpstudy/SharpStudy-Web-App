@@ -68,6 +68,7 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 			});
 		}
 	};
+	console.log("process.env.STRIPE_PUBLISHABLE_KEY", process.env.STRIPE_PUBLISHABLE_KEY);
 
 	return (
 		<StripeCheckout
