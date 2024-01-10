@@ -3,9 +3,21 @@ import { transport } from "./config";
 
 export const confirmEmailAddress = async (user) => {
   console.log("user.email", user.email)
+
+  // Verify the connection configuration
+  try {
+    await transport.verify({ timeout: 50000 }); // Increase timeout to 5 mins
+
+    console.log("Server is ready to take our messages");
+  } catch (error) {
+    console.error("Error verifying the server:", error);
+    return; // Stop execution if verification fails
+  }
+
   const data = {
     to: user.email,
-    from: "Sharpstudy Online Courses <mike@sharpstudy.io>",
+    // from: "justmic007@gmail.com",
+    from: "mike@sharpstudy.io>",
     subject: "Confirm Your Email Address",
     html: `
         <!DOCTYPE html>
