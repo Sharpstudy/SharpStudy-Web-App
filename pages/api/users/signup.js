@@ -67,7 +67,6 @@ const userSignup = async (req, res) => {
       reset_password_send_at: Date.now(),
     });
 
-    console.log('Got here =========>', newUser);
     confirmEmailAddress(newUser);
     const edmy_users_token = jwt.sign(
       {
