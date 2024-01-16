@@ -312,7 +312,7 @@ export const confirmEmailAddress = async (user) => {
 
                                     <p>
                                         Regards, <br />
-                                        sharpstudy Support Team <br />
+                                        Sharpstudy Support Team <br />
                                         All Rights Reserved by sharpstudy.io
                                     </p>
                                 </div>
@@ -344,7 +344,7 @@ export const confirmEmailAddress = async (user) => {
                 </tr>
                 <tr>
                   <td class="bg_light" style="text-align: center;">
-                    <p>&copy;2022 Sharpstudy Support</p>
+                    <p>&copy;2024 Sharpstudy Support</p>
                   </td>
                 </tr>
               </table>
@@ -356,15 +356,6 @@ export const confirmEmailAddress = async (user) => {
         `,
   };
 
-  // try {
-  //   console.log('Transporter Auth:', transport.options.auth);
-  //   await transport.sendMail(data);
-  //   // console.log("Email send successfully")
-  //   // res.status(200).send("Email send successfully")
-  // } catch (error) {
-  //   console.log(error);
-  //   // res.status(500).send("Error proccessing charge");
-  // }
   try {
     await transport.sendMail(data, (error, info) => {
       if (error) {
