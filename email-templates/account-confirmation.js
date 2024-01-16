@@ -2,22 +2,9 @@ import baseUrl from "@/utils/baseUrl";
 import { transport } from "./config";
 
 export const confirmEmailAddress = async (user) => {
-  console.log("user.email", user.email)
-
-  // Verify the connection configuration
-  try {
-    await transport.verify({ timeout: 50000 }); // Increase timeout to 5 mins
-
-    console.log("Server is ready to take our messages");
-  } catch (error) {
-    console.error("Error verifying the server:", error);
-    return; // Stop execution if verification fails
-  }
-
   const data = {
     to: user.email,
-    // from: "justmic007@gmail.com",
-    from: "mike@sharpstudy.io>",
+    from: "Sharpstudy Online Courses <hello@sharpstudy.io>",
     subject: "Confirm Your Email Address",
     html: `
         <!DOCTYPE html>
@@ -320,7 +307,7 @@ export const confirmEmailAddress = async (user) => {
                             <td>
                                 <div class="text" style="padding: 0 2.5em; text-align: left;">
                                     <h4>Dear ${user.first_name},</h4>
-                                    <p>Thanks for registering on Sharpstudy! Please click the below link to verify your email address and activate your account.</p>
+                                    <p>Thanks for registering on Sharpstudy. Please click the below link to verify your email address and activate your account.</p>
                                     <p><a href="${baseUrl}/confirm-email?token=${user.reset_password_token}&email=${user.email}" style="text-decoration: underline;">Confirm My Email Address</a></p>
 
                                     <p>
