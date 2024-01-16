@@ -14,14 +14,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   env: {
-    // JWT_SECRET: "asdfghjklnbvcxzqwertyuiopmkioprewqasderfgnujm",
-    // DB_NAME_PRODUCTION: "sharpstudydb",
-    // DB_PASSWORD_PROD: "sharpstudydb",
-    // DB_HOSTNAME: "127.0.0.1",
-    // DB_USERNAME: "root",
-    // DB_PORT_PROD: 3306,
-    AWS_SES_USER: "...",
-    AWS_SES_PASSWORD: ".....",
     CLOUD_NAME: "dvoomq0ii",
     UPLOAD_PRESETS: "zhphafwx",
     CLOUDINARY_URL:
