@@ -6,7 +6,8 @@ export const transport = nodemailer.createTransport({
   secure: true, // use SSL
   port: 465, // port for secure SMTP
   auth: {
-    user: "AKIAWXZR2MNLH4547DPB",
-    pass: "BPD1hk3+xK4rib+mleIBr13MHCB/svA2cy4yW+vhcOeD",
+    user: process.env.AWS_SES_USER,
+    pass: process.env.AWS_SES_PASSWORD,
   },
 });
+
