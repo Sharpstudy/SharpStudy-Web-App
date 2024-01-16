@@ -356,14 +356,25 @@ export const confirmEmailAddress = async (user) => {
         `,
   };
 
+  // try {
+  //   console.log('Transporter Auth:', transport.options.auth);
+  //   await transport.sendMail(data);
+  //   // console.log("Email send successfully")
+  //   // res.status(200).send("Email send successfully")
+  // } catch (error) {
+  //   console.log(error);
+  //   // res.status(500).send("Error proccessing charge");
+  // }
   try {
-    console.log('Transporter Auth:', transport.options.auth);
-    await transport.sendMail(data);
-    // console.log("Email send successfully")
-    // res.status(200).send("Email send successfully")
+    await transport.sendMail(data, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
   } catch (error) {
     console.log(error);
-    // res.status(500).send("Error proccessing charge");
   }
   transport.close();
 };
