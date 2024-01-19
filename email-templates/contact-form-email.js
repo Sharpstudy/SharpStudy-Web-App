@@ -10,7 +10,7 @@ export const contactFormEmail = async (
 ) => {
 	// console.log(user.email)
 	const data = {
-		to: "shabbir@hibootstrap.com",
+		to: "mike@sharpstudy.io",
 		from: "sharpstudy Online Courses <hello@sharpstudy.io>",
 		subject: "Contact Message",
 		html: `
