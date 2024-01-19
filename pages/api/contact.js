@@ -1,9 +1,9 @@
 import { contactFormEmail } from "email-templates/contact-form-email";
 
 export default async function handler(req, res) {
-	const { name, email, phone, message } = req.body;
+	const { name, email, phone,subject, message } = req.body;
 	try {
-		contactFormEmail(name, email, phone, message);
+		contactFormEmail(name, email, phone, subject,message);
 		res.status(200).json({
 			message: "Email sent successfully.",
 		});
