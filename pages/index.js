@@ -90,7 +90,7 @@ const index = ({ courses, categories, user }) => {
 				</div>
 			</div> */}
 
-			<Categories categories={categories} />
+			{/* <Categories categories={categories} /> */}
 			<Transform />
 			<Features />
 			<Testimonials />
