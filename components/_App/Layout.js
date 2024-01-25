@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
 	return (
 		<>
 			<Head>
-				<title>SharpStudy - Online learning | Skills</title>
+				<title>SharpStudy - Project based learning | Workshops | Skills</title>
 				<meta
 					name="viewport"
 					content="initial-scale=1.0, width=device-width"
@@ -44,6 +44,24 @@ const Layout = ({ children }) => {
 			</Head>
 
 			{children}
+			<Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-QQHKTTTD86"
+      />
+		<Script
+			id="google-analytics"
+			strategy="afterInteractive"
+			dangerouslySetInnerHTML={{
+			__html: `
+							window.dataLayer = window.dataLayer || [];
+							function gtag(){dataLayer.push(arguments);}
+							gtag('js', new Date());
+							gtag('config', 'G-QQHKTTTD86', {
+								page_path: window.location.pathname,
+							});
+						`,
+			}}
+		/>
 
 			<Script src="https://meet.jit.si/external_api.js" />
 
