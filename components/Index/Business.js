@@ -19,14 +19,11 @@ function Business() {
 						<div className="col-lg-5">
 							<div className="business-content">
 								<h2>
-									Be A Member Of Sharpstudy Learning  Business & Start Earning
+								Empower and upskill your employees with our corporate training workshops
 									
 								</h2>
 								<p>
-									Instructors from around the world teach
-									 students on Sharpstudy. We provide the
-									tools and skills to teach what you love. And
-									you can also achieve your goal with us.
+								Elevate your team's performance with our dynamic corporate training workshops. Tailored to enhance skills and boost confidence, our program equips employees to tackle modern technical and business challenges efficiently. 
 								</p>
 
 								<Link href="/become-an-instructor">

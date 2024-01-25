@@ -3,12 +3,15 @@ import React from "react";
 import SearchForm from "@/components/_App/SearchForm";
 import AnimatedCharacters from "./BannerText";
 import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+
 
 const Banner = () => {
+	const router = useRouter();
 	const headingText = [
 		{
 			type: "heading",
-			text: "Unlock Your Potential: Master Key Skills, Achieve Your Goals.",
+			text: "Learn more about our transformational Workshops in The Age Of AI.",
 		},
 	];
 
@@ -66,18 +69,28 @@ const Banner = () => {
 								animate="visible"
 								variants={pVariants}
 							>
-							Limitless learning <span>40k+</span> Online courses &{" "}
-								<span>500K+</span> Online registered student.
-								Study whenever you like.
-							</motion.p>
+								Making the world future-ready by imparting critical cognitive, Technical and Business skills to the next generation of leaders.
 
-							<SearchForm
+							{/* Limitless learning <span>40k+</span> Online courses &{" "}
+								<span>500K+</span> Online registered student.
+								Study whenever you like. */}
+							</motion.p>
+							<button
+								type="button"
+								className="btn btn-warning btn-lg"
+								onClick={() => router.push(`https://meetings.hubspot.com/mike1162 `)}
+							>
+								Schedule a call
+							</button>
+
+
+							{/* <SearchForm
 								formClass="search-form"
 								btnClass="default-btn"
 								banner={true}
-							/>
+							/> */}
 
-							<ul className="client-list">
+							{/* <ul className="client-list">
 								<li>
 									<img
 										src="/images/banner/client-1.jpg"
@@ -105,7 +118,7 @@ const Banner = () => {
 										</Link>
 									</p>
 								</li>
-							</ul>
+							</ul> */}
 						</motion.div>
 					</div>
 				</div>

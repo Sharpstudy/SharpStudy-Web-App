@@ -16,10 +16,9 @@ const Features = () => {
                 src="/images/features/feature-1.svg"
                 alt="feature"
               />
-              <h3>Expert-Led Video Courses</h3>
+              <h3>Project Based Learning</h3>
               <p>
-                Instructors from around the world teach millions
-                of students on Sharpstudy through video.
+              Experience immersive education where real-world challenges inspire innovation and hands-on learning.
               </p>
             </div>
           </div>
@@ -30,10 +29,9 @@ const Features = () => {
                 src="/images/features/feature-2.svg"
                 alt="feature"
               />
-              <h3>In-Demand Trendy Topics</h3>
+              <h3>Adaptive Learning</h3>
               <p>
-                Instructors from around the world teach millions
-                of students on Sharpstudy through video.
+              Tailored learning roadmaps designed to align with each student's unique capabilities and educational background.
               </p>
             </div>
           </div>
@@ -44,10 +42,9 @@ const Features = () => {
                 src="/images/features/feature-3.svg"
                 alt="feature"
               />
-              <h3>Segment Your Learning</h3>
+              <h3>Microlearning</h3>
               <p>
-                Instructors from around the world teach millions
-                of students on Sharpstudy through video.
+              Engaging, concise training modules designed to captivate learners with ongoing micro lessons.
               </p>
             </div>
           </div>
@@ -58,11 +55,10 @@ const Features = () => {
                 src="/images/features/feature-4.svg"
                 alt="feature"
               />
-              <h3>Always Interactive Learning</h3>
+              <h3>Gamify learning</h3>
 
               <p>
-                Instructors from around the world teach millions
-                of students on Sharpstudy through video.
+              Use leaderboards and contests to motivate learners, enhance team building, and drive performance!
               </p>
             </div>
           </div>

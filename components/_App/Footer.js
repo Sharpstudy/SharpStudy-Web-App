@@ -24,7 +24,7 @@ const Footer = () => {
 									/>
 								</a>
 								<p>
-									SharpStudy Learning Inc. is a Project based cognetive skills development which uses advanced pedogogy for practival and enhanced learning.
+									SharpStudy Learning Inc. is a Project based cognetive skills development which uses advanced pedogogy for practical and enhanced learning.
 								</p>
 							</div>
 						</div>

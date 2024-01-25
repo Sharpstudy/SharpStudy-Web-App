@@ -9,16 +9,13 @@ const Transform = () => {
 					<div className="col-lg-6 wow animate__animated animate__fadeInLeft delay-0-2s">
 						<div className="transform-conetnt wow animate__animated animate__fadeInLeft delay-0-8s">
 							<h2>
-								Transform Your Life Through Online Education
+								Creating Leaders and Visionaries of Tomorrow
 							</h2>
 							<p>
-								Instructors from around the world teach millions
-								of students on Sharpstudy. We provide the tools and
-								skills to teach what you love. And you can also
-								achieve your goal.
+							Sharpstudy makes Youth into  World class Tech & Business Leaders by Project based learning / Interning and  Problem solving where they team up learn and apply the Tech , Communication, Presentation , and creating businesses in real time  using advance and practical learning methods
 							</p>
 
-							<div className="single-transform d-flex align-items-center">
+							{/* <div className="single-transform d-flex align-items-center">
 								<div className="transform-video-img flex-shrink-0">
 									<img
 										src="/images/courses/course-16.jpg"
@@ -44,7 +41,7 @@ const Transform = () => {
 										<li>My Courses</li>
 									</ul>
 								</div>
-							</div>
+							</div> */}
 
 							<Link href="/courses">
 								<a className="default-btn">Find Out How</a>
