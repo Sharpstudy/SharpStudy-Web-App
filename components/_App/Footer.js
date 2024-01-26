@@ -130,11 +130,15 @@ const Footer = () => {
 									</li>
 									<li>
 										<span>Mail Us:</span>{" "}
-										<a href="mailto:mike@evolvelab.co">
-											mike@evolvelab.co
+										<a href="mailto:hello@sharpstudy.io">
+											hello@sharpstudy.io
 										</a>
 									</li>
 								</ul>
+								<div>
+								<a href="https://www.facebook.com/sharpstudyio"><i className="ri-facebook-circle-fill"></i></a>
+								</div>
+								<a href="https://www.linkedin.com/company/sharpstudy"><i className="ri-linkedin-box-fill"></i></a>
 							</div>
 						</div>
 					</div>

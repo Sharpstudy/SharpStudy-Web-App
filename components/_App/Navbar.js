@@ -114,7 +114,7 @@ const Navbar = ({ user }) => {
 										</Link>
 									</motion.li>
 
-									{user ? (
+									{/* {user ? (
 										!user.instructor_request && (
 											<motion.li
 												className="nav-item"
@@ -160,7 +160,7 @@ const Navbar = ({ user }) => {
 												</a>
 											</Link>
 										</motion.li>
-									)}
+									)} */}
 								</ul>
 							</div>
 
