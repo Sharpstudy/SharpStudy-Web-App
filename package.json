@@ -51,6 +51,8 @@
 		"sass": "^1.54.0",
 		"sequelize": "^6.21.3",
 		"stripe": "^10.2.0",
+		"swagger-ui": "^5.11.2",
+		"swagger-ui-react": "^5.11.2",
 		"swiper": "^8.3.2",
 		"uuid": "^8.3.2",
 		"uuid-validate": "^0.0.3",
