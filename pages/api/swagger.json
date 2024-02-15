@@ -1,12 +1,12 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Your API Title",
+    "title": "Sharpstudy API",
     "description": "Description of your API",
     "version": "1.0.0",
     "contact": {
-      "name": "Your Name",
-      "email": "your@email.com"
+      "name": "Sharpstudy",
+      "email": "hello@sharpstudy.io"
     }
   },
   "paths": {
@@ -46,6 +46,55 @@
         "responses": {
           "201": {
             "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/signup": {
+      "post": {
+        "summary": "Sign up a new user",
+        "description": "Signs up a new user with first name, last name, email, and password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "first_name",
+                  "last_name",
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User signed up successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -103,6 +152,53 @@
           }
         }
       }
+    },
+    "/api/partners": {
+      "get": {
+        "summary": "Retrieve a list of partners",
+        "description": "Returns a list of partners.",
+        "responses": {
+          "200": {
+            "description": "A list of partners",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Partner"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new partner",
+        "description": "Creates a new partner.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Partner"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Partner created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Partner"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -111,12 +207,121 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "format": "uuid"
           },
-          "name": {
+          "first_name": {
             "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "designation": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "profile_photo": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "reset_password_token": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reset_password_send_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reset_password_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "website": {
+            "type": "string",
+            "format": "uri"
+          },
+          "twitter": {
+            "type": "string",
+            "format": "uri"
+          },
+          "facebook": {
+            "type": "string",
+            "format": "uri"
+          },
+          "linkedin": {
+            "type": "string",
+            "format": "uri"
+          },
+          "youtube": {
+            "type": "string",
+            "format": "uri"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "student",
+              "admin",
+              "instructor"
+            ]
+          },
+          "email_confirmed": {
+            "type": "boolean"
+          },
+          "email_confirmed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructor_request": {
+            "type": "boolean"
+          },
+          "instructor_request_confirmed": {
+            "type": "boolean"
+          },
+          "instructor_request_confirmed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "instructor_status": {
+            "type": "boolean"
+          },
+          "instructor_subject": {
+            "type": "string"
+          },
+          "instructor_description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "is_profile_public": {
+            "type": "boolean"
           }
-        }
+        },
+        "required": [
+          "first_name",
+          "last_name",
+          "email",
+          "password",
+          "role",
+          "status"
+        ]
       },
       "Category": {
         "type": "object",
@@ -128,6 +333,25 @@
             "type": "string"
           }
         }
+      },
+      "Partner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "partner_image": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "partner_image"
+        ]
       }
     }
   }
