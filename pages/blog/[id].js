@@ -63,17 +63,6 @@ const SingleBlog = ({ user }) => {
             </div>
             <div className="col-lg-4">
               <div className="sidebar-wrap">
-                <div className="sidebar-widget card border-0 mb-3">
-                  <img
-                    src={
-                      user.profile_photo
-                        ? user.profile_photo
-                        : "/images/testimonials/testimonial-1.png"
-                    }
-                    alt
-                    className="img-fluid"
-                  />
-                </div>
                 <div className="sidebar-widget latest-post card border-0 p-4 mb-3">
                   <h5>Latest Posts</h5>
                   {blogData.slice(0, 3).map((item) => (
