@@ -106,7 +106,7 @@ const Navbar = ({ user }) => {
                     }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <Link href="/blogs" activeClassName="active">
+                    <Link href="/blog/blogs/" activeClassName="active">
                       <a onClick={toggleNavbar} className="nav-link">
                         Blogs
                       </a>
