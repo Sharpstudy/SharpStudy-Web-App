@@ -226,6 +226,68 @@
           }
         }
       }
+    },
+    "/api/all-courses": {
+      "get": {
+        "summary": "Get a list of courses",
+        "description": "Retrieve a list of courses with optional pagination, sorting, and search functionality.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page number for pagination.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of items per page for pagination.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "short",
+            "in": "query",
+            "description": "Short field for sorting.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search query for filtering courses.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No courses found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -385,6 +447,117 @@
         "required": [
           "name",
           "partner_image"
+        ]
+      },
+      "CourseList": {
+        "type": "object",
+        "properties": {
+          "courses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Course"
+            }
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "coursesCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "short_desc": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string"
+          },
+          "latest_price": {
+            "type": "number"
+          },
+          "before_price": {
+            "type": "number"
+          },
+          "lessons": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "access_time": {
+            "type": "string",
+            "enum": [
+              "Lifetime",
+              "Three Months",
+              "Six Months",
+              "1 Year"
+            ]
+          },
+          "requirements": {
+            "type": "string"
+          },
+          "what_you_will_learn": {
+            "type": "string"
+          },
+          "who_is_this_course_for": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "catId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "approved": {
+            "type": "boolean"
+          },
+          "in_home_page": {
+            "type": "boolean"
+          },
+          "in_home_page_set_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "is_class": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "short_desc",
+          "overview",
+          "latest_price",
+          "before_price",
+          "lessons",
+          "duration",
+          "image",
+          "access_time",
+          "requirements",
+          "what_you_will_learn",
+          "who_is_this_course_for",
+          "userId",
+          "catId",
+          "approved",
+          "in_home_page",
+          "is_class"
         ]
       }
     }
