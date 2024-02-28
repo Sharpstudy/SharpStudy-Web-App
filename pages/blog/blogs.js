@@ -43,13 +43,9 @@ const Blogs = ({ user }) => {
                     <ul className="admin pt-2">
                       <li>
                         <img
-                          src={
-                            user.profile_photo
-                              ? user.profile_photo
-                              : "/images/testimonials/testimonial-1.png"
-                          }
+                          src="/images/testimonials/testimonial-1.png"
                           className="rounded-circle"
-                          alt={user.first_name}
+                          alt="user_image"
                           style={{
                             height: "25px",
                             width: "25px",
