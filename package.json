@@ -22,6 +22,7 @@
 		"@mantine/rte": "^5.1.1",
 		"axios": "^0.27.2",
 		"bcrypt": "^5.0.1",
+		"disqus-react": "^1.1.5",
 		"framer-motion": "^7.3.4",
 		"fslightbox-react": "^1.6.2-2",
 		"html-to-image": "^1.10.8",

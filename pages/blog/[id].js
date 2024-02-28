@@ -4,11 +4,11 @@ import Navbar from "@/components/_App/Navbar";
 import PageBanner from "@/components/Common/PageBanner";
 import { blogData } from "@/utils/sampleData";
 import Link from "next/link";
+import { DiscussionEmbed } from 'disqus-react';
 
 const SingleBlog = ({ user }) => {
   const router = useRouter();
   const { id } = router.query;
-
   const blog = blogData.find((blog) => blog.id === id);
 
   if (!blog) return <div>Blog not found</div>;
@@ -60,6 +60,17 @@ const SingleBlog = ({ user }) => {
                   </div>
                 </div>
               </div>
+              <DiscussionEmbed
+                  shortname='sharpstudy blog'
+                  config={
+                      {
+                          // url: "this.props.article.url",
+                          identifier: blog.id,
+                          title: blog.title,
+                          language: "en_US" 
+                      }
+                  }
+              />
             </div>
             <div className="col-lg-4">
               <div className="sidebar-wrap">
