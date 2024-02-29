@@ -288,6 +288,233 @@
           }
         }
       }
+    },
+    "/api/courses/new": {
+      "post": {
+        "summary": "Create a new course",
+        "description": "Endpoint to create a new course.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the course."
+                  },
+                  "short_desc": {
+                    "type": "string",
+                    "description": "Short description of the course."
+                  },
+                  "overview": {
+                    "type": "string",
+                    "description": "Overview of the course."
+                  },
+                  "latest_price": {
+                    "type": "number",
+                    "description": "Latest price of the course."
+                  },
+                  "before_price": {
+                    "type": "number",
+                    "description": "Previous price of the course."
+                  },
+                  "lessons": {
+                    "type": "string",
+                    "description": "Number of lessons in the course."
+                  },
+                  "duration": {
+                    "type": "string",
+                    "description": "Duration of the course."
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "URL of the course image."
+                  },
+                  "access_time": {
+                    "type": "string",
+                    "description": "Access time of the course."
+                  },
+                  "requirements": {
+                    "type": "string",
+                    "description": "Requirements for the course."
+                  },
+                  "what_you_will_learn": {
+                    "type": "string",
+                    "description": "What you will learn in the course."
+                  },
+                  "who_is_this_course_for": {
+                    "type": "string",
+                    "description": "Target audience of the course."
+                  },
+                  "catId": {
+                    "type": "string",
+                    "description": "ID of the category the course belongs to."
+                  },
+                  "is_class": {
+                    "type": "boolean",
+                    "description": "Whether the course is a class or not."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Course created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message."
+                    },
+                    "course": {
+                      "$ref": "#/components/schemas/Course"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "500": {
+            "description": "Internal server error, failed to create the course."
+          }
+        }
+      }
+    },
+    "/api/courses/course/upload/new": {
+      "post": {
+        "summary": "Upload a new video course",
+        "description": "Endpoint to upload a new video course.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "group_name": {
+                    "type": "string",
+                    "description": "Group name of the video."
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the video course."
+                  },
+                  "thumb": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "URL of the thumbnail image for the video."
+                  },
+                  "video": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "URL of the video file."
+                  },
+                  "video_length": {
+                    "type": "number",
+                    "description": "Length of the video in seconds."
+                  },
+                  "is_preview": {
+                    "type": "boolean",
+                    "description": "Indicates if the video is a preview."
+                  },
+                  "short_id": {
+                    "type": "number",
+                    "description": "Short identifier for the video."
+                  },
+                  "courseId": {
+                    "type": "string",
+                    "description": "ID of the course associated with the video."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Video course uploaded successfully."
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to upload the video course."
+          }
+        }
+      }
+    },
+    "/api/admin/courses/requests/": {
+      "put": {
+        "summary": "Update course approval status",
+        "description": "Endpoint to update the approval status of a course.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "courseId": {
+                    "type": "string",
+                    "description": "ID of the course to be updated."
+                  },
+                  "approved": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the course is approved or not."
+                  }
+                },
+                "required": [
+                  "courseId",
+                  "approved"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Course approval status updated successfully."
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to update course approval status."
+          }
+        }
+      }
     }
   },
   "components": {
