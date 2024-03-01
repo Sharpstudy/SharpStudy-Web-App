@@ -61,10 +61,10 @@ const SingleBlog = ({ user }) => {
                 </div>
               </div>
               <DiscussionEmbed
-                  shortname='sharpstudy blog'
+                  shortname='https-sharpstudy-io'
                   config={
                       {
-                          // url: "this.props.article.url",
+                           url: 'https://https-sharpstudy-io.disqus.com/embed.js',
                           identifier: blog.id,
                           title: blog.title,
                           language: "en_US" 
