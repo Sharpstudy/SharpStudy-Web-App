@@ -18,14 +18,13 @@ export default async function handler(req, res) {
   }
 }
 const handlePut = async (req, res) => {
-  console.log("Headers:", req.headers.authorization);
   const { name, email, phone, instructor_subject, instructor_description } = req.body;
   try {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
       // Token comes from the UI or Swagger docs
       token = req.headers.authorization.split(' ')[1];
-      console.log('token', token);
+
     } else if (req.headers.authorization) {
       // Token comes without the "Bearer " prefix
       token = req.headers.authorization;
