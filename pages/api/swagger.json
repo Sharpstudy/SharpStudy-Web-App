@@ -680,6 +680,35 @@
           }
         }
       }
+    },
+    "/api/instructor/instructors": {
+      "get": {
+        "summary": "Get list of approved instructors",
+        "description": "Retrieve a list of all approved instructors.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Instructors"
+        ]
+      }
     }
   },
   "components": {
@@ -707,9 +736,6 @@
           "email": {
             "type": "string",
             "format": "email"
-          },
-          "password": {
-            "type": "string"
           },
           "gender": {
             "type": "string"
