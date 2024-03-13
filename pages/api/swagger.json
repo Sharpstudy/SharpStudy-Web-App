@@ -467,7 +467,7 @@
         }
       }
     },
-    "/api/admin/courses/requests/": {
+    "/api/admin/courses/requests": {
       "put": {
         "summary": "Update course approval status",
         "description": "Endpoint to update the approval status of a course.",
@@ -574,7 +574,7 @@
         }
       }
     },
-    "/api/courses": {
+    "/api/admin/courses": {
       "get": {
         "summary": "Get instructor courses",
         "description": "Endpoint to fetch courses associated with a particular instructor.",
