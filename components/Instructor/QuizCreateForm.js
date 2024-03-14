@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import Button from "@/utils/Button";
 
 const QuizCreateForm = () => {
   const [numSteps, setNumSteps] = useState(0);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState([]);
 
+  console.log(formData, "Form Data: ");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data:", formData);
+    window.alert("Form submitted");
+    setFormData([]);
+    setNumSteps(0);
   };
 
   const handleChange = (e) => {
@@ -55,6 +59,16 @@ const QuizCreateForm = () => {
 
   const handleNext = (e) => {
     e.preventDefault();
+    const currentFormData = formData[step - 1];
+
+    setFormData([]);
+    const updatedFormData = new Array(numSteps).fill({}).map((_, index) => {
+      if (index === step - 1) {
+        return currentFormData || {};
+      }
+      return {};
+    });
+    setFormData(updatedFormData);
     if (step < numSteps) {
       setStep(step + 1);
     }
@@ -72,6 +86,10 @@ const QuizCreateForm = () => {
     padding: "2vw",
   };
 
+  const color = {
+    color: " #286bad",
+  };
+
   return (
     <>
       <div className="d-flex align-items-center justify-content-center">
@@ -87,15 +105,16 @@ const QuizCreateForm = () => {
         </div>
       </div>
       {step <= numSteps && (
-        <form onSubmit={step === numSteps ? handleSubmit : handleNext}>
+        <form onSubmit={step === numSteps ? handleSubmit : undefined}>
           <div className="d-flex align-items-center justify-content-center">
             <div style={qfrom}>
               <h2>
-                You are about to add {numSteps} questions associated to the
+                You are about to add {numSteps} questions associated with the
                 course
               </h2>
+              <h3 style={color}>step: {step}</h3>
               <p>
-                Note: fill in carefully (you should follow exact case of
+                Note: fill in carefully (you should follow the exact case of
                 answers)
               </p>
               <label htmlFor="question">Enter question:</label> <br />
@@ -104,43 +123,29 @@ const QuizCreateForm = () => {
                 name="question"
                 className="form-control"
                 placeholder="Enter question"
+                value={formData[step - 1]?.question || ""}
                 onChange={handleChange}
               />
               <br />
               <hr></hr>
-              <label htmlFor="answer1">Enter Answer:</label> <br />
-              <input
-                type="text"
-                name="choices_1"
-                className="form-control"
-                placeholder="Enter answer1"
-                onChange={handleChange}
-              />{" "}
-              <br />
-              <input
-                type="text"
-                name="choices_2"
-                className="form-control"
-                placeholder="Enter answer2"
-                onChange={handleChange}
-              />{" "}
-              <br />
-              <input
-                type="text"
-                name="choices_3"
-                className="form-control"
-                placeholder="Enter answer3"
-                onChange={handleChange}
-              />{" "}
-              <br />
-              <input
-                type="text"
-                name="choices_4"
-                className="form-control"
-                placeholder="Enter answer4"
-                onChange={handleChange}
-              />
-              <br />
+              <label htmlFor="answer1">Enter Answers:</label> <br />
+              {[1, 2, 3, 4].map((num) => (
+                <div key={num}>
+                  <input
+                    type="text"
+                    name={`choices_${num}`}
+                    className="form-control"
+                    placeholder={`Enter answer${num}`}
+                    value={
+                      (formData[step - 1]?.choices &&
+                        formData[step - 1]?.choices[num - 1]) ||
+                      ""
+                    }
+                    onChange={handleChange}
+                  />
+                  <br />
+                </div>
+              ))}
               <hr></hr>
               <label htmlFor="correctAnswer">Enter correct answer:</label>{" "}
               <br />
@@ -149,6 +154,7 @@ const QuizCreateForm = () => {
                 name="correctAnswer"
                 className="form-control"
                 placeholder="Enter correct answer"
+                value={formData[step - 1]?.correctAnswer || ""}
                 onChange={handleChange}
               />
               <div className="d-flex align-items-center justify-content-center mt-5">
@@ -161,7 +167,11 @@ const QuizCreateForm = () => {
                     Previous
                   </button>
                 )}
-                <button className="default-btn" type="submit">
+                <button
+                  className="default-btn"
+                  type={step === numSteps ? "submit" : "button"}
+                  onClick={step !== numSteps && handleNext}
+                >
                   {step === numSteps ? "Submit" : "Next"}
                 </button>
               </div>
