@@ -16,7 +16,7 @@ const QuizCreateForm = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     const index = step - 1;
     const updatedFormData = [...formData];
 
@@ -35,6 +35,25 @@ const QuizCreateForm = () => {
       }
 
       updatedFormData[index].choices[choiceIndex] = value;
+    } else if (type === "checkbox") {
+      if (!updatedFormData[index].correctAnswers) {
+        updatedFormData[index].correctAnswers = [];
+      }
+      if (checked) {
+        updatedFormData[index].correctAnswers.push(value);
+      } else {
+        const indexToRemove =
+          updatedFormData[index].correctAnswers.indexOf(value);
+        if (indexToRemove !== -1) {
+          updatedFormData[index].correctAnswers.splice(indexToRemove, 1);
+        }
+      }
+    } else if (name === "type") {
+      // Handle type select input
+      updatedFormData[index] = {
+        ...updatedFormData[index],
+        [name]: value,
+      };
     } else {
       updatedFormData[index] = { ...updatedFormData[index], [name]: value };
     }
@@ -104,6 +123,7 @@ const QuizCreateForm = () => {
           />
         </div>
       </div>
+
       {step <= numSteps && (
         <form onSubmit={step === numSteps ? handleSubmit : undefined}>
           <div className="d-flex align-items-center justify-content-center">
@@ -146,17 +166,55 @@ const QuizCreateForm = () => {
                   <br />
                 </div>
               ))}
-              <hr></hr>
-              <label htmlFor="correctAnswer">Enter correct answer:</label>{" "}
-              <br />
-              <input
-                type="text"
-                name="correctAnswer"
+              <div className="d-flex align-items-center justify-content-center">
+                <div className="form-group">
+                  <label className="form-label fw-semibold">Quiz Image</label>
+                  <input
+                    type="file"
+                    className="form-control file-control"
+                    name="image"
+                  />
+                </div>
+              </div>
+              <label htmlFor="type">Enter answers type:</label> <br />
+              <select
                 className="form-control"
-                placeholder="Enter correct answer"
-                value={formData[step - 1]?.correctAnswer || ""}
-                onChange={handleChange}
-              />
+                name="type"
+                value={formData[step - 1]?.type || ""}
+              >
+                <option value="">Select</option>
+                <option value="radio">Radio</option>
+                <option value="checkbox">CheckBox</option>
+                <option value="dropdown">Dropdown</option>
+                <option value="multiselect">Multiselect</option>
+              </select>
+              <hr></hr>
+              <label htmlFor="correctAnswer">Select correct answer(s):</label>
+              <br />
+              {formData[step - 1]?.choices &&
+                formData[step - 1]?.choices.map((choice, index) => (
+                  <div key={index}>
+                    <input
+                      type="checkbox"
+                      name="correctAnswers"
+                      className="form-check-input"
+                      value={choice}
+                      checked={
+                        formData[step - 1]?.correctAnswers &&
+                        formData[step - 1]?.correctAnswers.includes(choice)
+                      }
+                      onChange={handleChange}
+                    />
+                    <span
+                      style={{
+                        paddingLeft: "5px",
+                      }}
+                    >
+                      {choice}
+                    </span>
+                    <br />
+                  </div>
+                ))}
               <div className="d-flex align-items-center justify-content-center mt-5">
                 {step > 1 && (
                   <button
