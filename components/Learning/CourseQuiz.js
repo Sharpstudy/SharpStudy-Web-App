@@ -85,42 +85,59 @@ const CourseQuiz = () => {
   };
 
   const addLeadingZero = (number) => (number > 9 ? number : `0${number}`);
+  const progressPercentage = ((activeQuestion + 1) / questions.length) * 100;
 
   return (
     <div className="quiz-container">
       {!showResult ? (
-        <div>
+        <>
+          <div className="progress">
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{
+                width: `${progressPercentage}%`,
+                backgroundColor: "#286bad",
+              }}
+              aria-valuenow={progressPercentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
+          </div>
+
           <div>
-            <span className="active-question-no">
-              {addLeadingZero(activeQuestion + 1)}
-            </span>
-            <span className="total-question">
-              /{addLeadingZero(questions.length)}
-            </span>
-          </div>
-          <h2>{question}</h2>
-          <ul>
-            {choices.map((answer, index) => (
-              <li
-                onClick={() => onAnswerSelected(answer, index)}
-                key={answer}
-                className={
-                  selectedAnswerIndex === index ? "selected-answer" : null
-                }
+            <div>
+              <span className="active-question-no">
+                {addLeadingZero(activeQuestion + 1)}
+              </span>
+              <span className="total-question">
+                /{addLeadingZero(questions.length)}
+              </span>
+            </div>
+            <h2>{question}</h2>
+            <ul>
+              {choices.map((answer, index) => (
+                <li
+                  onClick={() => onAnswerSelected(answer, index)}
+                  key={answer}
+                  className={
+                    selectedAnswerIndex === index ? "selected-answer" : null
+                  }
+                >
+                  {answer}
+                </li>
+              ))}
+            </ul>
+            <div className="flex-right">
+              <button
+                onClick={onClickNext}
+                disabled={selectedAnswerIndex === null}
               >
-                {answer}
-              </li>
-            ))}
-          </ul>
-          <div className="flex-right">
-            <button
-              onClick={onClickNext}
-              disabled={selectedAnswerIndex === null}
-            >
-              {activeQuestion === questions.length - 1 ? "Finish" : "Next"}
-            </button>
+                {activeQuestion === questions.length - 1 ? "Finish" : "Next"}
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <div className="result">
           <h3>Result</h3>
