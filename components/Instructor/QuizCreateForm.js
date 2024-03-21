@@ -4,6 +4,7 @@ const QuizCreateForm = () => {
   const [numSteps, setNumSteps] = useState(0);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState([]);
+  const [imagePreview, setImagePreview] = React.useState("");
 
   console.log(formData, "Form Data: ");
 
@@ -174,13 +175,25 @@ const QuizCreateForm = () => {
                     className="form-control file-control"
                     name="image"
                   />
+                  <div className="form-text">Upload image size 750x500!</div>
+                  <div className="mt-2">
+                    <img
+                      src={
+                        imagePreview
+                          ? imagePreview
+                          : "/images/courses/course-1.jpg"
+                      }
+                      alt="image"
+                      className="img-thumbnail w-100px me-2"
+                    />
+                  </div>
                 </div>
               </div>
               <label htmlFor="type">Enter answers type:</label> <br />
               <select
                 className="form-control"
                 name="type"
-                value={formData[step - 1]?.type || ""}
+                onChange={handleChange}
               >
                 <option value="">Select</option>
                 <option value="radio">Radio</option>
