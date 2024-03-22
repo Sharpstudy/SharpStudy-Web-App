@@ -393,7 +393,10 @@
           "500": {
             "description": "Internal server error, failed to create the course."
           }
-        }
+        },
+        "tags": [
+          "Courses"
+        ]
       }
     },
     "/api/courses/course/upload/new": {
@@ -603,7 +606,10 @@
           "500": {
             "description": "Internal server error, failed to fetch courses."
           }
-        }
+        },
+        "tags": [
+          "Courses"
+        ]
       }
     },
     "/api/instructor/new": {
@@ -706,7 +712,7 @@
           }
         },
         "tags": [
-          "Instructors"
+          "Users"
         ]
       }
     },
@@ -780,6 +786,41 @@
         },
         "tags": [
           "Courses"
+        ]
+      }
+    },
+    "/api/students": {
+      "get": {
+        "summary": "List of all students",
+        "description": "Endpoint to fetch all students.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch students."
+          }
+        },
+        "tags": [
+          "Users"
         ]
       }
     }
