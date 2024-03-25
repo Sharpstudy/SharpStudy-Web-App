@@ -823,6 +823,94 @@
           "Users"
         ]
       }
+    },
+    "/api/admin/make-admin": {
+      "put": {
+        "summary": "Update user privileges",
+        "description": "Endpoint to update user roles.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "ID of the user to be updated."
+                  },
+                  "admin": {
+                    "type": "boolean",
+                    "description": "Boolean to update user role",
+                    "default": false
+                  }
+                },
+                "required": [
+                  "userId",
+                  "admin"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User role updated successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to update user role."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "summary": "Get admin users",
+        "description": "Retrieve a list of admin users.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "admins": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
     }
   },
   "components": {
