@@ -196,9 +196,10 @@ const QuizCreateForm = () => {
                 onChange={handleChange}
               >
                 <option value="">Select</option>
+                <option value="default">Default</option>
                 <option value="radio">Radio</option>
                 <option value="checkbox">CheckBox</option>
-                <option value="dropdown">Dropdown</option>
+                <option value="select">Select Dropdown</option>
                 <option value="multiselect">Multiselect</option>
               </select>
               <hr></hr>
