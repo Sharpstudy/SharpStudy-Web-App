@@ -826,8 +826,8 @@
     },
     "/api/admin/make-admin": {
       "put": {
-        "summary": "Update user privileges",
-        "description": "Endpoint to update user roles.",
+        "summary": "Assign/Unassign admin privilege",
+        "description": "Endpoint to Assign/Unassign admin privilege",
         "security": [
           {
             "BearerAuth": []
@@ -909,6 +909,38 @@
         },
         "tags": [
           "Users"
+        ]
+      }
+    },
+    "/api/learnings": {
+      "get": {
+        "summary": "List of all learnings",
+        "description": "Endpoint to fetch all learnings.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch learnings."
+          }
+        },
+        "tags": [
+          "Learnings"
         ]
       }
     }
