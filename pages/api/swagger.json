@@ -943,6 +943,182 @@
           "Learnings"
         ]
       }
+    },
+    "/api/learnings/my-purchases": {
+      "get": {
+        "summary": "List courses user purchased",
+        "description": "Endpoint to fetch all courses user purchased.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Purchased courses fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch courses purchased."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/progress": {
+      "get": {
+        "summary": "User's course progress",
+        "description": "Endpoint to show User's course progress",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the course to retrieve progress for."
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the user to retrieve progress for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Purchased courses fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseProgress"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch User's course progress"
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/videos/{slug}": {
+      "get": {
+        "summary": "Get course videos by slug",
+        "description": "Endpoint to retrieve a video by its slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug identifier for the video."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Video"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Video not found."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch video."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/video/{videoId}": {
+      "get": {
+        "summary": "Get video details by video ID",
+        "description": "Endpoint to retrieve details of a specific video.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "videoId",
+            "required": true,
+            "description": "ID of the video to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "userId",
+            "required": true,
+            "description": "ID of the user accessing the video.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course containing the video.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video details retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Video not found."
+          },
+          "500": {
+            "description": "Internal server error, failed to retrieve video details."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
     }
   },
   "components": {
