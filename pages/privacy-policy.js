@@ -17,40 +17,30 @@ const privacyPolicy = ({ user }) => {
 			<section className="ptb-100">
 				<div className="container">
 					<div className="main-content-text">
-						<h3>1. Personal information:</h3>
-						<p>
-							Proin eget tortor risus. Mauris blandit aliquet
-							elit, eget tincidunt nibh pulvinar a. Quisque velit
-							nisi, pretium ut lacinia in elementum id enim.
-							Praesent sapien massa, convallis a pellentesque nec,
-							egestas non nisi. Cras ultricies ligula sed magna
-							dictum porta. Curabitur non nulla sit amet nisl
-							tempus convallis quis ac lectus. Vestibulum ac diam
-							sit amet quam vehicula elementum sed sit amet dui.
-							Donec rutrum congue leo eget malesuada. Donec rutrum
-							congue leo eget malesuada. Pellentesque in ipsum id
-							orci porta dapibus. Curabitur aliquet quam id ut
-							lacinia in elementum id enim. Praesent sapien massa,
-							convallis a pellentesque nec, egestas non nisi leo
-							eget malesuada.
-						</p>
+						
 
 						<div className="gap-20"></div>
-
-						<h3>2. Collecting personal information:</h3>
-						<p>
-							Lorem ipsum dolor sit amet consectetur adipisicing
-							elit. Assumenda, odio sequi! Nam consectetur,
-							officiis ipsam explicabo tempore placeat! Voluptas
-							molestiae pariatur necessitatibus consectetur, ullam
-							aut esse amet debitis sint culpa. orem ipsum dolor
-							sit amet consectetur adipisicing elit. Assumenda,
-							odio Lorem ipsum dolor sit amet consectetur
-							adipisicing elit. Vitae mollitia laborum assumenda
-							beatae minima enim quis dolores, pariatur, at
-							perferendis sit dolore modi nostrum eum ea
-							voluptatem
+						<h3>Information We Collect:</h3>
+						<p> <strong>Personal Information:</strong>  We may collect personal information such as names, email addresses, and other contact details when users register for an account, subscribe to our newsletter, or engage in other activities on our Site.
 						</p>
+						<p>
+						<strong>Usage Information:</strong>	  We automatically collect certain information about how users interact with our Site, including IP addresses, browser types, operating systems, and pages viewed. This information helps us improve the user experience and optimize our services.
+						Cookies and Similar Technologies: We use cookies and similar technologies to track user preferences, enhance user experience, and collect analytics data. Users can manage cookie preferences through their browser settings.
+						</p>
+
+						<h3>How We Use Information:</h3>
+						<p>
+						Personal Information: We may collect personal information such as names, email addresses, and other contact details when users register for an account, subscribe to our newsletter, or engage in other activities on our Site.</p>
+						<p><strong>Usage Information:</strong> We automatically collect certain information about how users interact with our Site, including IP addresses, browser types, operating systems, and pages viewed. This information helps us improve the user experience and optimize our services.
+						Cookies and Similar Technologies: We use cookies and similar technologies to track user preferences, enhance user experience, and collect analytics data. Users can manage cookie preferences through their browser settings.
+						</p>
+						How We Use Information:
+
+						Provide Services: We use personal information to deliver the services requested by users, such as providing access to educational resources and facilitating communication.
+						Communication: We may use contact information to send users updates, newsletters, promotional offers, and other communications related to our services. Users can opt-out of receiving marketing communications at any time.
+						Analytics: We analyze usage data to understand how users interact with our Site and improve its functionality and content.
+
+						
 						<p>
 							Lorem ipsum dolor sit amet consectetur, adipisicing
 							elit. Ut, placeat? Culpa ab est nemo perspiciatis
