@@ -35,7 +35,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       },
       "post": {
         "summary": "Create a new user",
@@ -61,7 +64,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/users/signup": {
@@ -110,7 +116,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/users/signin": {
@@ -151,7 +160,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/categories": {
@@ -177,7 +189,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Categories"
+        ]
       }
     },
     "/api/partners": {
@@ -198,7 +213,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Partners"
+        ]
       },
       "post": {
         "summary": "Create a new partner",
@@ -224,7 +242,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Partners"
+        ]
       }
     },
     "/api/all-courses": {
@@ -286,7 +307,10 @@
           "500": {
             "description": "Internal server error"
           }
-        }
+        },
+        "tags": [
+          "Courses"
+        ]
       }
     },
     "/api/courses/new": {
@@ -399,77 +423,6 @@
         ]
       }
     },
-    "/api/courses/course/upload/new": {
-      "post": {
-        "summary": "Upload a new video course",
-        "description": "Endpoint to upload a new video course.",
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "group_name": {
-                    "type": "string",
-                    "description": "Group name of the video."
-                  },
-                  "title": {
-                    "type": "string",
-                    "description": "Title of the video course."
-                  },
-                  "thumb": {
-                    "type": "string",
-                    "format": "url",
-                    "description": "URL of the thumbnail image for the video."
-                  },
-                  "video": {
-                    "type": "string",
-                    "format": "url",
-                    "description": "URL of the video file."
-                  },
-                  "video_length": {
-                    "type": "number",
-                    "description": "Length of the video in seconds."
-                  },
-                  "is_preview": {
-                    "type": "boolean",
-                    "description": "Indicates if the video is a preview."
-                  },
-                  "short_id": {
-                    "type": "number",
-                    "description": "Short identifier for the video."
-                  },
-                  "courseId": {
-                    "type": "string",
-                    "description": "ID of the course associated with the video."
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Video course uploaded successfully."
-          },
-          "400": {
-            "description": "Bad request, invalid parameters."
-          },
-          "401": {
-            "description": "Unauthorized, authentication required."
-          },
-          "500": {
-            "description": "Internal server error, failed to upload the video course."
-          }
-        }
-      }
-    },
     "/api/admin/courses/requests": {
       "put": {
         "summary": "Update course approval status",
@@ -516,7 +469,10 @@
           "500": {
             "description": "Internal server error, failed to update course approval status."
           }
-        }
+        },
+        "tags": [
+          "Courses"
+        ]
       }
     },
     "/api/instructor/requests": {
@@ -574,7 +530,10 @@
           "500": {
             "description": "Internal server error, failed to approve the instructor request."
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/admin/courses": {
@@ -684,7 +643,10 @@
           "500": {
             "description": "Internal server error, failed to submit the request."
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/instructor/instructors": {
@@ -1570,6 +1532,146 @@
             }
           }
         }
+      }
+    },
+    "/api/categories/create": {
+      "post": {
+        "summary": "Create a new category",
+        "description": "Endpoint to create a new category.",
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "Name of the category to create"
+                  }
+                },
+                "required": [
+                  "category"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "$ref": "#/components/schemas/Category"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update an existing category",
+        "description": "Endpoint to update an existing category.",
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "Name of the category to update"
+                  },
+                  "catId": {
+                    "type": "integer",
+                    "description": "ID of the category to update"
+                  }
+                },
+                "required": [
+                  "category",
+                  "catId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
       }
     }
   },
