@@ -258,6 +258,47 @@
         "tags": [
           "Partners"
         ]
+      },
+      "delete": {
+        "summary": "Delete a partner",
+        "description": "Deletes a partner.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "partnerId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the partner to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Partner deleted successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Partners"
+        ]
       }
     },
     "/api/all-courses": {
