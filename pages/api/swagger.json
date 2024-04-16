@@ -217,7 +217,9 @@
         "tags": [
           "Partners"
         ]
-      },
+      }
+    },
+    "/api/partners/create": {
       "post": {
         "summary": "Create a new partner",
         "description": "Creates a new partner.",
@@ -226,7 +228,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Partner"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Partner name"
+                  },
+                  "partner_image": {
+                    "type": "string",
+                    "description": "Partner Logo"
+                  }
+                }
               }
             }
           }
