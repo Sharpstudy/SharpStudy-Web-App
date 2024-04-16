@@ -4,165 +4,117 @@ import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
 
 const termsConditions = ({ user }) => {
-	return (
-		<>
-			<Navbar user={user} />
-			<PageBanner
-				pageTitle="Terms & Conditions"
-				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Terms & Conditions"
-			/>
-			<section className="ptb-100">
-				<div className="container">
-					<div className="main-content-text">
-						<h3>1. Accuracy and validity of information</h3>
-						<p>
-							Proin eget tortor risus. Mauris blandit aliquet
-							elit, eget tincidunt nibh pulvinar a. Quisque velit
-							nisi, pretium ut lacinia in elementum id enim.
-							Praesent sapien massa, convallis a pellentesque nec,
-							egestas non nisi. Cras ultricies ligula sed magna
-							dictum porta. Curabitur non nulla sit amet nisl
-							tempus convallis quis ac lectus. Vestibulum ac diam
-							sit amet quam vehicula elementum sed sit amet dui.
-							Donec rutrum congue leo eget malesuada. Donec rutrum
-							congue leo eget malesuada. Pellentesque in ipsum id
-							orci porta dapibus. Curabitur aliquet quam id ut
-							lacinia in elementum id enim. Praesent sapien massa,
-							convallis a pellentesque nec, egestas non nisi leo
-							eget malesuada.
-						</p>
+  return (
+    <>
+      <Navbar user={user} />
+      <PageBanner
+        pageTitle="Terms & Conditions"
+        homePageUrl="/"
+        homePageText="Home"
+        activePageText="Terms & Conditions"
+      />
+      <section className="ptb-100">
+        <div className="container">
+          <div className="main-content-text">
+            <p>
+              These terms and conditions (Terms) govern your use of SharpStudy
+              elearning Platform , operated by SharpStudy. <br /> By accessing
+              or using the Website, you agree to be bound by these Terms. If you
+              disagree with any part of these Terms, you may not access the
+              Website.
+            </p>
+            <h3>1. Use of the Website</h3>
+            <p>
+              1.1 <strong>Eligibility:</strong> By using the Website, you affirm
+              that you are at least 18 years of age or have obtained
+              parental/guardian consent to use the Website. <br />
+              1.2 <strong>License:</strong> We grant you a limited,
+              non-exclusive, non-transferable, and revocable license to use the
+              Website for its intended purpose. <br /> 1.3{" "}
+              <strong>User Account</strong>: You may be required to create a
+              user account. You are responsible for maintaining the
+              confidentiality of your account information and for all activities
+              that occur under your account
+            </p>
 
-						<div className="gap-20"></div>
+            <div className="gap-20"></div>
 
-						<h3>2. Availability</h3>
-						<p>
-							Lorem ipsum dolor sit amet consectetur adipisicing
-							elit. Assumenda, odio sequi! Nam consectetur,
-							officiis ipsam explicabo tempore placeat! Voluptas
-							molestiae pariatur necessitatibus consectetur, ullam
-							aut esse amet debitis sint culpa. orem ipsum dolor
-							sit amet consectetur adipisicing elit. Assumenda,
-							odio Lorem ipsum dolor sit amet consectetur
-							adipisicing elit. Vitae mollitia laborum assumenda
-							beatae minima enim quis dolores, pariatur, at
-							perferendis sit dolore modi nostrum eum ea
-							voluptatem
-						</p>
-						<p>
-							Lorem ipsum dolor sit amet consectetur, adipisicing
-							elit. Ut, placeat? Culpa ab est nemo perspiciatis
-							quam, nesciunt reprehenderit voluptate id error
-							corrupti doloremque exercitationem quis, iusto
-							debitis velit eveniet ea. ipsum dolor sit amet
-							consectetur, adipisicing elit. Ut, placeat? Culpa ab
-							est nemo perspiciatis quam, nesciunt reprehenderit
-						</p>
+            <h3>2. Content</h3>
+            <p>
+              2.1 <strong>Ownership :</strong> All content on the Website,
+              including but not limited to text, graphics, logos, images, audio
+              clips, and software, is owned or licensed by us and is subject to
+              copyright and other intellectual property rights. <br /> 2.2{" "}
+              <strong>User-Generated Content: </strong> If you submit any
+              content to the Website, you grant us a worldwide, irrevocable,
+              perpetual, royalty-free license to use, modify, publish, adapt,
+              translate, distribute, and display such content
+            </p>
 
-						<div className="gap-20"></div>
+            <div className="gap-20"></div>
 
-						<h3>3. Third party websites</h3>
-						<p>
-							Curabitur arcu erat, accumsan id imperdiet et,
-							porttitor at sem. Vivamus suscipit tortor eget felis
-							porttitor volutpat. Nulla quis lorem ut libero
-							malesuada feugiat. Nulla porttitor accumsan
-							tincidunt. Sed porttitor lectus nibh. Pellentesque
-							in ipsum id orci porta dapibus.Nulla quis lorem ut
-							libero malesuada feugiat. Proin eget tortor risus.
-							Nulla porttitor accumsan tinci dunt. Donec rutrum
-							congue leo eget malesuada. Vestibulum ac diam sit
-							amet quam vehicula elementum sed sit amet dui.
-							Vivamus magna justo.
-						</p>
-						<p>
-							Quisque velit nisi, pretium ut lacinia in, elementum
-							id enim. Proin eget tortor risus. Lorem ipsum dolor
-							sit amet, consectetur adipiscing elit. Curabitur
-							aliquet quam id dui posuere blandit. Vivamus magna
-							justo, lacinia eget consectetur sed, convallis at
-							tellus. Praesent sapien massa, convallis a
-							pellentesque nec, egestas non nisi.
-						</p>
+            <h3>3. Prohibited Conduct</h3>
+            <p>
+              You agree not to: <br />
+              3.1 Use the Website in any way that violates applicable laws or
+              regulations.
+              <br />
+              3.2 IEngage in any activity that disrupts or interferes with the
+              Website or servers.
+              <br />
+              3.3 Attempt to gain unauthorized access to any part of the
+              Website.
+            </p>
 
-						<div className="gap-20"></div>
+            <div className="gap-20"></div>
 
-						<h3>4. Copyright and intellectual property</h3>
-						<p>
-							Nulla quis lorem ut libero malesuada feugiat. Proin
-							eget tortor risus. Nulla porttitor accumsan
-							tincidunt. Donec rutrum congue leo eget malesuada.
-							Vestibulum ac diam sit amet quam vehicula elementum
-							sed sit amet dui. Vivamus magna justo, lacinia eget
-							consectetur sed, convallis at tellus libero
-							malesuada feugiat. Proin eget tortor.
-						</p>
-						<ul>
-							<li>
-								<i className="ri-check-line"></i>
-								Quisque velit nisi, pretium ut lacinia in,
-								elementum id enim.
-							</li>
-							<li>
-								<i className="ri-check-line"></i>
-								Proin eget tortor risus consectetur adipiscing
-								elit.
-							</li>
-							<li>
-								<i className="ri-check-line"></i>
-								Curabitur aliquet quam id dui posuere blandit.
-							</li>
-						</ul>
+            <h3>4. Privacy</h3>
+            <p>
+              Our Privacy Policy governs the collection, use, and disclosure of
+              your personal information. By using the Website, you consent to
+              the terms of our Privacy Policy.
+            </p>
 
-						<div className="gap-20"></div>
+            <div className="gap-20"></div>
 
-						<h3>6. Termination of contract</h3>
-						<p>
-							Curabitur arcu erat, accumsan id imperdiet et,
-							porttitor at sem. Vivamus suscipit tortor eget felis
-							porttitor volutpat. Nulla quis lorem ut libero
-							malesuada feugiat. Nulla porttitor accumsan
-							tincidunt. Sed porttitor lectus nibh. Pellentesque
-							in ipsum id orci porta dapibus.Nulla quis lorem ut
-							libero malesuada feugiat. Proin eget tortor risus.
-							Nulla porttitor accumsan tinci dunt. Donec rutrum
-							congue leo eget malesuada. Vestibulum ac diam sit
-							amet quam vehicula elementum sed sit amet dui.
-							Vivamus magna justo
-						</p>
-						<p>
-							Quisque velit nisi, pretium ut lacinia in, elementum
-							id enim. Proin eget tortor risus. Lorem ipsum dolor
-							sit amet, consectetur adipiscing elit. Curabitur
-							aliquet quam id dui posuere blandit. Vivamus magna
-							justo, lacinia eget consectetur sed, convallis at
-							tellus. Praesent sapien massa, convallis a
-							pellentesque nec, egestas non nisi.
-						</p>
+            <h3>5. Limitation of Liability</h3>
+            <p>
+              To the fullest extent permitted by law, we shall not be liable for
+              any indirect, incidental, special, consequential, or punitive
+              damages arising out of or in connection with your use of the
+              Website.
+            </p>
 
-						<div className="gap-20"></div>
+            <div className="gap-20"></div>
 
-						<h3>7. Limitation of liability</h3>
-						<p>
-							Proin eget tortor risus. Mauris blandit aliquet
-							elit, eget tincidunt nibh pulvinar a. Quisque velit
-							nisi, pretium ut lacinia in elementum id enim.
-							Praesent sapien massa, convallis a pellentesque nec,
-							egestas non nisi. Cras ultricies ligula sed magna
-							dictum porta. Curabitur non nulla sit amet nisl
-							tempus convallis quis ac lectus. Vestibulum ac diam
-							sit amet quam vehicula elementum sed sit amet dui.
-							Donec rutrum congue leo eget malesuada. Donec rutrum
-							congue leo eget malesuada. Pellentesque in ipsum id
-							orci.
-						</p>
-					</div>
-				</div>
-			</section>
-			<Footer />
-		</>
-	);
+            <h3>6. Termination</h3>
+            <p>
+              We reserve the right to terminate or suspend access to the Website
+              immediately, without prior notice or liability, for any reason
+              whatsoever.
+            </p>
+            <h3>7. Changes to Terms</h3>
+            <p>
+              We reserve the right to modify or replace these Terms at any time.
+              Your continued use of the Website after any such changes
+              constitute your acceptance of the new Terms.
+            </p>
+            <h3>8. Governing Law</h3>
+            <p>
+              These Terms shall be governed by and construed in accordance with
+              the applicable laws.
+            </p>
+            <h3>9. Contact Us</h3>
+            <p>
+              If you have any questions about these Terms, please contact us at
+              hello@sharpstudy.io.
+            </p>
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </>
+  );
 };
 
 export default termsConditions;
