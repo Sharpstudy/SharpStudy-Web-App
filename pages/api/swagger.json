@@ -35,7 +35,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       },
       "post": {
         "summary": "Create a new user",
@@ -61,7 +64,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/users/signup": {
@@ -110,7 +116,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/users/signin": {
@@ -151,7 +160,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/api/categories": {
@@ -177,7 +189,10 @@
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Categories"
+        ]
       }
     },
     "/api/partners": {
@@ -198,8 +213,13 @@
               }
             }
           }
-        }
-      },
+        },
+        "tags": [
+          "Partners"
+        ]
+      }
+    },
+    "/api/partners/create": {
       "post": {
         "summary": "Create a new partner",
         "description": "Creates a new partner.",
@@ -208,7 +228,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Partner"
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Partner name"
+                  },
+                  "partner_image": {
+                    "type": "string",
+                    "description": "Partner Logo"
+                  }
+                }
               }
             }
           }
@@ -224,7 +254,1479 @@
               }
             }
           }
+        },
+        "tags": [
+          "Partners"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a partner",
+        "description": "Deletes a partner.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "partnerId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the partner to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Partner deleted successfully"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Partners"
+        ]
+      }
+    },
+    "/api/all-courses": {
+      "get": {
+        "summary": "Get a list of courses",
+        "description": "Retrieve a list of courses with optional pagination, sorting, and search functionality.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page number for pagination.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of items per page for pagination.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "short",
+            "in": "query",
+            "description": "Short field for sorting.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search query for filtering courses.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseList"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No courses found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/new": {
+      "post": {
+        "summary": "Create a new course",
+        "description": "Endpoint to create a new course.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the course."
+                  },
+                  "short_desc": {
+                    "type": "string",
+                    "description": "Short description of the course."
+                  },
+                  "overview": {
+                    "type": "string",
+                    "description": "Overview of the course."
+                  },
+                  "latest_price": {
+                    "type": "number",
+                    "description": "Latest price of the course."
+                  },
+                  "before_price": {
+                    "type": "number",
+                    "description": "Previous price of the course."
+                  },
+                  "lessons": {
+                    "type": "string",
+                    "description": "Number of lessons in the course."
+                  },
+                  "duration": {
+                    "type": "string",
+                    "description": "Duration of the course."
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "URL of the course image."
+                  },
+                  "access_time": {
+                    "type": "string",
+                    "description": "Access time of the course."
+                  },
+                  "requirements": {
+                    "type": "string",
+                    "description": "Requirements for the course."
+                  },
+                  "what_you_will_learn": {
+                    "type": "string",
+                    "description": "What you will learn in the course."
+                  },
+                  "who_is_this_course_for": {
+                    "type": "string",
+                    "description": "Target audience of the course."
+                  },
+                  "catId": {
+                    "type": "string",
+                    "description": "ID of the category the course belongs to."
+                  },
+                  "is_class": {
+                    "type": "boolean",
+                    "description": "Whether the course is a class or not."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Course created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message."
+                    },
+                    "course": {
+                      "$ref": "#/components/schemas/Course"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "500": {
+            "description": "Internal server error, failed to create the course."
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/admin/courses/requests": {
+      "put": {
+        "summary": "Update course approval status",
+        "description": "Endpoint to update the approval status of a course.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "courseId": {
+                    "type": "string",
+                    "description": "ID of the course to be updated."
+                  },
+                  "approved": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether the course is approved or not."
+                  }
+                },
+                "required": [
+                  "courseId",
+                  "approved"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Course approval status updated successfully."
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to update course approval status."
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/instructor/requests": {
+      "put": {
+        "summary": "Approve or reject an instructor request as an Admin",
+        "description": "Endpoint to approve or reject an instructor request.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "instId": {
+                    "type": "string",
+                    "description": "ID of the instructor request to approve or reject."
+                  },
+                  "approve": {
+                    "type": "boolean",
+                    "description": "Boolean indicating whether to approve or reject the instructor request."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Instructor request approved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Success message indicating the approval of the instructor request."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to approve the instructor request."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/admin/courses": {
+      "get": {
+        "summary": "Get instructor courses",
+        "description": "Endpoint to fetch courses associated with a particular instructor.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courses fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Course"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch courses."
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/instructor/new": {
+      "put": {
+        "summary": "Submit a new instructor request",
+        "description": "Endpoint to submit a new request to become an instructor.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the instructor."
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Email address of the instructor."
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number of the instructor."
+                  },
+                  "instructor_subject": {
+                    "type": "string",
+                    "description": "Subject for which the instructor is applying."
+                  },
+                  "instructor_description": {
+                    "type": "string",
+                    "description": "Description or reason for applying to become an instructor."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request received successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message confirming the request submission."
+                    },
+                    "instructor": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "description": "ID of the newly created instructor request."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "500": {
+            "description": "Internal server error, failed to submit the request."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/instructor/instructors": {
+      "get": {
+        "summary": "Get list of approved instructors",
+        "description": "Retrieve a list of all approved instructors.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/courses/course/upload/new": {
+      "post": {
+        "summary": "Upload a new course video",
+        "description": "Upload a new course with the provided details.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "group_name": {
+                    "type": "string",
+                    "description": "The group name of the course."
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the course."
+                  },
+                  "thumb": {
+                    "type": "string",
+                    "description": "The thumbnail of the course."
+                  },
+                  "video": {
+                    "type": "string",
+                    "description": "The video of the course."
+                  },
+                  "video_length": {
+                    "type": "number",
+                    "description": "The length of the video in seconds."
+                  },
+                  "is_preview": {
+                    "type": "boolean",
+                    "description": "Indicates whether the course is a preview."
+                  },
+                  "short_id": {
+                    "type": "string",
+                    "description": "The short identifier of the course."
+                  },
+                  "courseId": {
+                    "type": "string",
+                    "description": "The ID of the course."
+                  }
+                },
+                "required": [
+                  "group_name",
+                  "title",
+                  "thumb",
+                  "video",
+                  "video_length",
+                  "is_preview",
+                  "short_id",
+                  "courseId"
+                ]
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/students": {
+      "get": {
+        "summary": "List of all students",
+        "description": "Endpoint to fetch all students.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch students."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/admin/make-admin": {
+      "put": {
+        "summary": "Assign/Unassign admin privilege",
+        "description": "Endpoint to Assign/Unassign admin privilege",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "ID of the user to be updated."
+                  },
+                  "admin": {
+                    "type": "boolean",
+                    "description": "Boolean to update user role",
+                    "default": false
+                  }
+                },
+                "required": [
+                  "userId",
+                  "admin"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User role updated successfully"
+          },
+          "400": {
+            "description": "Bad request, invalid parameters."
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to update user role."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "get": {
+        "summary": "Get admin users",
+        "description": "Retrieve a list of admin users.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "admins": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/learnings": {
+      "get": {
+        "summary": "List of all learnings",
+        "description": "Endpoint to fetch all learnings.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Students fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch learnings."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/my-purchases": {
+      "get": {
+        "summary": "List courses user purchased",
+        "description": "Endpoint to fetch all courses user purchased.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Purchased courses fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch courses purchased."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/progress": {
+      "get": {
+        "summary": "User's course progress",
+        "description": "Endpoint to show User's course progress",
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the course to retrieve progress for."
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the user to retrieve progress for."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Purchased courses fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseProgress"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch User's course progress"
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/videos/{slug}": {
+      "get": {
+        "summary": "Get course videos by slug",
+        "description": "Endpoint to retrieve a video by its slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug identifier for the video."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Video"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Video not found."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch video."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/learnings/video/{videoId}": {
+      "get": {
+        "summary": "Get video details by video ID",
+        "description": "Endpoint to retrieve details of a specific video.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "videoId",
+            "required": true,
+            "description": "ID of the video to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "userId",
+            "required": true,
+            "description": "ID of the user accessing the video.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course containing the video.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video details retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Video not found."
+          },
+          "500": {
+            "description": "Internal server error, failed to retrieve video details."
+          }
+        },
+        "tags": [
+          "Learnings"
+        ]
+      }
+    },
+    "/api/courses/course": {
+      "get": {
+        "summary": "Get course details by slug",
+        "description": "Retrieve details of a course by its slug.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "slug",
+            "required": true,
+            "description": "Slug of the course to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/course/assets/{courseId}": {
+      "get": {
+        "summary": "Get assets for a course",
+        "description": "Retrieve assets associated with a specific course.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course to retrieve assets for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "course_assets": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CourseAsset"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/course/assets/{assetId}": {
+      "delete": {
+        "summary": "Delete a course asset",
+        "description": "Delete a specific asset associated with a course.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assetId",
+            "required": true,
+            "description": "ID of the asset to be deleted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/course/{courseId}": {
+      "get": {
+        "summary": "Get course by ID",
+        "description": "Retrieve details of a course by its ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course to retrieve details for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a course",
+        "description": "Delete a course by its ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Course deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/course/upload/{courseId}": {
+      "get": {
+        "summary": "Get videos for a particular course",
+        "description": "Retrieve videos details for a course by its course ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the course to retrieve upload details for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/courses/course/upload/{videoId}": {
+      "delete": {
+        "summary": "Delete video",
+        "description": "Delete a video by its ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "videoId",
+            "required": true,
+            "description": "ID of the video to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Video deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/wishlist": {
+      "get": {
+        "summary": "Get wishlist",
+        "description": "Retrieve wishlist for the authenticated user.",
+        "tags": [
+          "wishlist"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "courses": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/api/categories/create": {
+      "post": {
+        "summary": "Create a new category",
+        "description": "Endpoint to create a new category.",
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "Name of the category to create"
+                  }
+                },
+                "required": [
+                  "category"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "category": {
+                      "$ref": "#/components/schemas/Category"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update an existing category",
+        "description": "Endpoint to update an existing category.",
+        "tags": [
+          "Categories"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string",
+                    "description": "Name of the category to update"
+                  },
+                  "catId": {
+                    "type": "integer",
+                    "description": "ID of the category to update"
+                  }
+                },
+                "required": [
+                  "category",
+                  "catId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -253,9 +1755,6 @@
           "email": {
             "type": "string",
             "format": "email"
-          },
-          "password": {
-            "type": "string"
           },
           "gender": {
             "type": "string"
@@ -385,6 +1884,117 @@
         "required": [
           "name",
           "partner_image"
+        ]
+      },
+      "CourseList": {
+        "type": "object",
+        "properties": {
+          "courses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Course"
+            }
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "coursesCount": {
+            "type": "integer"
+          }
+        }
+      },
+      "Course": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "short_desc": {
+            "type": "string"
+          },
+          "overview": {
+            "type": "string"
+          },
+          "latest_price": {
+            "type": "number"
+          },
+          "before_price": {
+            "type": "number"
+          },
+          "lessons": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "access_time": {
+            "type": "string",
+            "enum": [
+              "Lifetime",
+              "Three Months",
+              "Six Months",
+              "1 Year"
+            ]
+          },
+          "requirements": {
+            "type": "string"
+          },
+          "what_you_will_learn": {
+            "type": "string"
+          },
+          "who_is_this_course_for": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "catId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "approved": {
+            "type": "boolean"
+          },
+          "in_home_page": {
+            "type": "boolean"
+          },
+          "in_home_page_set_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "is_class": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "short_desc",
+          "overview",
+          "latest_price",
+          "before_price",
+          "lessons",
+          "duration",
+          "image",
+          "access_time",
+          "requirements",
+          "what_you_will_learn",
+          "who_is_this_course_for",
+          "userId",
+          "catId",
+          "approved",
+          "in_home_page",
+          "is_class"
         ]
       }
     }
