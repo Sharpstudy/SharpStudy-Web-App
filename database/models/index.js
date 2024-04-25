@@ -7,7 +7,8 @@ import Enrolment from "./enrolment";
 import Instructor_Earning from "./instructor_earning";
 import Course_Progress from "./course_progress";
 import Course_Asset from "./course_asset";
-import Quiz from "./oquiz";
+import Quiz from "./quiz";
+import Question from "./question";
 
 User.hasMany(Course, { foreignKey: "userId", as: "courses" });
 Course.belongsTo(User, { foreignKey: "userId", as: "user" });
@@ -69,6 +70,9 @@ Course_Progress.belongsTo(Video, { foreignKey: "videoId", as: "video" });
 Course.hasMany(Quiz, { foreignKey: "courseId", as: "quizzes" });
 Quiz.belongsTo(Course, { foreignKey: "courseId", as: "course" });
 
+Quiz.hasMany(Question, { foreignKey: "quizId", as: "questions" });
+Question.belongsTo(Quiz, { foreignKey: "quizId", as: "quiz" });
+
 export {
   User,
   Course,
@@ -80,4 +84,5 @@ export {
   Course_Progress,
   Course_Asset,
   Quiz,
+  Question,
 };
