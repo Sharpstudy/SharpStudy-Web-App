@@ -2,26 +2,23 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('quizzes', {
+    await queryInterface.createTable('questions', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      title: {
-        type: Sequelize.STRING
+      question_text: {
+        type: Sequelize.TEXT
       },
-      description: {
-        type: Sequelize.STRING
-      },
-      courseId: {
+      quizId: {
         type: Sequelize.UUID,
         allowNull: false,
         onDelete: "CASCADE",
         references: {
-          model: "courses",
+          model: "quizzes",
           key: "id",
-          as: "courseId",
+          as: "quizId",
         },
       },
       createdAt: {
@@ -35,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('quizzes');
+    await queryInterface.dropTable('questions');
   }
 };

@@ -2,27 +2,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('quizzes', {
+    await queryInterface.createTable('answer_options', {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
       },
-      title: {
-        type: Sequelize.STRING
-      },
-      description: {
-        type: Sequelize.STRING
-      },
-      courseId: {
+      questionId: {
         type: Sequelize.UUID,
         allowNull: false,
         onDelete: "CASCADE",
         references: {
-          model: "courses",
+          model: "answer_options",
           key: "id",
-          as: "courseId",
-        },
+          as: "questionId",
+        }
+      },
+      option_text: {
+        type: Sequelize.TEXT
+      },
+      is_correct: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('quizzes');
+    await queryInterface.dropTable('answer_options');
   }
 };
