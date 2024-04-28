@@ -9,6 +9,7 @@ import Course_Progress from "./course_progress";
 import Course_Asset from "./course_asset";
 import Quiz from "./quiz";
 import Question from "./question";
+import Answer_Option from "./answer_option"
 
 User.hasMany(Course, { foreignKey: "userId", as: "courses" });
 Course.belongsTo(User, { foreignKey: "userId", as: "user" });
@@ -73,6 +74,9 @@ Quiz.belongsTo(Course, { foreignKey: "courseId", as: "course" });
 Quiz.hasMany(Question, { foreignKey: "quizId", as: "questions" });
 Question.belongsTo(Quiz, { foreignKey: "quizId", as: "quiz" });
 
+Question.hasMany(Answer_Option, { foreignKey: "questionId", as: "answer_options" });
+Answer_Option.belongsTo(Question, { foreignKey: "questionId", as: "question" });
+
 export {
   User,
   Course,
@@ -85,4 +89,5 @@ export {
   Course_Asset,
   Quiz,
   Question,
+  Answer_Option,
 };
