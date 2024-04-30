@@ -7,6 +7,10 @@ import Enrolment from "./enrolment";
 import Instructor_Earning from "./instructor_earning";
 import Course_Progress from "./course_progress";
 import Course_Asset from "./course_asset";
+import Quiz from "./quiz";
+import Question from "./question";
+import Answer_Option from "./answer_option";
+import User_Response from "./user_response"
 
 User.hasMany(Course, { foreignKey: "userId", as: "courses" });
 Course.belongsTo(User, { foreignKey: "userId", as: "user" });
@@ -36,43 +40,59 @@ Course.hasMany(Course_Asset, { foreignKey: "courseId", as: "assets" });
 Course_Asset.belongsTo(Course, { foreignKey: "courseId", as: "course" });
 
 User.hasMany(Instructor_Earning, {
-	foreignKey: "userId",
-	as: "instructor_earnings",
+  foreignKey: "userId",
+  as: "instructor_earnings",
 });
 Instructor_Earning.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 Course.hasMany(Instructor_Earning, {
-	foreignKey: "courseId",
-	as: "instructor_earnings",
+  foreignKey: "courseId",
+  as: "instructor_earnings",
 });
 Instructor_Earning.belongsTo(Course, { foreignKey: "courseId", as: "course" });
 
 User.hasMany(Course_Progress, {
-	foreignKey: "userId",
-	as: "course_progresses",
+  foreignKey: "userId",
+  as: "course_progresses",
 });
 Course_Progress.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 Course.hasMany(Course_Progress, {
-	foreignKey: "courseId",
-	as: "course_progresses",
+  foreignKey: "courseId",
+  as: "course_progresses",
 });
 Course_Progress.belongsTo(Course, { foreignKey: "courseId", as: "course" });
 
 Video.hasMany(Course_Progress, {
-	foreignKey: "videoId",
-	as: "course_progresses",
+  foreignKey: "videoId",
+  as: "course_progresses",
 });
 Course_Progress.belongsTo(Video, { foreignKey: "videoId", as: "video" });
 
+Course.hasMany(Quiz, { foreignKey: "courseId", as: "quizzes" });
+Quiz.belongsTo(Course, { foreignKey: "courseId", as: "course" });
+
+Quiz.hasMany(Question, { foreignKey: "quizId", as: "questions" });
+Question.belongsTo(Quiz, { foreignKey: "quizId", as: "quiz" });
+
+Question.hasMany(Answer_Option, { foreignKey: "questionId", as: "answer_options" });
+Answer_Option.belongsTo(Question, { foreignKey: "questionId", as: "question" });
+
+Question.hasMany(User_Response, { foreignKey: "questionId", as: "user_responses" });
+User_Response.belongsTo(Question, { foreignKey: "questionId", as: "question" });
+
 export {
-	User,
-	Course,
-	Category,
-	Video,
-	Favourite,
-	Enrolment,
-	Instructor_Earning,
-	Course_Progress,
-	Course_Asset,
+  User,
+  Course,
+  Category,
+  Video,
+  Favourite,
+  Enrolment,
+  Instructor_Earning,
+  Course_Progress,
+  Course_Asset,
+  Quiz,
+  Question,
+  Answer_Option,
+  User_Response,
 };
