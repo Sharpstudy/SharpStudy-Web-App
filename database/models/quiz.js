@@ -21,6 +21,10 @@ const initQuiz = (sequelize, Types) => {
       },
       title: DataTypes.STRING,
       description: DataTypes.STRING,
+      slug: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
       courseId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -29,6 +33,16 @@ const initQuiz = (sequelize, Types) => {
           model: "courses",
           key: "id",
           as: "courseId",
+        },
+      },
+      userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        onDelete: "CASCADE",
+        references: {
+          model: "users",
+          key: "id",
+          as: "userId",
         },
       },
     },
