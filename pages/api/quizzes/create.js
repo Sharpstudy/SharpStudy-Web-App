@@ -1,8 +1,8 @@
+import jwt from 'jsonwebtoken';
 import { slugify } from "@/utils/auth";
-import { Course, Quiz } from "database/models";
+import { Quiz } from "database/models";
 
 export default async function handler(req, res) {
-  console.log('req.body');
   if (!("authorization" in req.headers)) {
     return res.status(401).json({ message: "No autorization token" });
   }
@@ -40,7 +40,11 @@ const handlePostRequest = async (req, res) => {
     }
 
     // Verify the token using the extracted token variable
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized to create a quiz" });
+    }
 
     let slug = slugify(title);
     const slugExist = await Quiz.findOne({
@@ -53,12 +57,16 @@ const handlePostRequest = async (req, res) => {
       )}`;
     }
 
+    const newObj = {
+      'title': title,
+      'slug': slug,
+      'description': description,
+      'courseId': courseId,
+      'userId': user.userId
+    };
+
     const newQuiz = await Quiz.create({
-      title,
-      slug,
-      description,
-      courseId,
-      userId
+      ...newObj
     });
 
     res.status(200).json({
