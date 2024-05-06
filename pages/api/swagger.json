@@ -1801,6 +1801,11 @@
         },
         "tags": [
           "Quizzes"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
         ]
       }
     }
