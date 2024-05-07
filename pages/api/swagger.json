@@ -1807,6 +1807,64 @@
             "BearerAuth": []
           }
         ]
+      },
+      "delete": {
+        "summary": "Delete a Quiz and related data",
+        "description": "Delete a Quiz and related data",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "quizId",
+            "required": true,
+            "description": "ID of the quiz to be deleted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Quizzes"
+        ]
       }
     }
   },
