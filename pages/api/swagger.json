@@ -1543,7 +1543,7 @@
         "summary": "Get wishlist",
         "description": "Retrieve wishlist for the authenticated user.",
         "tags": [
-          "wishlist"
+          "Wishlist"
         ],
         "security": [
           {
@@ -1729,7 +1729,7 @@
         ]
       }
     },
-    "/api/quizzes/create": {
+    "/api/quizzes/quiz": {
       "post": {
         "summary": "Create a new quiz",
         "description": "Creates a new quiz.",
@@ -1865,6 +1865,64 @@
         "tags": [
           "Quizzes"
         ]
+      },
+      "get": {
+        "summary": "Find one quiz",
+        "description": "Retrieve quiz for the authenticated user.",
+        "tags": [
+          "Quizzes"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "quizId",
+            "required": true,
+            "description": "ID of the Quiz to retrieve.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "quizzes": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

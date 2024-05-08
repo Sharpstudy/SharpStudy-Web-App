@@ -9,6 +9,9 @@ export default async function handler(req, res) {
     case "POST":
       await handlePostRequest(req, res);
       break;
+    case "GET":
+      await handleGetRequest(req, res);
+      break;
     case "DELETE":
       await handleDeleteRequest(req, res);
       break;
@@ -31,7 +34,7 @@ const handlePostRequest = async (req, res) => {
     if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized to create a quiz" });
     }
-
+    //Todo: check if it is the quiz creator that created the course
     let slug = slugify(title);
     const slugExist = await Quiz.findOne({
       where: { slug: slug },
@@ -95,6 +98,30 @@ const handleDeleteRequest = async (req, res) => {
   } catch (e) {
     res.status(400).json({
       error_code: "delete_quiz",
+      message: e.message,
+    });
+  }
+};
+
+const handleGetRequest = async (req, res) => {
+  const { quizId } = req.query;
+  try {
+    const user = await verifyUser(req, res);
+    const quiz = await Quiz.findOne({
+      include: [
+        {
+          model: Question,
+          as: 'questions',
+          attributes: ['quizId', 'question_text']
+        }
+      ],
+      where: { id: quizId, userId: user.userId },
+    });
+
+    res.status(200).json({ quiz });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "get_quiz",
       message: e.message,
     });
   }
