@@ -15,6 +15,9 @@ export default async function handler(req, res) {
     case "DELETE":
       await handleDeleteRequest(req, res);
       break;
+    case "PUT":
+      await handlePutRequest(req, res);
+      break;
     default:
       res.status(405).json({
         message: `Method ${req.method} not allowed`,
@@ -122,6 +125,43 @@ const handleGetRequest = async (req, res) => {
   } catch (e) {
     res.status(400).json({
       error_code: "get_quiz",
+      message: e.message,
+    });
+  }
+};
+
+const handlePutRequest = async (req, res) => {
+  const { quizId, courseId } = req.query;
+  const {
+    title,
+    description,
+  } = req.body;
+  try {
+    const user = await verifyUser(req, res);
+
+    const [affectedRows] = await Quiz.update(
+      {
+        title,
+        description,
+      },
+      {
+        where: { id: quizId, userId: user.userId, courseId },
+      }
+    );
+
+    if (affectedRows === 0) {
+      return res.status(404).json({
+        message: "Quiz not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Quiz updated successfully",
+      updatedQuiz: affectedRows
+    });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "update_quiz",
       message: e.message,
     });
   }

@@ -1923,6 +1923,96 @@
             }
           }
         }
+      },
+      "put": {
+        "summary": "Update an existing quiz",
+        "description": "Endpoint to update an existing quiz.",
+        "tags": [
+          "Quizzes"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "quizId",
+            "required": true,
+            "description": "ID of the Quiz to update.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "courseId",
+            "required": true,
+            "description": "ID of the Course to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the quiz to update"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Description of the quiz to update"
+                  }
+                },
+                "required": [
+                  "courseId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/api/quizzes": {
