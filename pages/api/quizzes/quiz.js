@@ -131,7 +131,7 @@ const handleGetRequest = async (req, res) => {
 };
 
 const handlePutRequest = async (req, res) => {
-  const { quizId, courseId } = req.query;
+  const { quizId } = req.query;
   const {
     title,
     description,
@@ -145,7 +145,7 @@ const handlePutRequest = async (req, res) => {
         description,
       },
       {
-        where: { id: quizId, userId: user.userId, courseId },
+        where: { id: quizId, userId: user.userId },
       }
     );
 

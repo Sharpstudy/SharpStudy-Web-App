@@ -1939,15 +1939,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "query",
-            "name": "courseId",
-            "required": true,
-            "description": "ID of the Course to update.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
