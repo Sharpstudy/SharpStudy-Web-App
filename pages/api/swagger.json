@@ -1924,6 +1924,41 @@
           }
         }
       }
+    },
+    "/api/quizzes": {
+      "get": {
+        "summary": "Fetch all Admin/Instructor quizzes",
+        "description": "Endpoint to fetch quizzes associated with a particular instructor/admin",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quizzes fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quiz"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch courses."
+          }
+        },
+        "tags": [
+          "Quizzes"
+        ]
+      }
     }
   },
   "components": {
