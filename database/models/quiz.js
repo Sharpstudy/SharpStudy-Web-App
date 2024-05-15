@@ -19,8 +19,14 @@ const initQuiz = (sequelize, Types) => {
         defaultValue: Types.UUIDV4,
         primaryKey: true,
       },
-      title: DataTypes.STRING,
-      description: DataTypes.STRING,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       slug: {
         type: DataTypes.STRING,
         unique: true,
@@ -52,6 +58,18 @@ const initQuiz = (sequelize, Types) => {
       tableName: "quizzes",
       createdAt: "created_at",
       updatedAt: "updated_at",
+      validate: {
+        // Validate all fields
+        validateFields() {
+          if (!this.title) {
+            throw new Error("Title field is required");
+          }
+          if (!this.description) {
+            throw new Error("Description field required");
+          }
+        },
+
+      }
     }
   );
   return Quiz;
