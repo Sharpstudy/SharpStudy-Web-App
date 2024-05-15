@@ -19,8 +19,10 @@ const initQuestion = (sequelize, Types) => {
         defaultValue: Types.UUIDV4,
         primaryKey: true,
       },
-      title: DataTypes.STRING,
-      description: DataTypes.STRING,
+      question_text: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
       quizId: {
         type: DataTypes.UUID,
         allowNull: false,
@@ -38,6 +40,18 @@ const initQuestion = (sequelize, Types) => {
       tableName: "questions",
       createdAt: "created_at",
       updatedAt: "updated_at",
+      validate: {
+        // Validate all fields
+        validateFields() {
+          if (!this.question_text) {
+            throw new Error("Question text is required");
+          }
+          if (!this.quizId) {
+            throw new Error("Quiz ID is required");
+          }
+        },
+
+      }
     }
   );
   return Question;
