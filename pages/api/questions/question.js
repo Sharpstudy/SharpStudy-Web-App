@@ -105,3 +105,27 @@ const handleDeleteRequest = async (req, res) => {
     });
   }
 };
+
+const handleGetRequest = async (req, res) => {
+  const { questionId } = req.query;
+  try {
+    await verifyUser(req, res);
+    const question = await Question.findOne({
+      include: [
+        {
+          model: Answer_Option,
+          as: 'answer_options',
+          attributes: ['questionId', 'option_text']
+        }
+      ],
+      where: { id: questionId },
+    });
+
+    res.status(200).json({ question });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "get_question",
+      message: e.message,
+    });
+  }
+};

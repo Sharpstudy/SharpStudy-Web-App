@@ -2136,13 +2136,18 @@
             }
           }
         },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
         "tags": [
           "Questions"
         ]
       },
       "get": {
-        "summary": "Find one quiz",
-        "description": "Retrieve quiz for the authenticated user.",
+        "summary": "Find one Question",
+        "description": "Retrieve Question for the authenticated user.",
         "tags": [
           "Questions"
         ],
@@ -2154,9 +2159,9 @@
         "parameters": [
           {
             "in": "query",
-            "name": "quizId",
+            "name": "questionId",
             "required": true,
-            "description": "ID of the Quiz to retrieve.",
+            "description": "ID of the Question to retrieve.",
             "schema": {
               "type": "string"
             }
@@ -2170,7 +2175,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "quizzes": {
+                    "questions": {
                       "type": "object"
                     }
                   }

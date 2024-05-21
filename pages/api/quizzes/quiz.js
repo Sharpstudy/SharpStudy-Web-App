@@ -115,7 +115,14 @@ const handleGetRequest = async (req, res) => {
         {
           model: Question,
           as: 'questions',
-          attributes: ['quizId', 'question_text']
+          attributes: ['quizId', 'question_text'],
+          include: [
+            {
+              model: Answer_Option,
+              as: 'answer_options',
+              attributes: ['id', 'option_text']
+            }
+          ]
         }
       ],
       where: { id: quizId, userId: user.userId },
