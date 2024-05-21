@@ -2008,23 +2008,27 @@
     },
     "/api/questions/question": {
       "post": {
-        "summary": "Create a new question for a quiz",
-        "description": "Create a new question for a quiz",
+        "summary": "Create new questions for a quiz",
+        "description": "Create new questions for a quiz",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "question_text": {
-                    "type": "string",
-                    "description": "Quiz question"
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "question_text": {
+                      "type": "string",
+                      "description": "Quiz question"
+                    },
+                    "quizId": {
+                      "type": "string",
+                      "description": "ID of the quiz to associate the question with"
+                    }
                   },
-                  "quizId": {
-                    "type": "string",
-                    "description": "ID of the quiz to associated question with"
-                  }
+                  "required": ["question_text", "quizId"]
                 }
               }
             }
@@ -2032,7 +2036,7 @@
         },
         "responses": {
           "200": {
-            "description": "Question created successfully",
+            "description": "Questions created successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2041,9 +2045,11 @@
                     "message": {
                       "type": "string"
                     },
-                    "quiz": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/Question"
+                    "questions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Question"
+                      }
                     }
                   }
                 }
@@ -2136,14 +2142,14 @@
           }
         ],
         "tags": [
-          "Quizzes"
+          "Questions"
         ]
       },
       "get": {
         "summary": "Find one quiz",
         "description": "Retrieve quiz for the authenticated user.",
         "tags": [
-          "Quizzes"
+          "Questions"
         ],
         "security": [
           {
@@ -2201,7 +2207,7 @@
         "summary": "Update an existing quiz",
         "description": "Endpoint to update an existing quiz.",
         "tags": [
-          "Quizzes"
+          "Questions"
         ],
         "parameters": [
           {

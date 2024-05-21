@@ -25,89 +25,56 @@ export default async function handler(req, res) {
   }
 }
 
+
 const handlePostRequest = async (req, res) => {
-  const { question_text, quizId } = req.body;
+  const questions = req.body
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return res.status(400).json({ message: "Questions should be a non-empty array" });
+  }
+
   try {
     const user = await verifyUser(req, res);
 
     if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to create this question" });
+      return res.status(401).json({ message: "User is not authorized to create these questions" });
     }
 
     const checkQuiz = await Quiz.findOne({
-      where: { id: quizId, userId: user.userId }
+      where: { id: questions[0]['quizId'], userId: user.userId }
     });
 
     if (!checkQuiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
 
-    const newQuestion = await Question.create({
-      quizId: checkQuiz.id,
-      question_text: question_text
+    const questionsToCreate = questions.map(question => {
+      if (typeof question !== 'object' || question === null) {
+        throw new Error("Each question must be an object");
+      }
+      if (typeof question.question_text !== 'string' || question.question_text.trim() === "") {
+        throw new Error("Each question text is required");
+      }
+      if (!question.quizId || question.quizId.trim() === "") {
+        throw new Error("Each question must have a valid quiz");
+      }
+
+      return {
+        quizId: question.quizId.trim(),
+        question_text: question.question_text.trim()
+      };
     });
 
+    const createdQuestions = await Question.bulkCreate(questionsToCreate);
+
     res.status(200).json({
-      message: "Question created successfully.",
-      question: newQuestion,
+      message: "Questions created successfully.",
+      questions: createdQuestions,
     });
   } catch (e) {
-    console.error('Error creating question:', e);
+    console.error('Error creating questions:', e);
     res.status(400).json({
-      error_code: "create_question",
+      error_code: "create_questions",
       message: e.message,
     });
   }
 };
-
-
-// const handlePostRequest = async (req, res) => {
-//   const {
-//     question_text,
-//     quizId
-//   } = req.body;
-//   try {
-//     const user = await verifyUser(req, res);
-
-//     if (user.role === 'student') {
-//       return res.status(401).json({ message: "User is not authorized to create this question" });
-//     }
-
-//     const checkQuiz = await Quiz.findOne({
-//       where: { id: quizId, userId: user['userId'] }
-//     })
-
-//     // Check if quiz exists
-//     if (!checkQuiz) {
-//       return res.status(404).json({ message: "Quiz not found" });
-//     }
-
-//     // // console.log('checkQuiz', checkQuiz);
-//     // const newObj = {
-//     //   'quizId': 'e873a54b-be4f-427f-a24f-f0051cb399bd',
-//     //   // 'quizId': checkQuiz['id'],
-//     //   'question_text': 'question_text'
-//     //   // 'question_text': question_text
-//     // };
-
-//     // console.log('newObj', newObj);
-
-//     const newQuestion = await Question.create({
-//       quizId: checkQuiz.id,
-//       question_text: question_text
-//     });
-
-//     res.status(200).json({
-//       message:
-//         "Question created successfully.",
-//       question: newQuestion,
-//     });
-//   } catch (e) {
-//     console.error('e', e); // Log the error for debugging
-
-//     res.status(400).json({
-//       error_code: "create_question",
-//       message: e.message,
-//     });
-//   }
-// };
