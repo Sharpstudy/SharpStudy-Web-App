@@ -129,3 +129,40 @@ const handleGetRequest = async (req, res) => {
     });
   }
 };
+
+const handlePutRequest = async (req, res) => {
+  const { questionId } = req.query;
+  const {
+    question_text,
+    quizId
+  } = req.body;
+  try {
+    await verifyUser(req, res);
+
+    const [affectedRows] = await Question.update(
+      {
+        question_text,
+        quizId
+      },
+      {
+        where: { id: questionId, quizId },
+      }
+    );
+
+    if (affectedRows === 0) {
+      return res.status(404).json({
+        message: "Question not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Question updated successfully",
+      updatedQuestion: affectedRows
+    });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "update_question",
+      message: e.message,
+    });
+  }
+};

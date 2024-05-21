@@ -26,7 +26,7 @@ const handleGetRequest = async (req, res) => {
           model: Question,
           as: 'questions',
           attributes: ['id', 'quizId', 'question_text'],
-          include: [ //Todo: Check if nested answer_options is fetched
+          include: [
             {
               model: Answer_Option,
               as: 'answer_options',

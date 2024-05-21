@@ -2204,17 +2204,17 @@
         }
       },
       "put": {
-        "summary": "Update an existing quiz",
-        "description": "Endpoint to update an existing quiz.",
+        "summary": "Update an existing question",
+        "description": "Endpoint to update an existing question.",
         "tags": [
           "Questions"
         ],
         "parameters": [
           {
             "in": "query",
-            "name": "quizId",
+            "name": "questionId",
             "required": true,
-            "description": "ID of the Quiz to update.",
+            "description": "ID of the Question to update.",
             "schema": {
               "type": "string"
             }
@@ -2227,17 +2227,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "title": {
+                  "question_text": {
                     "type": "string",
-                    "description": "Title of the quiz to update"
+                    "description": "Question text to update"
                   },
-                  "description": {
+                  "quizId": {
                     "type": "string",
-                    "description": "Description of the quiz to update"
+                    "description": "Quiz question to update"
                   }
                 },
                 "required": [
-                  "courseId"
+                  "questionId",
+                  "question_text",
+                  "quizId"
                 ]
               }
             }
