@@ -2088,14 +2088,14 @@
         ]
       },
       "delete": {
-        "summary": "Delete a Quiz and related data",
-        "description": "Delete a Quiz and related data",
+        "summary": "Delete a Question and related data",
+        "description": "Delete a Question and related data",
         "parameters": [
           {
             "in": "query",
-            "name": "quizId",
+            "name": "questionId",
             "required": true,
-            "description": "ID of the quiz to be deleted.",
+            "description": "ID of the question to be deleted.",
             "schema": {
               "type": "string"
             }
@@ -2136,11 +2136,6 @@
             }
           }
         },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
         "tags": [
           "Questions"
         ]

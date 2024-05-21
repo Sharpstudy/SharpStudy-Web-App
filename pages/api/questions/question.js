@@ -78,3 +78,30 @@ const handlePostRequest = async (req, res) => {
     });
   }
 };
+
+const handleDeleteRequest = async (req, res) => {
+  const { questionId } = req.query;
+  try {
+    const user = await verifyUser(req, res);
+    const question = await Question.findOne({
+      where: { id: questionId },
+    });
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    await question.destroy({
+      include: [
+        { model: Answer_Option, onDelete: 'cascade' },
+      ],
+    });
+
+    res.status(200).json({ message: "Question and related data deleted successfully" });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "delete_question",
+      message: e.message,
+    });
+  }
+};
