@@ -14,6 +14,11 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      slug: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
       courseId: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -24,14 +29,26 @@ module.exports = {
           as: "courseId",
         },
       },
-      createdAt: {
+      userId: {
+        type: Sequelize.UUID,
         allowNull: false,
-        type: Sequelize.DATE
+        onDelete: "CASCADE",
+        references: {
+          model: "users",
+          key: "id",
+          as: "userId",
+        },
       },
-      updatedAt: {
+      created_at: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     });
   },
   async down(queryInterface, Sequelize) {
