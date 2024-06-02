@@ -2467,8 +2467,8 @@
         ]
       },
       "get": {
-        "summary": "Find one Question",
-        "description": "Retrieve Question for the authenticated user.",
+        "summary": "Retrieve answer options for a question as an authenticated user.",
+        "description": "Retrieve answer options for a question as an authenticated user.",
         "tags": [
           "Answer Options"
         ],
@@ -2482,7 +2482,7 @@
             "in": "query",
             "name": "questionId",
             "required": true,
-            "description": "ID of the Question to retrieve.",
+            "description": "ID of the Question to retrieve its answer options.",
             "schema": {
               "type": "string"
             }
