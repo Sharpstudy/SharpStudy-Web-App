@@ -98,3 +98,99 @@ const handlePostRequest = async (req, res) => {
     });
   }
 };
+
+
+const handleDeleteRequest = async (req, res) => {
+  const { questionId } = req.query;
+  try {
+    const user = await verifyUser(req, res);
+
+    if (user.role === student) {
+      return res.status(401).json({ message: "User is not authorized to delete this question's answer options" });
+    }
+
+    const questionAnswers = await Answer_Option.findAll({
+      where: { questionId },
+    });
+
+    if (!questionAnswers) {
+      return res.status(404).json({ message: "Question has no answer options" });
+    }
+
+    await questionAnswers.destroy({
+      include: [
+        { model: Answer_Option, onDelete: 'cascade' },
+      ],
+    });
+
+    res.status(200).json({ message: "Answer Options and related data deleted successfully" });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "delete_answer_options",
+      message: e.message,
+    });
+  }
+};
+
+const handleGetRequest = async (req, res) => {
+  const { questionId } = req.query;
+  try {
+    const user = await verifyUser(req, res);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized" });
+    }
+
+    const questionAnswers = await Answer_Option.findAll({
+      where: { questionId },
+    })
+
+    res.status(200).json({ questionAnswers });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "get_answer_options",
+      message: e.message,
+    });
+  }
+};
+
+const handlePutRequest = async (req, res) => {
+  const { id } = req.query;
+  const {
+    option_text,
+    is_correct
+  } = req.body;
+  try {
+    const user = await verifyUser(req, res);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized to update this answer options" });
+    }
+
+    const [affectedRows] = await Answer_Option.update(
+      {
+        option_text,
+        is_correct
+      },
+      {
+        where: { id },
+      }
+    );
+
+    if (affectedRows === 0) {
+      return res.status(404).json({
+        message: "Answer Option not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Answer option updated successfully",
+      updatedAnswerOption: affectedRows
+    });
+  } catch (e) {
+    res.status(400).json({
+      error_code: "update_answer_option",
+      message: e.message,
+    });
+  }
+};
