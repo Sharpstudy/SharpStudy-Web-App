@@ -2525,17 +2525,17 @@
         }
       },
       "put": {
-        "summary": "Update an existing question",
-        "description": "Endpoint to update an existing question.",
+        "summary": "Update an existing answer option",
+        "description": "Endpoint to update an existing answer option.",
         "tags": [
           "Answer Options"
         ],
         "parameters": [
           {
             "in": "query",
-            "name": "questionId",
+            "name": "id",
             "required": true,
-            "description": "ID of the Question to update.",
+            "description": "ID of the Answer Option to update.",
             "schema": {
               "type": "string"
             }
@@ -2548,19 +2548,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "question_text": {
+                  "option_text": {
                     "type": "string",
-                    "description": "Question text to update"
+                    "description": "Answer option text to update"
                   },
-                  "quizId": {
+                  "is_correct": {
                     "type": "string",
-                    "description": "Quiz question to update"
+                    "description": "Answer is_correct to update"
                   }
                 },
                 "required": [
-                  "questionId",
-                  "question_text",
-                  "quizId"
+                  "id",
+                  "option_text",
+                  "is_correct"
                 ]
               }
             }
