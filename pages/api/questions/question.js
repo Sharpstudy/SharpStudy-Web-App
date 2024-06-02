@@ -115,7 +115,7 @@ const handleGetRequest = async (req, res) => {
         {
           model: Answer_Option,
           as: 'answer_options',
-          attributes: ['questionId', 'option_text']
+          attributes: ['id', 'questionId', 'option_text']
         }
       ],
       where: { id: questionId },
