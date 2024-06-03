@@ -2409,14 +2409,14 @@
         ]
       },
       "delete": {
-        "summary": "Delete a Question and related data",
-        "description": "Delete a Question and related data",
+        "summary": "Delete a answer options related to a question ",
+        "description": "Delete a answer options related to a question",
         "parameters": [
           {
             "in": "query",
             "name": "questionId",
             "required": true,
-            "description": "ID of the question to be deleted.",
+            "description": "ID of the question its answer options is to be deleted ",
             "schema": {
               "type": "string"
             }
