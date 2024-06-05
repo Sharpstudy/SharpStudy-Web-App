@@ -102,10 +102,11 @@ const handlePostRequest = async (req, res) => {
 
 const handleDeleteRequest = async (req, res) => {
   const { questionId } = req.query;
+
   try {
     const user = await verifyUser(req, res);
 
-    if (user.role === student) {
+    if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized to delete this question's answer options" });
     }
 
@@ -117,10 +118,8 @@ const handleDeleteRequest = async (req, res) => {
       return res.status(404).json({ message: "Question has no answer options" });
     }
 
-    await questionAnswers.destroy({
-      include: [
-        { model: Answer_Option, onDelete: 'cascade' },
-      ],
+    await Answer_Option.destroy({
+      where: { questionId },
     });
 
     res.status(200).json({ message: "Answer Options and related data deleted successfully" });
