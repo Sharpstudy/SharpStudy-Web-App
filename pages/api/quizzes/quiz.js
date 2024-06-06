@@ -146,6 +146,11 @@ const handlePutRequest = async (req, res) => {
   try {
     const user = await verifyUser(req, res);
 
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized to update this quiz" });
+    }
+
     const [affectedRows] = await Quiz.update(
       {
         title,

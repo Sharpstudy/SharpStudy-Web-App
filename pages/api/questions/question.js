@@ -115,7 +115,7 @@ const handleGetRequest = async (req, res) => {
         {
           model: Answer_Option,
           as: 'answer_options',
-          attributes: ['questionId', 'option_text']
+          attributes: ['id', 'questionId', 'option_text']
         }
       ],
       where: { id: questionId },
@@ -137,7 +137,11 @@ const handlePutRequest = async (req, res) => {
     quizId
   } = req.body;
   try {
-    await verifyUser(req, res);
+    const user = await verifyUser(req, res);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized to update this question" });
+    }
 
     const [affectedRows] = await Question.update(
       {

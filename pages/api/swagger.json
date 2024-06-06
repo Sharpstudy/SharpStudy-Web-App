@@ -2321,6 +2321,292 @@
           "Quizzes"
         ]
       }
+    },
+    "/api/answer-options/answer-option": {
+      "post": {
+        "summary": "Create new answer-options for a question",
+        "description": "Create new answer-options for a question",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "option_text": {
+                      "type": "string",
+                      "description": "Answer Options for a Question"
+                    },
+                    "is_correct": {
+                      "type": "boolean",
+                      "default": "false",
+                      "description": "Mark answer option as True or False for each answer option"
+                    },
+                    "questionId": {
+                      "type": "string",
+                      "description": "ID of the quiz to associate the question with"
+                    }
+                  },
+                  "required": ["option_text", "questionId", "is_correct"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Answer Options created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "questions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Answer_Option"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Answer Options"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Delete a answer options related to a question ",
+        "description": "Delete a answer options related to a question",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "questionId",
+            "required": true,
+            "description": "ID of the question its answer options is to be deleted ",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Answer Options"
+        ]
+      },
+      "get": {
+        "summary": "Retrieve answer options for a question as an authenticated user.",
+        "description": "Retrieve answer options for a question as an authenticated user.",
+        "tags": [
+          "Answer Options"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "questionId",
+            "required": true,
+            "description": "ID of the Question to retrieve its answer options.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "questions": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing answer option",
+        "description": "Endpoint to update an existing answer option.",
+        "tags": [
+          "Answer Options"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "description": "ID of the Answer Option to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "option_text": {
+                    "type": "string",
+                    "description": "Answer option text to update"
+                  },
+                  "is_correct": {
+                    "type": "string",
+                    "description": "Answer is_correct to update"
+                  }
+                },
+                "required": [
+                  "id",
+                  "option_text",
+                  "is_correct"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error_code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2632,6 +2918,30 @@
         "required": [
           "question_text",
           "quizId"
+        ]
+      },
+      "Answer_Option": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "option_text": {
+            "type": "string"
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "is_correct": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "option_text",
+          "questionId",
+          "is_correct"
         ]
       }
     }
