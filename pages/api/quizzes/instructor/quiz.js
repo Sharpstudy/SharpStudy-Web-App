@@ -3,7 +3,7 @@ import { Quiz, Question, Answer_Option } from "database/models";
 
 export default async function handler(req, res) {
   if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
+    return res.status(401).json({ message: "No authorization token" });
   }
   switch (req.method) {
     case "POST":
@@ -78,6 +78,11 @@ const handleDeleteRequest = async (req, res) => {
   const { quizId } = req.query;
   try {
     const user = await verifyUser(req, res);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized" });
+    }
+
     const quiz = await Quiz.findOne({
       where: { id: quizId },
     });
@@ -110,17 +115,22 @@ const handleGetRequest = async (req, res) => {
   const { quizId } = req.query;
   try {
     const user = await verifyUser(req, res);
+
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized" });
+    }
+
     const quiz = await Quiz.findOne({
       include: [
         {
           model: Question,
           as: 'questions',
-          attributes: ['quizId', 'question_text'],
+          attributes: ['id', 'quizId', 'question_text'],
           include: [
             {
               model: Answer_Option,
               as: 'answer_options',
-              attributes: ['id', 'option_text']
+              attributes: ['id', 'questionId', 'option_text']
             }
           ]
         }

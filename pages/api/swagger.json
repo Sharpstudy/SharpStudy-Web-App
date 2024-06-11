@@ -1729,7 +1729,7 @@
         ]
       }
     },
-    "/api/quizzes/quiz": {
+    "/api/quizzes/instructor/quiz": {
       "post": {
         "summary": "Create a new quiz",
         "description": "Creates a new quiz.",
@@ -2287,7 +2287,7 @@
         ]
       }
     },
-    "/api/quizzes": {
+    "/api/quizzes/instructor": {
       "get": {
         "summary": "Fetch all Admin/Instructor quizzes",
         "description": "Endpoint to fetch quizzes associated with a particular instructor/admin",

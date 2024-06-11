@@ -19,6 +19,9 @@ export default async function handler(req, res) {
 const handleGetRequest = async (req, res) => {
   try {
     const user = await verifyUser(req, res);
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized" });
+    }
     const quizzes = await Quiz.findAll({
       order: [["created_at", "DESC"]],
       include: [
