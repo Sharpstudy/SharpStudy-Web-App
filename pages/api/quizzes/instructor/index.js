@@ -3,7 +3,7 @@ import { Answer_Option, Quiz, Question } from "database/models";
 
 export default async function handler(req, res) {
   if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
+    return res.status(401).json({ message: "No authorization token" });
   }
   switch (req.method) {
     case "GET":
@@ -19,6 +19,9 @@ export default async function handler(req, res) {
 const handleGetRequest = async (req, res) => {
   try {
     const user = await verifyUser(req, res);
+    if (user.role === 'student') {
+      return res.status(401).json({ message: "User is not authorized" });
+    }
     const quizzes = await Quiz.findAll({
       order: [["created_at", "DESC"]],
       include: [

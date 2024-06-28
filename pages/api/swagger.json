@@ -1729,7 +1729,7 @@
         ]
       }
     },
-    "/api/quizzes/quiz": {
+    "/api/quizzes/instructor/quiz": {
       "post": {
         "summary": "Create a new quiz",
         "description": "Creates a new quiz.",
@@ -2005,6 +2005,192 @@
           }
         ]
       }
+    },
+    "/api/quizzes/instructor": {
+      "get": {
+        "summary": "Fetch all Admin/Instructor quizzes",
+        "description": "Endpoint to fetch quizzes associated with a particular instructor/admin",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quizzes fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quiz"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, authentication required."
+          },
+          "500": {
+            "description": "Internal server error, failed to fetch courses."
+          }
+        },
+        "tags": [
+          "Quizzes"
+        ]
+      }
+    },
+    "/api/quizzes/student/quiz": {
+        "get": {
+          "summary": "Find a quiz or course quizzes as a Student",
+          "description": "Retrieve a specific quiz or all quizzes for a specific course for the authenticated student.",
+          "tags": [
+            "Quizzes"
+          ],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "quizId",
+              "required": false,
+              "description": "ID of the Quiz to retrieve. Provide either quizId or courseId.",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "in": "query",
+              "name": "courseId",
+              "required": false,
+              "description": "ID of the Course to retrieve quizzes for. Provide either quizId or courseId.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "quizId": { "type": "string" },
+                          "question_text": { "type": "string" },
+                          "answer_options": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": { "type": "string" },
+                                "questionId": { "type": "string" },
+                                "option_text": { "type": "string" }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "quizId": { "type": "string" },
+                            "question_text": { "type": "string" },
+                            "answer_options": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": { "type": "string" },
+                                  "questionId": { "type": "string" },
+                                  "option_text": { "type": "string" }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error_code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
     },
     "/api/questions/question": {
       "post": {
@@ -2284,41 +2470,6 @@
           {
             "BearerAuth": []
           }
-        ]
-      }
-    },
-    "/api/quizzes": {
-      "get": {
-        "summary": "Fetch all Admin/Instructor quizzes",
-        "description": "Endpoint to fetch quizzes associated with a particular instructor/admin",
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Quizzes fetched successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Quiz"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized, authentication required."
-          },
-          "500": {
-            "description": "Internal server error, failed to fetch courses."
-          }
-        },
-        "tags": [
-          "Quizzes"
         ]
       }
     },
