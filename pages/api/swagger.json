@@ -2190,6 +2190,80 @@
               }
             }
           }
+        },
+        "post": {
+          "summary": "Submit answers for a question",
+          "description": "Submit answers for a question by an authenticated student.",
+          "tags": [
+            "Answers"
+          ],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "questionId":{
+                      "type": "string",
+                      "description": "ID of the question"
+                    },
+                    "selectedAnswerIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "IDs of the selected answer options"
+                    }
+                  },
+                  "required": ["questionId", "selectedAnswerIds"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": " Answer submitted successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "isAnsweredCorrectly": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error_code": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
     },
     "/api/questions/question": {

@@ -1,5 +1,5 @@
 import { verifyUser } from "@/utils/auth";
-import { Quiz, Question, Answer_Option, Enrolment, Course } from "database/models";
+import { Quiz, Question, Answer_Option, Enrolment, Course, User_Response } from "database/models";
 
 export default async function handler(req, res) {
   if (!("authorization" in req.headers)) {
@@ -15,6 +15,9 @@ export default async function handler(req, res) {
         res.status(400).json({ message: "Invalid query parameters" });
       }
       break;
+    case "POST":
+      await handlePostRequest(req, res)
+      break
     default:
       res.status(405).json({
         message: `Method ${req.method} not allowed`,
@@ -124,4 +127,85 @@ const handleGetCourseQuizzesRequest = async (req, res) => {
     });
   }
 };
+
+const handlePostRequest = async (req, res) => {
+  const { questionId, selectedAnswerIds } = req.body
+
+  try {
+    const user = await verifyUser(req, res)
+
+    // Query the question and answer options and include the quiz the question belong to
+    const question = await Question.findOne({
+      include: [
+        {
+          model: Answer_Option,
+          as: 'answer_options',
+          attributes: ['id', 'is_correct']
+        },
+        {
+          model: Quiz,
+          as: 'quiz',
+          attributes: ['id', 'courseId']
+        }
+      ],
+      where: { id: questionId }
+    })
+
+    // Verify student enrollment
+    const studentEnrolments = await Enrolment.findOne({
+      where: {
+        userId: user.userId,
+        courseId: question.quiz.courseId
+      }
+    })
+
+    if (!studentEnrolments) {
+      return res.status(401).json({ message: "Student is not enrolled in this course" });
+    }
+
+    // Check if there is an existing response for this question
+    const existingResponse = await User_Response.findOne({
+      where: {
+        enrolmentId: studentEnrolments.id,
+        questionId: question.id
+      }
+    });
+
+    if (existingResponse && existingResponse.is_answered_correctly) {
+      return res.status(422).json({ message: "Question has already been answered correctly" });
+    }
+
+    // Retrieve the correct answers
+    const correctAnswers = question.answer_options.filter(option => option.is_correct);
+    const correctAnswerIds = correctAnswers.map(option => option.id);
+
+    // Check if the selected answers match the correct answers exactly 
+    const isAnsweredCorrectly = selectedAnswerIds.length === correctAnswerIds.length && selectedAnswerIds.every(answerId => correctAnswerIds.includes(answerId))
+
+    const answerStatus = isAnsweredCorrectly ? 'correct' : 'incorrect';
+
+    if (existingResponse) {
+      // Update the existing response if necessary
+      existingResponse.is_answered_correctly = isAnsweredCorrectly;
+      existingResponse.updated_at = new Date()
+      await existingResponse.save();
+      res.status(200).json({ message: "User response updated successfully", status: answerStatus });
+    } else {
+      // Save the new user response
+      await User_Response.create({
+        enrolmentId: studentEnrolments.id,
+        questionId: question.id,
+        is_answered_correctly: isAnsweredCorrectly
+      });
+      res.status(201).json({ message: "User response saved successfully", status: answerStatus });
+    }
+
+  } catch (e) {
+    res.status(400).json({
+      error_code: "user_answered_question",
+      message: e.message,
+    });
+
+  }
+}
 
