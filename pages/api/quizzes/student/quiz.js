@@ -137,22 +137,42 @@ const handlePostRequest = async (req, res) => {
   try {
     const user = await verifyUser(req, res)
 
-    // Retrieve the question and include the quiz the question belongs to
-    const question = await Question.findOne({
-      include: [
-        {
-          model: Answer_Option,
-          as: 'answer_options',
-          attributes: ['id', 'is_correct']
-        },
-        {
-          model: Quiz,
-          as: 'quiz',
-          attributes: ['id', 'courseId']
-        }
-      ],
-      where: { id: questionId }
-    })
+    // Helper function to retrieve question by it's ID
+    const getQuestionById = async (id) => {
+      return await Question.findOne({
+        include: [
+          {
+            model: Answer_Option,
+            as: 'answer_options',
+            attributes: ['id', 'is_correct']
+          },
+          {
+            model: Quiz,
+            as: 'quiz',
+            attributes: ['id', 'courseId']
+          }
+        ],
+        where: { id }
+      })
+    }
+
+    // Retrieve the question being answered
+    // const question = await Question.findOne({
+    //   include: [
+    //     {
+    //       model: Answer_Option,
+    //       as: 'answer_options',
+    //       attributes: ['id', 'is_correct']
+    //     },
+    //     {
+    //       model: Quiz,
+    //       as: 'quiz',
+    //       attributes: ['id', 'courseId']
+    //     }
+    //   ],
+    //   where: { id: questionId }
+    // })
+    const question = await getQuestionById(questionId)
 
     if (!question) {
       return res.status(404).json({ message: "Question not found" });
@@ -174,21 +194,24 @@ const handlePostRequest = async (req, res) => {
     // Check if the student has an ongoing question (i.e., currentQuestionId is set)
     if (studentEnrolments.currentQuestionId && studentEnrolments.currentQuestionId !== questionId) {
       // Retrieve the current question they need to answer
-      const currentQuestion = await Question.findOne({
-        where: { id: studentEnrolments.currentQuestionId },
-        include: [
-          {
-            model: Answer_Option,
-            as: 'answer_options',
-            attributes: ['id', 'is_correct']
-          },
-          {
-            model: Quiz,
-            as: 'quiz',
-            attributes: ['id', 'courseId']
-          }
-        ]
-      })
+      // const currentQuestion = await Question.findOne({
+      //   where: { id: studentEnrolments.currentQuestionId },
+      //   include: [
+      //     {
+      //       model: Answer_Option,
+      //       as: 'answer_options',
+      //       attributes: ['id', 'is_correct']
+      //     },
+      //     {
+      //       model: Quiz,
+      //       as: 'quiz',
+      //       attributes: ['id', 'courseId']
+      //     }
+      //   ]
+      // })
+
+      const currentQuestion = await getQuestionById(studentEnrolments.currentQuestionId);
+
       return res.status(200).json({
         message: 'You have an unanswered question',
         currentQuestion
