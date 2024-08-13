@@ -81,21 +81,6 @@ Answer_Option.belongsTo(Question, { foreignKey: "questionId", as: "question" });
 Question.hasMany(User_Response, { foreignKey: "questionId", as: "user_responses" });
 User_Response.belongsTo(Question, { foreignKey: "questionId", as: "question" });
 
-// Enrolment.hasMany(Quiz, { as: 'quizzes', foreignKey: 'courseId', sourceKey: 'courseId' });
-
-// // Question and Quiz association
-// // Question.belongsTo(Quiz, { as: 'quiz', foreignKey: 'quizId' });
-
-// Question.belongsTo(Quiz, { as: 'quiz', foreignKey: 'quizId' });
-// // Quiz.hasMany(Question, { as: 'quizQuestions', foreignKey: 'quizId' });
-
-// Question.hasMany(Answer_Option, { as: 'questionAnswers', foreignKey: 'questionId' });
-// Quiz.belongsTo(Enrolment, { as: 'enrolment_course_quiz', foreignKey: 'courseId', targetKey: 'courseId' });
-
-// // Quiz and Enrolment association with a unique alias
-// // Quiz.belongsTo(Enrolment, { as: 'enrolmentQuiz', foreignKey: 'courseId', targetKey: 'courseId' });
-
-// Unique association alias for handling post requests
 Enrolment.hasMany(Quiz, { as: 'enrolment_quizzes', foreignKey: 'courseId', sourceKey: 'courseId' });
 Quiz.belongsTo(Enrolment, { as: 'enrolment_course_quiz', foreignKey: 'courseId', targetKey: 'courseId' });
 
