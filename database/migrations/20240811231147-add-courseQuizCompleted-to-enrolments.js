@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn("enrolments", "cousrseQuizCompleted", {
+    await queryInterface.addColumn("enrolments", "courseQuizCompleted", {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       onDelete: "CASCADE",
@@ -9,6 +9,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("enrolments", "cousrseQuizCompleted");
+    await queryInterface.removeColumn("enrolments", "courseQuizCompleted");
   },
 };

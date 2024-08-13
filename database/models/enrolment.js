@@ -30,6 +30,12 @@ const initEnrolment = (sequelize, Types) => {
         onDelete: "CASCADE",
         defaultValue: null
       },
+      courseQuizCompleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        onDelete: "CASCADE",
+        defaultValue: false
+      },
       userId: {
         type: DataTypes.UUID,
         allowNull: false,
