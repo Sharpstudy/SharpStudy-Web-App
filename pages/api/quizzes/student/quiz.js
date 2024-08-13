@@ -157,21 +157,6 @@ const handlePostRequest = async (req, res) => {
     }
 
     // Retrieve the question being answered
-    // const question = await Question.findOne({
-    //   include: [
-    //     {
-    //       model: Answer_Option,
-    //       as: 'answer_options',
-    //       attributes: ['id', 'is_correct']
-    //     },
-    //     {
-    //       model: Quiz,
-    //       as: 'quiz',
-    //       attributes: ['id', 'courseId']
-    //     }
-    //   ],
-    //   where: { id: questionId }
-    // })
     const question = await getQuestionById(questionId)
 
     if (!question) {
@@ -190,26 +175,9 @@ const handlePostRequest = async (req, res) => {
       return res.status(401).json({ message: "Student is not enrolled in this course" });
     }
 
-    // Todo: Test for the ongoing question
     // Check if the student has an ongoing question (i.e., currentQuestionId is set)
     if (studentEnrolments.currentQuestionId && studentEnrolments.currentQuestionId !== questionId) {
       // Retrieve the current question they need to answer
-      // const currentQuestion = await Question.findOne({
-      //   where: { id: studentEnrolments.currentQuestionId },
-      //   include: [
-      //     {
-      //       model: Answer_Option,
-      //       as: 'answer_options',
-      //       attributes: ['id', 'is_correct']
-      //     },
-      //     {
-      //       model: Quiz,
-      //       as: 'quiz',
-      //       attributes: ['id', 'courseId']
-      //     }
-      //   ]
-      // })
-
       const currentQuestion = await getQuestionById(studentEnrolments.currentQuestionId);
 
       return res.status(200).json({
