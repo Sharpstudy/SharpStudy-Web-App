@@ -81,6 +81,9 @@ Answer_Option.belongsTo(Question, { foreignKey: "questionId", as: "question" });
 Question.hasMany(User_Response, { foreignKey: "questionId", as: "user_responses" });
 User_Response.belongsTo(Question, { foreignKey: "questionId", as: "question" });
 
+Enrolment.hasMany(Quiz, { as: 'enrolment_quizzes', foreignKey: 'courseId', sourceKey: 'courseId' });
+Quiz.belongsTo(Enrolment, { as: 'enrolment_course_quiz', foreignKey: 'courseId', targetKey: 'courseId' });
+
 export {
   User,
   Course,
