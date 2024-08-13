@@ -1,5 +1,8 @@
 import { verifyUser } from "@/utils/auth";
 import { Quiz, Question, Answer_Option, Enrolment, Course, User_Response } from "database/models";
+import { Sequelize, Op } from "sequelize";
+// import { Op } from 'sequelize';
+
 
 export default async function handler(req, res) {
   if (!("authorization" in req.headers)) {
@@ -151,6 +154,10 @@ const handlePostRequest = async (req, res) => {
       where: { id: questionId }
     })
 
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
     // Verify student enrollment
     const studentEnrolments = await Enrolment.findOne({
       where: {
@@ -197,7 +204,70 @@ const handlePostRequest = async (req, res) => {
         questionId: question.id,
         is_answered_correctly: isAnsweredCorrectly
       });
-      res.status(201).json({ message: "User response saved successfully", status: answerStatus });
+      // res.status(201).json({ message: "User response saved successfully", status: answerStatus });
+    }
+
+    // TOdo: test this query with 2 or more questions for the course
+    // Check if all questions in the quiz have been answered correctly
+    const enrolmentWithUnansweredQuestions = await Enrolment.findOne({
+      where: {
+        id: studentEnrolments.id,
+        userId: studentEnrolments.userId,
+        courseId: studentEnrolments.courseId,
+      },
+      include: [
+        {
+          model: Course,
+          as: 'course',
+          include: [
+            {
+              model: Quiz,
+              as: 'quizzes',
+              include: [
+                {
+                  model: Question,
+                  as: 'questions',
+                  where: {
+                    id: {
+                      [Op.notIn]: Sequelize.literal(
+                        `(SELECT questionId FROM User_Responses WHERE enrolmentId = '${studentEnrolments.id}' AND is_answered_correctly = true)`
+                      ),
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    // Check if there are unanswered questions
+    if (!enrolmentWithUnansweredQuestions || !enrolmentWithUnansweredQuestions.course.quizzes.some(quiz => quiz.questions.length > 0)) {
+      // Todo: Add another field to the enrolment table 
+      // Mark the quiz as completed
+      studentEnrolments.currentQuestionId = null
+      studentEnrolments.courseQuizCompleted = true // Todo: set default to false
+      await studentEnrolments.save()
+
+      return res.status(200).json({ message: 'Course Quiz completed successfully', status: answerStatus });
+    } else {
+      // Update the current question to the next unanswered question
+      // const nextQuestion = enrolmentWithUnansweredQuestions.course.quizzes.find(quiz => quiz.questions.length > 0).questions[0];
+      const nextQuizWithQuestions = enrolmentWithUnansweredQuestions.course.quizzes.find(quiz => quiz.questions.length > 0);
+      const nextQuestion = nextQuizWithQuestions.questions[0];
+      studentEnrolments.currentQuestionId = nextQuestion.id
+
+      // console.log({ nextQuestion: nextQuestion, studentEnrolments: studentEnrolments });
+
+      await studentEnrolments.save()
+
+      return res.status(200).json({
+        message: 'Next question is ready',
+        status: answerStatus,
+        nextQuestionId: nextQuestion.id,
+        enrolmentWithUnansweredQuestions: enrolmentWithUnansweredQuestions
+      })
     }
 
   } catch (e) {
