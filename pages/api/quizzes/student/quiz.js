@@ -137,7 +137,7 @@ const handlePostRequest = async (req, res) => {
   try {
     const user = await verifyUser(req, res)
 
-    // Query the question and answer options and include the quiz the question belong to
+    // Retrieve the question and include the quiz the question belongs to
     const question = await Question.findOne({
       include: [
         {
@@ -170,6 +170,31 @@ const handlePostRequest = async (req, res) => {
       return res.status(401).json({ message: "Student is not enrolled in this course" });
     }
 
+    // Todo: Test for the ongoing question
+    // Check if the student has an ongoing question (i.e., currentQuestionId is set)
+    if (studentEnrolments.currentQuestionId && studentEnrolments.currentQuestionId !== questionId) {
+      // Retrieve the current question they need to answer
+      const currentQuestion = await Question.findOne({
+        where: { id: studentEnrolments.currentQuestionId },
+        include: [
+          {
+            model: Answer_Option,
+            as: 'answer_options',
+            attributes: ['id', 'is_correct']
+          },
+          {
+            model: Quiz,
+            as: 'quiz',
+            attributes: ['id', 'courseId']
+          }
+        ]
+      })
+      return res.status(200).json({
+        message: 'You have an unanswered question',
+        currentQuestion
+      });
+    }
+
     // Check if there is an existing response for this question
     const existingResponse = await User_Response.findOne({
       where: {
@@ -190,6 +215,16 @@ const handlePostRequest = async (req, res) => {
     const isAnsweredCorrectly = selectedAnswerIds.length === correctAnswerIds.length && selectedAnswerIds.every(answerId => correctAnswerIds.includes(answerId))
     const answerStatus = isAnsweredCorrectly ? 'correct' : 'incorrect';
 
+    if (!isAnsweredCorrectly) {
+      // If the answer is incorrect, return the same question to the client
+      return res.status(200).json({
+        message: 'Incorrect answer, please try again',
+        status: answerStatus,
+        nextQuestionId: questionId
+      });
+    }
+
+    // If the answer is correct, handle the response
     if (existingResponse) {
       // Update the existing response if necessary
       existingResponse.is_answered_correctly = isAnsweredCorrectly;
@@ -197,7 +232,7 @@ const handlePostRequest = async (req, res) => {
       await existingResponse.save();
       res.status(200).json({ message: "User response updated successfully", status: answerStatus });
     } else {
-      // Save the new user response
+      // Save the user's answer
       await User_Response.create({
         enrolmentId: studentEnrolments.id,
         questionId: question.id,
@@ -205,7 +240,7 @@ const handlePostRequest = async (req, res) => {
       });
     }
 
-    // Check if all questions in the quiz have been answered correctly
+    // Proceed to check if all questions in the quiz have been answered correctly
     const enrolmentWithUnansweredQuestions = await Enrolment.findOne({
       where: {
         id: studentEnrolments.id,
