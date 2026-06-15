@@ -148,6 +148,7 @@ const Create = ({ user }) => {
 					</div>
 				</div>
 			</div>
+
 			<Footer />
 		</>
 	);
