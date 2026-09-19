@@ -14,6 +14,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   env: {
+    BASE_URL: process.env.BASE_URL,
     CLOUD_NAME: "dvoomq0ii",
     UPLOAD_PRESETS: "zhphafwx",
     CLOUDINARY_URL:
