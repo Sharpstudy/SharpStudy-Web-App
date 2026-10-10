@@ -21,66 +21,39 @@ const PageNavigation = ({ courseId, activeClassname }) => {
 		fetchCourse();
 	}, []);
 
+	const tabs = [
+		{ key: "edit", href: `/instructor/course/edit/${courseId}`, label: "Course details", icon: "ri-edit-line" },
+		{ key: "upload", href: `/instructor/course/upload/${courseId}`, label: "Upload video", icon: "ri-upload-cloud-2-line" },
+		{ key: "uploads", href: `/instructor/course/uploads/${courseId}`, label: "Videos", icon: "ri-video-line" },
+		{ key: "assets", href: `/instructor/course/assets/${courseId}`, label: "Assets", icon: "ri-folder-2-line" },
+	];
+
 	return (
 		<>
-			<h2 className="fw-bold mb-4">Title: {course && course.title}</h2>
-
-			<ul className="nav-style1">
-				<li>
+			<div className="ss-dash__head">
+				<div style={{ minWidth: 0 }}>
 					<Link href="/instructor/courses/">
-						<a>Courses</a>
-					</Link>
-				</li>
-				<li>
-					<Link href="/instructor/course/create/">
-						<a>Create Course</a>
-					</Link>
-				</li>
-				<li>
-					<Link href={`/instructor/course/edit/${courseId}`}>
-						<a
-							className={
-								activeClassname == "edit" ? "active" : ""
-							}
-						>
-							Edit Course
+						<a className="ss-backlink">
+							<i className="ri-arrow-left-line" aria-hidden="true"></i> My courses
 						</a>
 					</Link>
-				</li>
-				<li>
-					<Link href={`/instructor/course/upload/${courseId}`}>
+					<h1>{(course && course.title) || "Course"}</h1>
+				</div>
+			</div>
+
+			<nav className="ss-tabs" aria-label="Course sections">
+				{tabs.map((t) => (
+					<Link href={t.href} key={t.key}>
 						<a
-							className={
-								activeClassname == "upload" ? "active" : ""
-							}
+							className={activeClassname == t.key ? "active" : ""}
+							aria-current={activeClassname == t.key ? "page" : undefined}
 						>
-							Upload Video
+							<i className={t.icon} aria-hidden="true"></i>
+							{t.label}
 						</a>
 					</Link>
-				</li>
-				<li>
-					<Link href={`/instructor/course/uploads/${courseId}`}>
-						<a
-							className={
-								activeClassname == "uploads" ? "active" : ""
-							}
-						>
-							Videos
-						</a>
-					</Link>
-				</li>
-				<li>
-					<Link href={`/instructor/course/assets/${courseId}`}>
-						<a
-							className={
-								activeClassname == "assets" ? "active" : ""
-							}
-						>
-							Assets
-						</a>
-					</Link>
-				</li>
-			</ul>
+				))}
+			</nav>
 		</>
 	);
 };

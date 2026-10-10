@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import AdminLayout from "@/components/_App/AdminLayout";
 import Link from "next/link";
 import axios from "axios";
 import baseUrl from "@/utils/baseUrl";
@@ -85,17 +83,8 @@ const Create = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
+			<AdminLayout user={user} title="Categories" description="Edit a category.">
 								{/* Nav */}
 								<ul className="nav-style1">
 									<li>
@@ -143,13 +132,7 @@ const Create = ({ user }) => {
 										</div>
 									</div>
 								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</AdminLayout>
 		</>
 	);
 };

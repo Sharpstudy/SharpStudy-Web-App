@@ -1,172 +1,114 @@
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+
+const columns = [
+	{
+		title: "Learn",
+		links: [
+			{ href: "/courses/", label: "All courses" },
+			{ href: "/blog/blogs/", label: "Blog" },
+			{ href: "/become-an-instructor/", label: "Become an instructor" },
+		],
+	},
+	{
+		title: "Company",
+		links: [
+			{ href: "/about-us/", label: "About us" },
+			{ href: "/contact-us/", label: "Contact" },
+			{ href: "/faq/", label: "FAQ" },
+		],
+	},
+	{
+		title: "Legal",
+		links: [
+			{ href: "/terms-conditions/", label: "Terms & conditions" },
+			{ href: "/privacy-policy/", label: "Privacy policy" },
+		],
+	},
+];
 
 const Footer = () => {
 	const currentYear = new Date().getFullYear();
 	return (
-		<>
-			<div className="footer-area bg-color-f6fafb pt-100 pb-70">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-3 col-sm-6">
-							<div className="single-footer-widget">
-								<a href="index.html" className="logo">
-									<img
-										src="/images/sharpstudy.png"
-										className="main-logo"
-										alt="Sharp Study Logo"
-									/>
-									<img
-										src="/images/sharpstudy.png"
-										className="white-logo"
-										alt="logo"
-									/>
-								</a>
-								<p>
-									SharpStudy Learning Inc. is a Project based cognetive skills development which uses advanced pedogogy for practical and enhanced learning.
-								</p>
-							</div>
+		<footer className="ss-footer">
+			<div className="ss-container ss-container--wide">
+				<div className="ss-footer__grid">
+					<div className="ss-footer__brand">
+						<Link href="/">
+							<a aria-label="SharpStudy home">
+								{/* eslint-disable-next-line @next/next/no-img-element */}
+								<img src="/images/sharpstudy.png" alt="SharpStudy" width="170" height="28" />
+							</a>
+						</Link>
+						<p>
+							SharpStudy Learning Inc. is a project-based cognitive skills
+							development platform that uses advanced pedagogy for practical and
+							enhanced learning.
+						</p>
+						<div className="ss-footer__social">
+							<a
+								href="https://www.facebook.com/sharpstudyio"
+								aria-label="SharpStudy on Facebook"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<i className="ri-facebook-fill" aria-hidden="true"></i>
+							</a>
+							<a
+								href="https://www.linkedin.com/company/sharpstudy"
+								aria-label="SharpStudy on LinkedIn"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<i className="ri-linkedin-fill" aria-hidden="true"></i>
+							</a>
 						</div>
+					</div>
 
-						<div className="col-lg-3 col-sm-6">
-							<div className="single-footer-widget pl-40">
-								<h3>Quick Link</h3>
-
-								<ul className="import-link">
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/courses">
-											<a>Courses</a>
+					{columns.map((col) => (
+						<nav key={col.title} aria-label={col.title}>
+							<h2 className="ss-footer__title">{col.title}</h2>
+							<ul>
+								{col.links.map((l) => (
+									<li key={l.href}>
+										<Link href={l.href}>
+											<a>{l.label}</a>
 										</Link>
-									</motion.li>
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/about-us">
-											<a>About Us</a>
-										</Link>
-									</motion.li>
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/terms-conditions">
-											<a>Terms & Conditions</a>
-										</Link>
-									</motion.li>
-								</ul>
-							</div>
-						</div>
-
-						<div className="col-lg-3 col-sm-6">
-							<div className="single-footer-widget pl-40">
-								<h3>Help Center</h3>
-
-								<ul className="import-link">
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/contact-us">
-											<a>Support</a>
-										</Link>
-									</motion.li>
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/faq">
-											<a>Get Help</a>
-										</Link>
-									</motion.li>
-									<motion.li
-										whileHover={{
-											scale: 1.1,
-											originX: 0,
-											transition: { duration: 0.5 },
-										}}
-									>
-										<Link href="/privacy-policy">
-											<a>Privacy Policy</a>
-										</Link>
-									</motion.li>
-								</ul>
-							</div>
-						</div>
-
-						<div className="col-lg-3 col-sm-6">
-							<div className="single-footer-widget">
-								<h3>Contact Info</h3>
-
-								<ul className="info">
-									<li>
-										<span>Call Us:</span>{" "}
-										<a href="tel:16047670944">
-											1-604-767-0944
-										</a>
 									</li>
-									<li>
-										<span>Address:</span> 151 West Hasting St,
-										Vancouver , B.C.  V3c 4L8 Canada
-									</li>
-									<li>
-										<span>Mail Us:</span>{" "}
-										<a href="mailto:hello@sharpstudy.io">
-											hello@sharpstudy.io
-										</a>
-									</li>
-								</ul>
-								<div>
-								<a href="https://www.facebook.com/sharpstudyio"><i className="ri-facebook-circle-fill"></i></a>
-								</div>
-								<a href="https://www.linkedin.com/company/sharpstudy"><i className="ri-linkedin-box-fill"></i></a>
-							</div>
-						</div>
+								))}
+							</ul>
+						</nav>
+					))}
+
+					<div>
+						<h2 className="ss-footer__title">Contact</h2>
+						<ul className="ss-footer__contact">
+							<li>
+								<i className="ri-phone-line" aria-hidden="true"></i>
+								<a href="tel:16047670944">1-604-767-0944</a>
+							</li>
+							<li>
+								<i className="ri-mail-line" aria-hidden="true"></i>
+								<a href="mailto:hello@sharpstudy.io">hello@sharpstudy.io</a>
+							</li>
+							<li>
+								<i className="ri-map-pin-line" aria-hidden="true"></i>
+								<span>151 West Hasting St, Vancouver, B.C. V3c 4L8 Canada</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 
-				<img
-					src="/images/footer-shape-1.png"
-					className="shape shape-1"
-					alt="footer"
-				/>
-				<img
-					src="/images/footer-shape-2.png"
-					className="shape shape-2"
-					alt="footer"
-				/>
-			</div>
-
-			<div className="copy-right-area bg-color-f6fafb">
-				<div className="container">
+				<div className="ss-footer__bottom">
 					<p>
-						&copy; Sharpstudy {currentYear} is Proudly Owned by{" "}
-						<a href="https://www.hypervers.co/" target="_blank">
+						&copy; {currentYear} SharpStudy. Proudly owned by{" "}
+						<a href="https://www.hypervers.co/" target="_blank" rel="noopener noreferrer">
 							Hypervers Solutions Inc.
 						</a>
 					</p>
 				</div>
 			</div>
-		</>
+		</footer>
 	);
 };
 

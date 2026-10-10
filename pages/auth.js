@@ -1,129 +1,102 @@
 import React, { useState } from "react";
-import PageBanner from "@/components/Common/PageBanner";
+import Link from "next/link";
 import Footer from "@/components/_App/Footer";
 import Navbar from "@/components/_App/Navbar";
 import LoginForm from "@/components/Authentication/LoginForm";
 import RegisterForm from "@/components/Authentication/RegisterForm";
-import { motion } from "framer-motion";
 
-const auth = () => {
+const points = [
+	{ icon: "ri-lightbulb-flash-line", text: "Project-based courses and workshops" },
+	{ icon: "ri-play-circle-line", text: "Video lessons, resources, quizzes and live classes" },
+	{ icon: "ri-line-chart-line", text: "Track your progress and earn certificates" },
+];
+
+const tabs = [
+	{ id: "register", label: "Create account" },
+	{ id: "login", label: "Log in" },
+];
+
+const Auth = () => {
 	const [register, setRegister] = useState("register");
-	const [isOn, setIsOn] = useState(false);
-	const toggleSwitch = () => setIsOn(!isOn);
+
+	const onKeyDown = (e) => {
+		if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+		const next = register === "register" ? "login" : "register";
+		setRegister(next);
+		document.getElementById(`tab-${next}`)?.focus();
+	};
 
 	return (
 		<>
 			<Navbar />
-			<PageBanner
-				pageTitle="Auth"
-				homePageUrl="/"
-				homePageText="Home"
-				activePageText="Authentication"
-			/>
-			<div className="register-area ptb-100">
-				<div className="container">
-					<div className="row align-items-center">
-						<div className="col-lg-6">
-							<div className="register-img">
-								<img
-									src="/images/register-img.png"
-									alt="Image"
-								/>
-							</div>
-						</div>
-						<div className="col-lg-6">
-							<div className="register-form">
-								{register == "register" ? (
-									<motion.h2
-										initial={{ scale: 0 }}
-										animate={{ scale: 1, x: 0 }}
-										exit={{ scale: 0 }}
-									>
-										Create your account
-									</motion.h2>
-								) : (
-									<motion.h2
-										initial={{ scale: 0 }}
-										animate={{ scale: 0.9, x: 0 }}
-										exit={{ scale: 1 }}
-									>
-										Sign in to Sharpstudy
-									</motion.h2>
-								)}
+			<main className="ss-auth">
+				<div className="ss-container ss-auth__grid">
+					<aside className="ss-auth__aside">
+						<h2>Learn skills that last.</h2>
+						<p>Join SharpStudy to start learning at your own pace, on any device.</p>
+						<ul>
+							{points.map((p) => (
+								<li key={p.text}>
+									<span className="ss-icon-tile">
+										<i className={p.icon}></i>
+									</span>
+									{p.text}
+								</li>
+							))}
+						</ul>
+						{/* eslint-disable-next-line @next/next/no-img-element */}
+						<img src="/images/register-img.png" alt="" className="ss-auth__art" />
+					</aside>
 
-								<ul
-									className="register-tab nav nav-tabs justify-content-between"
-									data-ison={isOn}
-									onClick={toggleSwitch}
+					<section className="ss-card ss-auth__card" aria-labelledby="auth-title">
+						<h1 id="auth-title">
+							{register === "register" ? "Create your account" : "Welcome back"}
+						</h1>
+						<p className="ss-muted">
+							{register === "register"
+								? "It only takes a minute to get started."
+								: "Log in to continue learning."}
+						</p>
+
+						<div className="ss-segmented" role="tablist" aria-label="Account">
+							{tabs.map((t) => (
+								<button
+									key={t.id}
+									id={`tab-${t.id}`}
+									type="button"
+									role="tab"
+									aria-selected={register === t.id}
+									aria-controls="auth-panel"
+									tabIndex={register === t.id ? 0 : -1}
+									onClick={() => setRegister(t.id)}
+									onKeyDown={onKeyDown}
 								>
-									<li
-										className="nav-item"
-										role="presentation"
-									>
-										<motion.button
-											className={`nav-link ${
-												register == "register"
-													? "active"
-													: ""
-											}`}
-											onClick={() =>
-												setRegister("register")
-											}
-											whileHover={{
-												scale: 1.3,
-												transition: { duration: 1 },
-											}}
-											whileTap={{ scale: 0.8 }}
-											layout
-											transition={{
-												type: "spring",
-											}}
-										>
-											Register
-										</motion.button>
-									</li>
-									<li
-										className="nav-item"
-										role="presentation"
-									>
-										<motion.button
-											className={`nav-link ${
-												register == "login"
-													? "active"
-													: ""
-											}`}
-											type="button"
-											onClick={() => setRegister("login")}
-											whileHover={{
-												scale: 1.3,
-												transition: { duration: 1 },
-											}}
-											whileTap={{ scale: 0.8 }}
-											transition={{
-												type: "spring",
-											}}
-										>
-											Login
-										</motion.button>
-									</li>
-								</ul>
-
-								<div className="tab-content" id="myTabContent">
-									{register == "register" ? (
-										<RegisterForm />
-									) : (
-										<LoginForm />
-									)}
-								</div>
-							</div>
+									{t.label}
+								</button>
+							))}
 						</div>
-					</div>
-				</div>
-			</div>
 
+						<div id="auth-panel" role="tabpanel" aria-labelledby={`tab-${register}`}>
+							{register === "register" ? <RegisterForm /> : <LoginForm />}
+						</div>
+
+						<p className="ss-auth__terms">
+							By continuing you agree to our{" "}
+							<Link href="/terms-conditions/">
+								<a>Terms</a>
+							</Link>{" "}
+							and{" "}
+							<Link href="/privacy-policy/">
+								<a>Privacy Policy</a>
+							</Link>
+							.
+						</p>
+					</section>
+				</div>
+			</main>
 			<Footer />
 		</>
 	);
 };
 
-export default auth;
+export default Auth;

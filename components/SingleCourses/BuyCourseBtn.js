@@ -34,12 +34,13 @@ const BuyCourseBtn = ({ current_user, course }) => {
 	return (
 		<>
 			<button
+				type="button"
 				onClick={() => buyCourse(course)}
-				className="default-btn buy"
+				className="ss-btn ss-btn--secondary ss-btn--lg ss-btn--block"
 			>
-				Buy This Course Now
+				Buy now
 			</button>
-			<p className="text-center">30-Day Money-Back Guarantee</p>
+			<p className="ss-buy__note">30-Day Money-Back Guarantee</p>
 		</>
 	);
 };

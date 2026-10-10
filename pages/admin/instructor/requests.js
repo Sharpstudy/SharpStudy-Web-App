@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import AdminLayout from "@/components/_App/AdminLayout";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -148,17 +146,8 @@ const Index = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
+			<AdminLayout user={user} title="Instructors" description="Review requests to become an instructor.">
 								<ul className="nav-style1">
 									<li>
 										<Link href="/admin/instructor/">
@@ -213,9 +202,9 @@ const Index = ({ user }) => {
 													<tr>
 														<td
 															colSpan="7"
-															className="text-center py-3"
+															className="text-center py-4 ss-muted"
 														>
-															Empty!
+															Nothing here yet.
 														</td>
 													</tr>
 												)}
@@ -255,13 +244,7 @@ const Index = ({ user }) => {
 										</a>
 									</div>
 								</div> */}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</AdminLayout>
 		</>
 	);
 };

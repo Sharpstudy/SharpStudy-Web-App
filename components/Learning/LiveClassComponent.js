@@ -19,42 +19,43 @@ const LiveClassComponent = ({ slug, first_name, last_name }) => {
 					roomName={room}
 					displayName={name}
 					onMeetingEnd={() => console.log("Meeting has ended")}
-					loadingComponent={<p> jitsi is loading ...</p>}
-					containerStyles={{ width: "100%", height: "600px" }}
+					loadingComponent={<p className="ss-muted">Connecting to the class…</p>}
+					containerStyles={{ width: "100%", height: "min(600px, 75vh)" }}
 				/>
 			) : (
-				<form className="row row-cols-lg-auto g-3 align-items-center">
-					<div className="col-12">
-						<input
-							id="room"
-							type="text"
-							placeholder="Room"
-							value={room}
-							onChange={(e) => setRoom(e.target.value)}
-							readOnly={true}
-							className="form-control"
-						/>
+				<form className="ss-card ss-live" onSubmit={handleClick}>
+					<span className="ss-icon-tile ss-icon-tile--lg ss-icon-tile--accent" aria-hidden="true">
+						<i className="ri-live-line"></i>
+					</span>
+					<div className="ss-live__fields">
+						<div>
+							<label className="form-label" htmlFor="room">Room</label>
+							<input
+								id="room"
+								type="text"
+								placeholder="Room"
+								value={room}
+								onChange={(e) => setRoom(e.target.value)}
+								readOnly={true}
+								className="form-control"
+							/>
+						</div>
+						<div>
+							<label className="form-label" htmlFor="name">Your name</label>
+							<input
+								id="name"
+								type="text"
+								placeholder="Name"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								readOnly={true}
+								className="form-control"
+							/>
+						</div>
 					</div>
-					<div className="col-12">
-						<input
-							id="name"
-							type="text"
-							placeholder="Name"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							readOnly={true}
-							className="form-control"
-						/>
-					</div>
-					<div className="col-12">
-						<button
-							onClick={handleClick}
-							type="submit"
-							className="default-btn"
-						>
-							<i className="flaticon-user"></i> Start / Join
-						</button>
-					</div>
+					<button type="submit" className="ss-btn ss-btn--lg">
+						<i className="ri-vidicon-line" aria-hidden="true"></i> Start / Join class
+					</button>
 				</form>
 			)}
 		</div>

@@ -5,7 +5,7 @@ import { handleLogin } from "@/utils/auth";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
 
 const INITIAL_USER = {
 	first_name: "",
@@ -72,60 +72,49 @@ const RegisterForm = () => {
 	};
 
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="First Name"
+		<form onSubmit={handleSubmit}>
+			<div className="ss-form-row">
+				<Field
+					label="First name"
 					name="first_name"
+					autoComplete="given-name"
 					value={user.first_name}
 					onChange={handleChange}
 				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Last Name"
+				<Field
+					label="Last name"
 					name="last_name"
+					autoComplete="family-name"
 					value={user.last_name}
 					onChange={handleChange}
 				/>
 			</div>
-			<div className="form-group">
-				<input
-					type="email"
-					className="form-control"
-					placeholder="Email"
-					name="email"
-					value={user.email}
-					onChange={handleChange}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
+			<Field
+				label="Email"
+				type="email"
+				name="email"
+				autoComplete="email"
+				inputMode="email"
+				placeholder="you@example.com"
+				value={user.email}
+				onChange={handleChange}
+			/>
+			<Field label="Password">
+				<PasswordInput
 					name="password"
+					autoComplete="new-password"
+					placeholder="Create a password"
 					value={user.password}
 					onChange={handleChange}
 				/>
-			</div>
-
+			</Field>
 			<Button
 				loading={loading}
-				disabled={disabled}
-				btnText="Register Now"
-				btnClass="default-btn"
+				disabled={disabled || loading}
+				btnText="Create account"
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
-		</motion.form>
+		</form>
 	);
 };
 

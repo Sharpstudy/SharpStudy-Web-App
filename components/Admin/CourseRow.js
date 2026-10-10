@@ -32,37 +32,27 @@ const CourseRow = ({
 					{in_home_page ? (
 						<button
 							type="button"
-							className="btn btn-danger btn-sm fs-12 ms-2"
+							className="btn btn-outline-danger btn-sm fs-12"
 							onClick={() => onHomeRemove(id)}
 						>
-							Remove
+							Remove from homepage
 						</button>
 					) : (
 						<button
 							type="button"
-							className="btn btn-primary btn-sm fs-12 ms-2"
+							className="btn btn-primary btn-sm fs-12"
 							onClick={() => onHome(id)}
 						>
-							Homepage
+							Add to homepage
 						</button>
 					)}
 				</td>
 			)}
 			<td>
 				{approved ? (
-					<button
-						type="button"
-						className="btn btn-success btn-sm fs-12 ms-2"
-					>
-						Approved
-					</button>
+					<span className="ss-badge ss-badge--success">Approved</span>
 				) : (
-					<button
-						type="button"
-						className="btn btn-warning btn-sm fs-12"
-					>
-						Pending
-					</button>
+					<span className="ss-badge ss-badge--warning">Pending</span>
 				)}
 			</td>
 			{!approved && (

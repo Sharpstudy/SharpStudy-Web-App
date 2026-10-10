@@ -10,6 +10,7 @@ import VideoList from "@/components/Learning/VideoList";
 import ProgressManager from "@/components/Learning/ProgressManager";
 import CourseOverview from "@/components/Learning/CourseOverview";
 import Link from "next/link";
+import { EmptyState } from "@/components/ui";
 import CourseAsset from "@/components/Learning/CourseAsset";
 import CourseDiscussion from "@/components/Learning/CourseDiscussion";
 import CourseRating from "@/components/Learning/CourseRating";
@@ -26,18 +27,32 @@ const Index = ({ user }) => {
     query: { slug },
   } = useRouter();
 
+  const [loaded, setLoaded] = useState(false);
+
   const fetchVideos = async () => {
     const url = `${baseUrl}/api/learnings/videos/${slug}`;
     const response = await axios.get(url);
     setVideos(response.data.videos);
-    setSelectedVideo(response.data.videos[0].video);
-    setActive(response.data.videos[0].id);
+    if (response.data.videos.length > 0) {
+      setSelectedVideo(response.data.videos[0].video);
+      setActive(response.data.videos[0].id);
+    }
     setCourse(response.data.course);
+    setLoaded(true);
   };
 
   useEffect(() => {
-    fetchVideos();
+    if (slug) fetchVideos();
   }, [slug]);
+
+  const tabs = [
+    { id: "overview", label: "Overview", icon: "ri-file-list-3-line" },
+    { id: "asset", label: "Resources", icon: "ri-folder-download-line" },
+    { id: "quiz", label: "Quiz", icon: "ri-questionnaire-line" },
+    { id: "discussion", label: "Discussion", icon: "ri-chat-3-line" },
+    { id: "rating", label: "Rate course", icon: "ri-star-line" },
+    { id: "feedback", label: "Feedback", icon: "ri-feedback-line" },
+  ];
 
   const selectVideo = async (videoId) => {
     // console.log(videoId);
@@ -64,95 +79,81 @@ const Index = ({ user }) => {
     <>
       <Navbar user={user} />
 
-      <div className="mt-5 pb-5 video-area">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-9 col-md-8">
-              <div className="video-content">
-                {selectedVideo && <Player videoSrc={selectedVideo} />}
+      <main className="ss-player">
+        <div className="ss-container ss-container--wide">
+          <nav aria-label="Breadcrumb">
+            <ol className="ss-breadcrumb">
+              <li>
+                <Link href="/learning/my-courses/">
+                  <a>My learning</a>
+                </Link>
+              </li>
+              <li aria-current="page">{course && course.title}</li>
+            </ol>
+          </nav>
+          <h1 className="ss-player__title">{course && course.title}</h1>
 
-                <br />
-                <ul className="nav-style1">
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("overview");
-                        }}
-                        className={tab == "overview" ? "active" : ""}
-                      >
-                        Overview
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("asset");
-                        }}
-                        className={tab == "asset" ? "active" : ""}
-                      >
-                        Assets
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("discussion");
-                        }}
-                        className={tab == "discussion" ? "active" : ""}
-                      >
-                        Discussion
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("rating");
-                        }}
-                        className={tab == "rating" ? "active" : ""}
-                      >
-                        Leave a rating
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("quiz");
-                        }}
-                        className={tab == "quiz" ? "active" : ""}
-                      >
-                        Course Quiz
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={`/learning/course/${slug}`}>
-                      <a
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setTab("feedback");
-                        }}
-                        className={tab == "feedback" ? "active" : ""}
-                      >
-                        Leave a feedback
-                      </a>
-                    </Link>
-                  </li>
-                </ul>
+          <div className="ss-player__grid">
+            <div className="ss-player__stage">
+              {selectedVideo ? (
+                <Player videoSrc={selectedVideo} />
+              ) : (
+                loaded && (
+                  <EmptyState
+                    icon="ri-video-line"
+                    title="No lessons published yet"
+                    description="Your instructor hasn't uploaded any videos for this course. Check back soon."
+                  />
+                )
+              )}
+            </div>
 
+            <aside className="ss-player__side" aria-label="Course content">
+              <StickyBox offsetTop={96} offsetBottom={20}>
+                <div className="ss-card ss-lessons">
+                  <ProgressManager
+                    videos_count={videos.length}
+                    userId={user.id}
+                    courseId={course.id}
+                    selectedVideo={selectedVideo}
+                  />
+                  <h2 className="ss-lessons__title">
+                    Lessons <span>{videos.length}</span>
+                  </h2>
+                  <ol className="ss-lessons__list">
+                    {videos.length > 0 &&
+                      videos.map((video) => (
+                        <VideoList
+                          key={video.id}
+                          {...video}
+                          onPlay={() => selectVideo(video.id)}
+                          activeClass={active}
+                        />
+                      ))}
+                  </ol>
+                </div>
+              </StickyBox>
+            </aside>
+
+            <div className="ss-player__tabs">
+              <div className="ss-tabs" role="tablist" aria-label="Course sections">
+                {tabs.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="tab"
+                    id={`ptab-${t.id}`}
+                    aria-selected={tab === t.id}
+                    aria-controls="ptab-panel"
+                    onClick={() => setTab(t.id)}
+                  >
+                    <i className={t.icon} aria-hidden="true"></i>
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
+              <div id="ptab-panel" role="tabpanel" aria-labelledby={`ptab-${tab}`} className="ss-player__panel">
                 {course && tab == "asset" ? (
                   <CourseAsset {...course} />
                 ) : tab == "discussion" ? (
@@ -168,37 +169,9 @@ const Index = ({ user }) => {
                 )}
               </div>
             </div>
-
-            <div className="col-lg-3 col-md-4">
-              <StickyBox offsetTop={20} offsetBottom={20}>
-                <div className="video-sidebar">
-                  <ProgressManager
-                    videos_count={videos.length}
-                    userId={user.id}
-                    courseId={course.id}
-                    selectedVideo={selectedVideo}
-                  />
-
-                  <div className="course-video-list">
-                    <h4 className="title mb-3">{course && course.title}</h4>
-                    <ul>
-                      {videos.length > 0 &&
-                        videos.map((video) => (
-                          <VideoList
-                            key={video.id}
-                            {...video}
-                            onPlay={() => selectVideo(video.id)}
-                            activeClass={active}
-                          />
-                        ))}
-                    </ul>
-                  </div>
-                </div>
-              </StickyBox>
-            </div>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </>

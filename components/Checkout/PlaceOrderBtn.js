@@ -72,7 +72,7 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 
 	return (
 		<StripeCheckout
-			name="Edmy"
+			name="SharpStudy"
 			amount={stripeAmount}
 			currency="USD"
 			stripeKey={process.env.STRIPE_PUBLISHABLE_KEY}
@@ -82,8 +82,8 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 			<Button
 				loading={loading}
 				disabled={cartItems.length == 0 || loading}
-				btnText="Place Order"
-				btnClass="default-btn"
+				btnText="Place order"
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
 		</StripeCheckout>
 	);

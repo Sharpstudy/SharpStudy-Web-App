@@ -7,30 +7,30 @@ const CourseAssets = ({
 	onDelete,
 }) => {
 	return (
-		<div className="col-lg-4 col-md-6">
-			<div className="card mt-4" style={{ width: "18rem" }}>
-				<i
-					className="bx bx-file"
-					style={{ textAlign: "center", fontSize: "100px" }}
-				></i>
-				{/* {lecture_file} */}
-				<div className="card-body">
-					<h5 className="card-title">{lecture_name}</h5>
-					<button
-						className="btn btn-success me-3"
-						onClick={() => window.open(lecture_file)}
-					>
-						Download <i className="bx bx-down-arrow-circle"></i>
-					</button>
-					<button
-						onClick={() => onDelete(assetId)}
-						className="btn btn-danger"
-					>
-						Delete <i className="bx bx-trash"></i>
-					</button>
-				</div>
+		<li className="ss-card ss-asset">
+			<span className="ss-icon-tile" aria-hidden="true">
+				<i className="ri-file-text-line"></i>
+			</span>
+			<span className="ss-asset__name">{lecture_name}</span>
+			<div className="ss-asset__actions">
+				<button
+					type="button"
+					className="ss-btn ss-btn--soft ss-btn--sm"
+					onClick={() => window.open(lecture_file)}
+					aria-label={`Download ${lecture_name}`}
+				>
+					<i className="ri-download-2-line" aria-hidden="true"></i> Download
+				</button>
+				<button
+					type="button"
+					onClick={() => onDelete(assetId)}
+					className="ss-btn ss-btn--ghost ss-btn--sm ss-text-danger"
+					aria-label={`Delete ${lecture_name}`}
+				>
+					<i className="ri-delete-bin-line" aria-hidden="true"></i> Delete
+				</button>
 			</div>
-		</div>
+		</li>
 	);
 };
 

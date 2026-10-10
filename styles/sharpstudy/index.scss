@@ -1,0 +1,11 @@
+// SharpStudy design system entry. Imported last in pages/_app.js so it
+// layers over the legacy theme CSS without regenerating it.
+@use "tokens";
+@use "base";
+@use "components";
+@use "legacy";
+@use "shell";
+@use "marketing";
+@use "auth";
+@use "app";
+@use "course";
