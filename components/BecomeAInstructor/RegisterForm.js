@@ -117,7 +117,7 @@ const RegisterForm = ({
 									>
 										Please confirm your email first.{" "}
 										<a href="/send-confirmation-email">
-											Didn't receive a confirmation email?
+											Didn&apos;t receive a confirmation email?
 										</a>
 									</div>
 								)}

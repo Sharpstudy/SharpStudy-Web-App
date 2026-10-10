@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import Link from "next/link";
-import toast from "react-hot-toast";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import baseUrl from "@/utils/baseUrl";
-import GeneralLoader from "@/utils/GeneralLoader";
 import CourseCard from "@/components/Learning/CourseCard";
+import StudentLayout from "@/components/Learning/StudentLayout";
+import CourseSkeletonLoader from "@/utils/CourseSkeletonLoader";
+import { Button, EmptyState } from "@/components/ui";
 
 const Index = ({ user }) => {
 	const { edmy_users_token } = parseCookies();
@@ -17,64 +15,43 @@ const Index = ({ user }) => {
 	useEffect(() => {
 		const fetchEnrols = async () => {
 			setLoading(true);
-			const payload = {
-				headers: { Authorization: edmy_users_token },
-			};
-			const response = await axios.get(
-				`${baseUrl}/api/learnings`,
-				payload
-			);
+			try {
+				const payload = {
+					headers: { Authorization: edmy_users_token },
+				};
+				const response = await axios.get(
+					`${baseUrl}/api/learnings`,
+					payload
+				);
 
-			setEnrolments(response.data.enrolments);
-			setLoading(false);
+				setEnrolments(response.data.enrolments);
+			} finally {
+				setLoading(false);
+			}
 		};
 
 		fetchEnrols();
 	}, []);
 
 	return (
-		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
-					<h2 className="fw-bold mb-4">My learning</h2>
-
-					<ul className="nav-style1">
-						<li>
-							<Link href="/learning/my-courses/">
-								<a className="active">All Courses</a>
-							</Link>
-						</li>
-						<li>
-							<Link href="/learning/wishlist/">
-								<a>Wishlist</a>
-							</Link>
-						</li>
-					</ul>
-
-					<div className="row">
-						{loading ? (
-							<GeneralLoader />
-						) : (
-							<>
-								{enrolments &&
-									enrolments.map((enrol) => (
-										<CourseCard key={enrol.id} {...enrol} />
-									))}
-								{/* <div className="col-lg-12 col-md-12">
-									<div className="pagination-area text-center">
-										<Pagination sizes={[1]} total={pages} />
-									</div>
-								</div> */}
-							</>
-						)}
-					</div>
+		<StudentLayout user={user} section="learning">
+			{loading ? (
+				<CourseSkeletonLoader count={3} />
+			) : enrolments && enrolments.length > 0 ? (
+				<div className="ss-grid ss-grid--cards">
+					{enrolments.map((enrol) => (
+						<CourseCard key={enrol.id} {...enrol} />
+					))}
 				</div>
-			</div>
-
-			<Footer />
-		</>
+			) : (
+				<EmptyState
+					icon="ri-book-read-line"
+					title="You haven't enrolled in a course yet"
+					description="Courses you enrol in will appear here so you can jump straight back in."
+					action={<Button href="/courses/">Browse courses</Button>}
+				/>
+			)}
+		</StudentLayout>
 	);
 };
 

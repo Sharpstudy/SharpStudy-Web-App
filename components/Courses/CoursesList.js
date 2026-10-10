@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
-import CourseSkeletonLoader from "@/utils/CourseSkeletonLoader";
 import baseUrl from "@/utils/baseUrl";
 import CourseCard from "./CourseCard";
+import { Button, EmptyState } from "@/components/ui";
 
-const CoursesList = ({ courses, user }) => {
-	const [loading, setLoading] = useState(true);
+const CoursesList = ({ courses, user, empty }) => {
 	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setLoading(false);
-		}, 1000);
-		return () => clearTimeout(timer);
-	}, []);
 
 	const addToCart = (courseCart) => {
 		let courseObj = {};
@@ -78,28 +70,31 @@ const CoursesList = ({ courses, user }) => {
 		}
 	};
 
+	if (!courses || courses.length === 0) {
+		return (
+			empty || (
+				<EmptyState
+					icon="ri-book-open-line"
+					title="No courses to show yet"
+					description="Try a different search or browse the full catalogue."
+					action={<Button href="/courses/" variant="secondary">Browse all courses</Button>}
+				/>
+			)
+		);
+	}
+
 	return (
-		<div className="row justify-content-center">
-			{loading ? (
-				<CourseSkeletonLoader />
-			) : (
-				<>
-					{courses.length > 0 ? (
-						courses.map((course) => (
-							<CourseCard
-								key={course.id}
-								course={course}
-								onFav={() => handleFav(course.id, true)}
-								onUnFav={() => handleFav(course.id, false)}
-								userId={user && user.id}
-								onAddCart={() => addToCart(course)}
-							/>
-						))
-					) : (
-						<h3>Empty</h3>
-					)}
-				</>
-			)}
+		<div className="ss-grid ss-grid--cards">
+			{courses.map((course) => (
+				<CourseCard
+					key={course.id}
+					course={course}
+					onFav={() => handleFav(course.id, true)}
+					onUnFav={() => handleFav(course.id, false)}
+					userId={user && user.id}
+					onAddCart={() => addToCart(course)}
+				/>
+			))}
 		</div>
 	);
 };

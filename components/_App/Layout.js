@@ -45,12 +45,12 @@ const Layout = ({ children }) => {
 
 			{children}
 			<Script
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         src="https://www.googletagmanager.com/gtag/js?id=G-QQHKTTTD86"
       />
 		<Script
 			id="google-analytics"
-			strategy="afterInteractive"
+			strategy="lazyOnload"
 			dangerouslySetInnerHTML={{
 			__html: `
 							window.dataLayer = window.dataLayer || [];
@@ -63,7 +63,6 @@ const Layout = ({ children }) => {
 			}}
 		/>
 
-			<Script src="https://meet.jit.si/external_api.js" />
 
 			<Toaster />
 

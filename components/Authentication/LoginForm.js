@@ -5,7 +5,7 @@ import { handleLogin } from "@/utils/auth";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
 
 const INITIAL_USER = {
 	email: "",
@@ -70,39 +70,33 @@ const LoginForm = () => {
 	};
 
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Email"
-					name="email"
-					value={user.email}
-					onChange={handleChange}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
+		<form onSubmit={handleSubmit}>
+			<Field
+				label="Email"
+				type="email"
+				name="email"
+				autoComplete="email"
+				inputMode="email"
+				placeholder="you@example.com"
+				value={user.email}
+				onChange={handleChange}
+			/>
+			<Field label="Password">
+				<PasswordInput
 					name="password"
+					autoComplete="current-password"
+					placeholder="Your password"
 					value={user.password}
 					onChange={handleChange}
 				/>
-			</div>
+			</Field>
 			<Button
 				loading={loading}
-				disabled={disabled}
-				btnText="Login Now"
-				btnClass="default-btn"
+				disabled={disabled || loading}
+				btnText="Log in"
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
-		</motion.form>
+		</form>
 	);
 };
 

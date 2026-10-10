@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import AdminLayout from "@/components/_App/AdminLayout";
 import axios from "axios";
 import baseUrl from "@/utils/baseUrl";
 import LoadingSpinner from "@/utils/LoadingSpinner";
@@ -11,7 +9,7 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/router";
 import Button from "@/utils/Button";
 
-const create = ({ user }) => {
+const CreateCoupon = ({ user }) => {
 	const router = useRouter();
 	const { elarniv_users_token } = parseCookies();
 	const [coupon, setCoupon] = useState({ coupon: "", discount: 0.1 });
@@ -72,17 +70,8 @@ const create = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
+			<AdminLayout user={user} title="Coupons" description="Create a discount code.">
 								{/* Nav */}
 								<ul className="nav-style1">
 									<li>
@@ -145,15 +134,9 @@ const create = ({ user }) => {
 										</div>
 									</div>
 								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</AdminLayout>
 		</>
 	);
 };
 
-export default create;
+export default CreateCoupon;

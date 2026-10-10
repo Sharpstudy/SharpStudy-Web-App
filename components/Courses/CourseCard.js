@@ -57,116 +57,98 @@ const CourseCard = ({ course, onFav, onUnFav, userId, onAddCart }) => {
 		}
 	}, [fav]);
 
+	const instructor = user ? `${user.first_name} ${user.last_name}` : "";
+	const price = Number(latest_price);
+
 	return (
-		<div className="col-lg-3 col-md-6">
-			<div className="single-courses">
-				<div className="courses-main-img">
-					<img src={image} alt="Image" />
-				</div>
-				<div className="courses-content">
-					<h3>{title}</h3>
-					<ul className="admin">
-						<li>
+		<article className="ss-course-card">
+			<Link href={`/course/${slug}`}>
+				<a className="ss-course-card__media" tabIndex={-1} aria-hidden="true">
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src={image} alt="" loading="lazy" />
+				</a>
+			</Link>
+			{buy && (
+				<span className="ss-badge ss-badge--success ss-course-card__flag">
+					<i className="ri-check-line" aria-hidden="true"></i> Enrolled
+				</span>
+			)}
+
+			<div className="ss-course-card__body">
+				<h3 className="ss-course-card__title">
+					<Link href={`/course/${slug}`}>
+						<a>{title}</a>
+					</Link>
+				</h3>
+				{short_desc && <p className="ss-course-card__desc ss-clamp-2">{short_desc}</p>}
+
+				<div className="ss-course-card__meta">
+					{user && (
+						<span className="ss-course-card__author">
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img
-								src={
-									user.profile_photo
-										? user.profile_photo
-										: "/images/admin-1.jpg"
-								}
-								className="rounded-circle"
-								alt={user.first_name}
-								style={{ height: "25px", width: "25px" }}
+								className="ss-avatar ss-avatar--sm"
+								src={user.profile_photo ? user.profile_photo : "/images/admin/admin-9.jpg"}
+								alt=""
 							/>
-						</li>
-						<li>
-							<span>By</span>
-						</li>
-						<li>{`${user.first_name} ${user.last_name}`}</li>
-					</ul>
-					<h4>
-						{before_price > 0 && <del>${before_price}</del>} $
-						{latest_price}
-					</h4>
+							<span className="ss-truncate">{instructor}</span>
+						</span>
+					)}
+					{lessons > 0 && (
+						<span className="ss-course-card__lessons">
+							<i className="ri-play-list-2-line" aria-hidden="true"></i> {lessons} lessons
+						</span>
+					)}
 				</div>
 
-				<div className="courses-hover-content">
-					<div className="sk">
-						<div>
-							<h3>
-								<Link href={`/course/${slug}`}>
-									<a>{title}</a>
-								</Link>
-							</h3>
-							<p>{short_desc.slice(0, 108)}</p>
-
-							<div className="courses-btn d-flex justify-content-between align-items-center">
-								{buy ? (
-									<button
-										className="default-btn"
-										onClick={() =>
-											router.push(
-												`/learning/course/${slug}`
-											)
-										}
-									>
-										View My Course
-									</button>
-								) : (
-									<>
-										{add ? (
-											<button
-												className="default-btn"
-												onClick={() =>
-													router.push("/checkout")
-												}
-											>
-												View Cart
-											</button>
-										) : (
-											<button
-												className="default-btn"
-												onClick={() =>
-													onAddCart(course)
-												}
-											>
-												Add To Cart
-											</button>
-										)}
-									</>
-								)}
-								{fav ? (
-									<motion.button
-										whileTap={{ scale: 3 }}
-										transition={{ duration: 0.5 }}
-										className="default-btn wish"
-										onClick={() => {
-											onUnFav(id);
-											setfavs(!fav);
-										}}
-									>
-										<i className="ri-heart-fill"></i>
-										<i className="ri-heart-fill hover"></i>
-									</motion.button>
-								) : (
-									<motion.button
-										whileTap={{ scale: 3 }}
-										transition={{ duration: 0.5 }}
-										className="default-btn wish"
-										onClick={() => {
-											onFav(id);
-											setfavs(!fav);
-										}}
-									>
-										<i className="ri-heart-line"></i>
-										<i className="ri-heart-fill hover"></i>
-									</motion.button>
-								)}
-							</div>
-						</div>
+				<div className="ss-course-card__foot">
+					<div className="ss-course-card__price">
+						{price > 0 ? <>${latest_price}</> : "Free"}
+						{before_price > 0 && <del>${before_price}</del>}
+					</div>
+					<div className="ss-course-card__actions">
+						{buy ? (
+							<button
+								type="button"
+								className="ss-btn ss-btn--sm"
+								onClick={() => router.push(`/learning/course/${slug}`)}
+							>
+								Go to course
+							</button>
+						) : add ? (
+							<button
+								type="button"
+								className="ss-btn ss-btn--soft ss-btn--sm"
+								onClick={() => router.push("/checkout")}
+							>
+								View cart
+							</button>
+						) : (
+							<button
+								type="button"
+								className="ss-btn ss-btn--sm"
+								onClick={() => onAddCart(course)}
+							>
+								Add to cart
+							</button>
+						)}
+						<motion.button
+							type="button"
+							whileTap={{ scale: 0.85 }}
+							className={`ss-course-card__fav${fav ? " is-on" : ""}`}
+							aria-pressed={!!fav}
+							aria-label={fav ? `Remove ${title} from wishlist` : `Add ${title} to wishlist`}
+							onClick={() => {
+								fav ? onUnFav(id) : onFav(id);
+								setfavs(!fav);
+							}}
+						>
+							<i className={fav ? "ri-heart-3-fill" : "ri-heart-3-line"} aria-hidden="true"></i>
+						</motion.button>
 					</div>
 				</div>
 			</div>
-		</div>
+		</article>
 	);
 };
 

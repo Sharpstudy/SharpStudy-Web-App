@@ -1,29 +1,23 @@
 import React from "react";
-import Link from "next/link";
 
+// The original linked to /instructor, which has no page (404), so the
+// instructor is shown without a link.
 const InstructorProfile = ({ instructor }) => {
 	const { first_name, last_name, profile_photo } = instructor;
-	// console.log(instructor);
 	return (
-		<div className="admin-info d-flex align-items-center">
-			<Link href="/instructor">
-				<a>
-					<img
-						src={
-							profile_photo
-								? profile_photo
-								: "/images/admin/admin-10.jpg"
-						}
-						alt={first_name}
-					/>
-				</a>
-			</Link>
-			<span>Created By </span>{" "}
-			<Link href="/instructor">
-				<a>
+		<div className="ss-instructor">
+			{/* eslint-disable-next-line @next/next/no-img-element */}
+			<img
+				className="ss-avatar"
+				src={profile_photo ? profile_photo : "/images/admin/admin-10.jpg"}
+				alt=""
+			/>
+			<span>
+				<span className="ss-muted">Created by</span>{" "}
+				<strong className="text-capitalize">
 					{first_name} {last_name}
-				</a>
-			</Link>
+				</strong>
+			</span>
 		</div>
 	);
 };

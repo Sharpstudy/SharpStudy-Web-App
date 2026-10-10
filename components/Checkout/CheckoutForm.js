@@ -6,8 +6,8 @@ import {
 } from "@/utils/calculateCartTotal";
 import CheckoutList from "./CheckoutList";
 import PlaceOrderBtn from "./PlaceOrderBtn";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import { Button, EmptyState } from "@/components/ui";
 
 const CheckoutForm = ({ user }) => {
 	const cartItems = useSelector((state) => state.cart.cartItems);
@@ -30,80 +30,56 @@ const CheckoutForm = ({ user }) => {
 		});
 	};
 
+	if (cartItems.length === 0) {
+		return (
+			<div className="ss-container ss-student">
+				<EmptyState
+					icon="ri-shopping-cart-2-line"
+					title="Your cart is empty"
+					description="Courses you add to your cart will show up here."
+					action={<Button href="/courses/">Continue shopping</Button>}
+				/>
+			</div>
+		);
+	}
+
 	return (
-		<div className="cart-area ptb-100">
-			<div className="container">
-				<p className="your-cart">
-					<span>{cartItems.length}</span> courses in your cart
-				</p>
-				<div className="row justify-content-center">
-					<div className="col-lg-8">
-						<div className="cart-content">
-							<ul className="single-cart">
-								{cartItems.length > 0 ? (
-									<AnimatePresence>
-										{cartItems.map((cart) => (
-											<CheckoutList
-												key={cart.id}
-												{...cart}
-												onRemove={() =>
-													handleRemove(cart.id)
-												}
-											/>
-										))}
-									</AnimatePresence>
-								) : (
-									<>
-										<motion.div
-											className="col-lg-12 text-center"
-											initial={{ scale: 0 }}
-											animate={{ scale: 1 }}
-											transition={{ duration: 1 }}
-										>
-											<h3
-												style={{
-													textAlign: "center",
-													fontWeight: "bold",
-													color: "#0000001f",
-													fontSize: "93px",
-												}}
-											>
-												Empty
-											</h3>
-											<Link href="/courses">
-												<a className="default-btn">
-													Continue Shopping
-												</a>
-											</Link>
-										</motion.div>
-									</>
-								)}
-							</ul>
-						</div>
-					</div>
-
-					{cartItems.length > 0 && (
-						<div className="col-lg-4">
-							<div className="cart-total">
-								<h3>
-									Total <span>${cartAmout}</span>
-								</h3>
-								<ul>
-									{cartAmoutMinus > 0 && (
-										<li>
-											<del>${cartAmoutMinus}</del>
-										</li>
-									)}
-								</ul>
-
-								<PlaceOrderBtn
-									user={user}
-									cartItems={cartItems}
+		<div className="ss-container ss-container--wide ss-student">
+			<div className="ss-checkout">
+				<section aria-labelledby="cart-title">
+					<h2 id="cart-title" className="ss-checkout__title">
+						{cartItems.length} course{cartItems.length === 1 ? "" : "s"} in your cart
+					</h2>
+					<ul className="ss-cart">
+						<AnimatePresence>
+							{cartItems.map((cart) => (
+								<CheckoutList
+									key={cart.id}
+									{...cart}
+									onRemove={() => handleRemove(cart.id)}
 								/>
-							</div>
+							))}
+						</AnimatePresence>
+					</ul>
+				</section>
+
+				<aside className="ss-card ss-summary" aria-label="Order summary">
+					<h2>Order summary</h2>
+					{cartAmoutMinus > 0 && (
+						<div className="ss-summary__row">
+							<span>Original price</span>
+							<del>${cartAmoutMinus}</del>
 						</div>
 					)}
-				</div>
+					<div className="ss-summary__row ss-summary__total">
+						<span>Total</span>
+						<strong>${cartAmout}</strong>
+					</div>
+					<PlaceOrderBtn user={user} cartItems={cartItems} />
+					<p className="ss-summary__note">
+						<i className="ri-lock-line" aria-hidden="true"></i> Secure payment via Stripe
+					</p>
+				</aside>
 			</div>
 		</div>
 	);

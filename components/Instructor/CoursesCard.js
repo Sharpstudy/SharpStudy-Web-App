@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import ActionMenu from "@/components/ui/ActionMenu";
+import { plural } from "@/utils/helper";
 
 const CoursesCard = ({
 	id,
@@ -11,143 +13,60 @@ const CoursesCard = ({
 	before_price,
 	lessons,
 	is_class,
-	user: { first_name, last_name, profile_photo },
 	enrolments = [],
 	onDelete,
 }) => {
+	const viewHref = is_class ? `/learning/course/class/${slug}` : `/course/${slug}`;
 	return (
-		<div className="col-lg-4 col-md-6">
-			<div className="teacher-courses-box">
-				<div className="courses-image">
-					{is_class ? (
-						<Link href={`/learning/course/class/${slug}`}>
-							<a className="d-block image">
-								<img
-									src={
-										image
-											? image
-											: "/images/courses/courses1.jpg"
-									}
-									alt="image"
-								/>
-							</a>
-						</Link>
-					) : (
-						<Link href={`/course/${slug}`}>
-							<a className="d-block image">
-								<img
-									src={
-										image
-											? image
-											: "/images/courses/courses1.jpg"
-									}
-									alt="image"
-								/>
-							</a>
-						</Link>
-					)}
-
-					<div className="dropdown action-dropdown">
-						<div className="icon">
-							<i className="bx bx-dots-vertical-rounded"></i>
-						</div>
-						<ul className="dropdown-menu">
-							<li>
-								<Link href={`/instructor/course/edit/${id}`}>
-									<a className="dropdown-item">
-										{" "}
-										<i className="bx bx-edit"></i> Edit
-										Course
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href={`/instructor/course/upload/${id}`}>
-									<a className="dropdown-item">
-										<i className="bx bx-cloud-upload"></i>{" "}
-										Upload Video
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href={`/instructor/course/uploads/${id}`}>
-									<a className="dropdown-item">
-										<i className="bx bxs-edit-alt"></i> Edit
-										Video
-									</a>
-								</Link>
-							</li>
-							<li>
-								<Link href={`/instructor/course/assets/${id}`}>
-									<a className="dropdown-item">
-										<i className="bx bxs-file-plus"></i>{" "}
-										Assets
-									</a>
-								</Link>
-							</li>
-							<li>
-								<button
-									onClick={() => onDelete(id)}
-									type="button"
-									className="dropdown-item"
-								>
-									<i className="bx bxs-trash"></i> Delete
-								</button>
-							</li>
-						</ul>
-					</div>
-
-					<>
-						{before_price > 0 && (
-							<div className="price shadow discount-price">
-								<del>${before_price}</del>
-							</div>
-						)}
-						<div className="price shadow">
-							${latest_price > 0 ? latest_price : "Free"}
-						</div>
-					</>
+		<article className="ss-course-card">
+			<Link href={viewHref}>
+				<a className="ss-course-card__media" tabIndex={-1} aria-hidden="true">
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src={image ? image : "/images/courses/courses1.jpg"} alt="" loading="lazy" />
+				</a>
+			</Link>
+			<span className={`ss-badge ss-course-card__flag ${is_class ? "ss-badge--accent" : "ss-badge--primary"}`}>
+				{is_class ? "Live class" : "Self-paced"}
+			</span>
+			<div className="ss-course-card__body">
+				<h3 className="ss-course-card__title ss-clamp-2">
+					<Link href={viewHref}>
+						<a>{title}</a>
+					</Link>
+				</h3>
+				{short_desc && <p className="ss-course-card__desc ss-clamp-2">{short_desc}</p>}
+				<div className="ss-course-card__meta">
+					<span className="ss-course-card__lessons">
+						<i className="ri-play-list-2-line" aria-hidden="true"></i> {plural(lessons || 0, "lesson")}
+					</span>
+					<span className="ss-course-card__lessons">
+						<i className="ri-group-line" aria-hidden="true"></i> {plural(enrolments.length, "student")}
+					</span>
 				</div>
-				<div className="courses-content">
-					<div className="course-author d-flex align-items-center">
-						<img
-							src={
-								profile_photo
-									? profile_photo
-									: "/images/user1.jpg"
-							}
-							className="rounded-circle"
-							alt={first_name}
-						/>
-						<span>{`${first_name} ${last_name}`}</span>
+				<div className="ss-course-card__foot">
+					<div className="ss-course-card__price">
+						{latest_price > 0 ? `$${latest_price}` : "Free"}
+						{before_price > 0 && <del>${before_price}</del>}
 					</div>
-
-					<h3>
-						{is_class ? (
-							<Link href={`/learning/course/class/${slug}`}>
-								<a>{title.slice(0, 40)}...</a>
-							</Link>
-						) : (
-							<Link href={`/course/${slug}`}>
-								<a>{title.slice(0, 40)}...</a>
-							</Link>
-						)}
-					</h3>
-
-					<p>{short_desc.slice(0, 108)}</p>
-					<ul className="courses-box-footer d-flex justify-content-between align-items-center">
-						<li>
-							<i className="flaticon-agenda"></i> {lessons}{" "}
-							Lessons
-						</li>
-						<li>
-							<i className="flaticon-people"></i>{" "}
-							{enrolments.length} Students
-						</li>
-					</ul>
+					<div className="ss-course-card__actions">
+						<Link href={`/instructor/course/edit/${id}`}>
+							<a className="ss-btn ss-btn--soft ss-btn--sm">
+								<i className="ri-edit-line" aria-hidden="true"></i> Edit
+							</a>
+						</Link>
+						<ActionMenu
+							label={`More actions for ${title}`}
+							items={[
+								{ href: `/instructor/course/upload/${id}`, label: "Upload video", icon: "ri-upload-cloud-2-line" },
+								{ href: `/instructor/course/uploads/${id}`, label: "Manage videos", icon: "ri-video-line" },
+								{ href: `/instructor/course/assets/${id}`, label: "Assets", icon: "ri-folder-2-line" },
+								{ label: "Delete course", icon: "ri-delete-bin-line", danger: true, onClick: () => onDelete(id) },
+							]}
+						/>
+					</div>
 				</div>
 			</div>
-		</div>
+		</article>
 	);
 };
 

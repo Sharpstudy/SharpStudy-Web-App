@@ -5,7 +5,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import BuyCourseBtn from "./BuyCourseBtn";
-import { calculateDiscount } from "@/utils/helper";
+import { calculateDiscount, plural } from "@/utils/helper";
 
 const CoursesDetailsSidebar = ({ current_user, course }) => {
 	// console.log(course);
@@ -107,138 +107,96 @@ const CoursesDetailsSidebar = ({ current_user, course }) => {
 		}
 	};
 
-	return (
-		<div className="col-lg-4">
-			<div className="course-details-sidebar">
-				<div className="course-preview">
-					<img src={course.image} alt={course.title} />
-				</div>
+	const price = discount > 0 ? discount : course.latest_price;
+	const facts = [
+		{ icon: "ri-live-line", label: "Format", value: course.is_class ? "Live class" : "Self-paced" },
+		{ icon: "ri-folder-2-line", label: "Category", value: course.category && course.category.name },
+		{ icon: "ri-time-line", label: "Duration", value: course.duration },
+		{ icon: "ri-booklet-line", label: "Lectures", value: course.lessons },
+		{ icon: "ri-download-2-line", label: "Resources", value: `${course.assets ? course.assets.length : 0} downloadable` },
+		{ icon: "ri-group-line", label: "Enrolled", value: plural(course.enrolments ? course.enrolments.length : 0, "student") },
+		{ icon: "ri-key-2-line", label: "Access", value: course.access_time },
+	];
 
-				<div className="sidebar-futcher">
-					<div className="sidebar-title d-flex justify-content-between">
-						<h2>
-							{discount > 0 ? discount : course.latest_price}{" "}
-							{course.before_price > 0 && (
-								<del>${course.before_price}</del>
-							)}
-						</h2>
-						{course.before_price > 0 && <p>Offer for today</p>}
+	return (
+		<aside className="ss-course-body__side" aria-label="Purchase">
+			<div className="ss-card ss-card--flush ss-buy">
+				<div className="ss-buy__media">
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src={course.image} alt="" />
+				</div>
+				<div className="ss-buy__body">
+					<div className="ss-buy__price">
+						<strong>${price}</strong>
+						{course.before_price > 0 && <del>${course.before_price}</del>}
+						{course.before_price > 0 && <span className="ss-badge ss-badge--success">Offer for today</span>}
 					</div>
 
-					<ul>
-						<li>
-							<div className="d-flex justify-content-between align-items-center">
-								<span>
-									<i className="ri-tv-line"></i> Live Class
-								</span>
-								{course.is_class ? (
-									<div className="live-class-icon"></div>
-								) : (
-									"No"
-								)}
-							</div>
-						</li>
-						<li>
-							<i className="ri-bar-chart-fill"></i>
-							Category
-							<span>
-								{course.category && course.category.name}
-							</span>
-						</li>
-						<li>
-							<i className="ri-time-line"></i>
-							Duration
-							<span>{course.duration}</span>
-						</li>
-						<li>
-							<i className="ri-booklet-line"></i>
-							Lectures
-							<span>{course.lessons}</span>
-						</li>
-						<li>
-							<i className="ri-store-line"></i>
-							Resources
-							<span>
-								{course.assets && course.assets.length}{" "}
-								downloadable
-							</span>
-						</li>
-						<li>
-							<i className="ri-group-line"></i>
-							Enrolled
-							<span>
-								{course.enrolments && course.enrolments.length}{" "}
-								Students
-							</span>
-						</li>
-						<li>
-							<i className="ri-key-2-fill"></i>
-							Access
-							<span>{course.access_time}</span>
-						</li>
-					</ul>
+					<div className="ss-buy__actions">
+						{alreadyBuy ? (
+							<button type="button" onClick={() => router.push("/learning/my-courses")} className="ss-btn ss-btn--lg ss-btn--block">
+								View my courses
+							</button>
+						) : add ? (
+							<button type="button" onClick={() => router.push("/checkout")} className="ss-btn ss-btn--lg ss-btn--block">
+								View cart
+							</button>
+						) : (
+							<button type="button" onClick={() => addToCart(course)} className="ss-btn ss-btn--lg ss-btn--block">
+								<i className="ri-shopping-cart-2-line" aria-hidden="true"></i> Add to cart
+							</button>
+						)}
+						{!alreadyBuy && !add && <BuyCourseBtn current_user={current_user} course={course} />}
+					</div>
 
-					<div className="coupon">
-						<h4 onClick={() => setApplyCoupon(!apply)}>
-							Apply Coupon
-						</h4>
+					<div className="ss-buy__coupon">
+						<button
+							type="button"
+							className="ss-linkbtn"
+							aria-expanded={apply}
+							aria-controls="coupon-form"
+							onClick={() => setApplyCoupon(!apply)}
+						>
+							<i className="ri-coupon-3-line" aria-hidden="true"></i> Have a coupon?
+						</button>
 						{apply && (
-							<form onSubmit={handleCoupon}>
+							<form id="coupon-form" onSubmit={handleCoupon} className="ss-inline-form">
+								<label htmlFor="coupon-input" className="visually-hidden">
+									Coupon code
+								</label>
 								<input
+									id="coupon-input"
 									type="text"
-									className="input-search"
-									placeholder="Enter Coupon"
+									className="form-control"
+									placeholder="Enter coupon"
 									name="search"
 									value={coupon.coupon}
 									onChange={(e) => setCoupon(e.target.value)}
 								/>
-								<button type="submit">
-									<b>Apply</b>
+								<button type="submit" className="ss-btn ss-btn--secondary">
+									Apply
 								</button>
 							</form>
 						)}
 					</div>
 
-					<div className="cart-wish d-flex justify-content-between">
-						{alreadyBuy ? (
-							<button
-								onClick={() =>
-									router.push("/learning/my-courses")
-								}
-								className="default-btn"
-							>
-								View My Courses
-							</button>
-						) : (
-							<>
-								{add ? (
-									<button
-										onClick={() => router.push("/checkout")}
-										className="default-btn"
-									>
-										View Cart
-									</button>
-								) : (
-									<button
-										onClick={() => addToCart(course)}
-										className="default-btn"
-									>
-										Add To Cart
-									</button>
-								)}
-							</>
+					<h2 className="ss-buy__title">This course includes</h2>
+					<dl className="ss-facts">
+						{facts.map((item) =>
+							item.value !== undefined && item.value !== null && item.value !== "" ? (
+								<div key={item.label}>
+									<dt>
+										<i className={item.icon} aria-hidden="true"></i>
+										{item.label}
+									</dt>
+									<dd>{item.value}</dd>
+								</div>
+							) : null
 						)}
-					</div>
-
-					{!alreadyBuy && !add && (
-						<BuyCourseBtn
-							current_user={current_user}
-							course={course}
-						/>
-					)}
+					</dl>
 				</div>
 			</div>
-		</div>
+		</aside>
 	);
 };
 

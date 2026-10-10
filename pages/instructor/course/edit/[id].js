@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
 import CourseUpdateForm from "@/components/Instructor/CourseUpdateForm";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -29,22 +28,16 @@ const Create = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
+			<InstructorLayout user={user}>
 					<PageNavigation
 						courseId={courseId}
 						activeClassname="edit"
 					/>
 
-					<div className="create-course-form">
+					<div className="create-course-form ss-card ss-form-card">
 						{course && <CourseUpdateForm courseData={course} />}
 					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</InstructorLayout>
 		</>
 	);
 };

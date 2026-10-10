@@ -71,12 +71,9 @@ const ContactForm = () => {
 	};
 
 	return (
-		<div className="contact-area pb-100">
-			<div className="container">
-				<div className="section-title">
-					<span className="top-title">Contact Us</span>
-					<h2>Send Us Message Anytime</h2>
-				</div>
+		<div className="contact-area">
+			<div>
+				<h2 className="ss-contact__title">Send us a message</h2>
 
 				<div className="contact-form">
 					<form id="contactForm" onSubmit={handleSubmit}>
@@ -87,6 +84,7 @@ const ContactForm = () => {
 										type="text"
 										className="form-control"
 										placeholder="Your Full Name"
+										aria-label="Your Full Name"
 										name="name"
 										value={contact.name}
 										onChange={handleChange}
@@ -100,6 +98,7 @@ const ContactForm = () => {
 										type="email"
 										className="form-control"
 										placeholder="Your Email"
+										aria-label="Your Email"
 										name="email"
 										value={contact.email}
 										onChange={handleChange}
@@ -113,6 +112,7 @@ const ContactForm = () => {
 										type="text"
 										className="form-control"
 										placeholder="Your Phone"
+										aria-label="Your Phone"
 										name="phone"
 										value={contact.phone}
 										onChange={handleChange}
@@ -129,6 +129,7 @@ const ContactForm = () => {
 										value={contact.subject}
 										onChange={handleChange}
 										placeholder="Your Subject"
+										aria-label="Your Subject"
 									/>
 								</div>
 							</div>
@@ -137,6 +138,7 @@ const ContactForm = () => {
 								<div className="form-group">
 									<textarea
 										placeholder="Message"
+										aria-label="Message"
 										className="form-control"
 										name="message"
 										rows="5"
@@ -151,13 +153,14 @@ const ContactForm = () => {
 									<div className="form-group">
 										<div className="form-check">
 											<input
+												id="contact-agree"
 												name="check"
 												value="I agree to the terms and privacy policy."
 												className="form-check-input"
 												type="checkbox"
 											/>
 
-											<label className="form-check-label">
+											<label className="form-check-label" htmlFor="contact-agree">
 												I agree to the{" "}
 												<Link href="/terms-conditions">
 													<a>

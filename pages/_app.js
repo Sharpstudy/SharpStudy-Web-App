@@ -25,6 +25,9 @@ import "../styles/responsive.css";
 // Dashboard
 import "../styles/dashboard.css";
 
+// SharpStudy design system (tokens, components, legacy harmonization) — keep last
+import "../styles/sharpstudy/index.scss";
+
 import Layout from "../components/_App/Layout";
 
 function MyApp({ Component, pageProps }) {
