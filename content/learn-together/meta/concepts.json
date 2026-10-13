@@ -1,0 +1,82 @@
+{
+  "absorption": {
+    "label": "Soaking up",
+    "icon": "🧽"
+  },
+  "addition_strategies": {
+    "label": "Adding strategies",
+    "icon": "➕"
+  },
+  "budgeting": {
+    "label": "Budgeting",
+    "icon": "🧺"
+  },
+  "counting": {
+    "label": "Counting",
+    "icon": "🧮"
+  },
+  "data_tally": {
+    "label": "Tally charts",
+    "icon": "📊"
+  },
+  "estimation": {
+    "label": "Estimating",
+    "icon": "🤔"
+  },
+  "fair_test": {
+    "label": "Fair tests",
+    "icon": "⚖️"
+  },
+  "floating_sinking": {
+    "label": "Floating and sinking",
+    "icon": "⛵"
+  },
+  "fractions_equal_parts": {
+    "label": "Equal parts",
+    "icon": "🍕"
+  },
+  "geometry_shapes": {
+    "label": "Shapes",
+    "icon": "🔺"
+  },
+  "graphs": {
+    "label": "Graphs",
+    "icon": "📈"
+  },
+  "measurement_capacity": {
+    "label": "How much it holds",
+    "icon": "🥛"
+  },
+  "measurement_length": {
+    "label": "Measuring length",
+    "icon": "📏"
+  },
+  "money": {
+    "label": "Money",
+    "icon": "🪙"
+  },
+  "number_sense": {
+    "label": "Number sense",
+    "icon": "🔢"
+  },
+  "place_value": {
+    "label": "Tens and ones",
+    "icon": "🧱"
+  },
+  "prediction": {
+    "label": "Predicting",
+    "icon": "🔮"
+  },
+  "shapes_strength": {
+    "label": "Strong shapes",
+    "icon": "🏛️"
+  },
+  "time": {
+    "label": "Time",
+    "icon": "⏰"
+  },
+  "weather_observation": {
+    "label": "Weather",
+    "icon": "🌦️"
+  }
+}

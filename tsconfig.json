@@ -1,0 +1,61 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/public/*": [
+        "public/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ],
+      "@/database/*": [
+        "database/*"
+      ],
+      "@/store/*": [
+        "store/*"
+      ],
+      "@/learn-together/*": [
+        "learn-together/*"
+      ],
+      "@/content/*": [
+        "content/*"
+      ],
+      "@/email-templates/*": [
+        "email-templates/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "learn-together/**/*.ts",
+    "learn-together/**/*.tsx",
+    "pages/learn/**/*",
+    "pages/api/learn/**/*",
+    "tests/learn-together/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

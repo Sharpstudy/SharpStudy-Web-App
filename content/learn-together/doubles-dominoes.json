@@ -1,0 +1,203 @@
+{
+  "slug": "doubles-dominoes",
+  "title": "Doubles Detective",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 2,
+  "learningGoal": "Use doubles and near doubles (6+6, 6+7) to add quickly.",
+  "conceptTags": [
+    "addition_strategies"
+  ],
+  "prerequisites": [
+    "number_sense"
+  ],
+  "realWorldHook": "Doubles are everywhere: two hands, pairs of shoes, two eyes. They make adding easier.",
+  "materials": [
+    {
+      "item": "Dominoes or dice",
+      "householdSubstitution": "Draw dots on paper rectangles"
+    }
+  ],
+  "noPurchaseRoute": "Draw dominoes on paper: two boxes with dots.",
+  "parentPreview": "Your child spots doubles (same on both sides), learns them, then uses a double to work out a near double like 6+7.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "What things at home come in pairs?"
+      },
+      "child": {
+        "screen": "What comes in pairs?",
+        "readAloudText": "What things come in pairs?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "doubles",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Spread the dominoes out. Ask your child to pick out the doubles and say each one aloud, like 3 and 3 is 6.",
+        "watchFor": [
+          "counts_all"
+        ]
+      },
+      "child": {
+        "screen": "Find dominoes with the same on both sides!",
+        "readAloudText": "Look for dominoes that match on both sides.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "near",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "If 6 and 6 is 12, what is 6 and 7?",
+        "whyThisWorks": "Near doubles turn a hard fact into an easy one plus one.",
+        "watchFor": [
+          "ignores_double"
+        ]
+      },
+      "child": {
+        "screen": "6 + 6 = 12. So what is 6 + 7?",
+        "readAloudText": "Six and six make twelve. So what is six and seven?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 13
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "How did the double help you?"
+      },
+      "child": {
+        "screen": "How did the double help?",
+        "readAloudText": "How did the double help? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Which doubles do you know by heart?"
+      },
+      "child": {
+        "screen": "You found doubles everywhere!",
+        "readAloudText": "You found doubles everywhere.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Doubles to 10+10",
+    "6+7 = 13 using 6+6+1"
+  ],
+  "misconceptions": [
+    {
+      "key": "counts_all",
+      "signal": "Counts every dot rather than using the double.",
+      "supportiveNextQuestion": "You know 5 and 5. Can you use that?"
+    },
+    {
+      "key": "ignores_double",
+      "signal": "Adds 6+7 from scratch, or says 12.",
+      "supportiveNextQuestion": "Is 7 more or less than 6? So is the answer more or less than 12?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "5 and 5 is 10. What is 5 and 6?",
+      "interpretation": {
+        "clear": "Says 11 using the double.",
+        "partial": "Gets 11 by counting on.",
+        "not_yet": "Says 10 or 12 without reasoning."
+      },
+      "child": {
+        "screen": "5 + 5 = 10. What is 5 + 6?",
+        "readAloudText": "Five and five make ten. What is five and six?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 11
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Two packs of 8 crayons. How many crayons?",
+      "interpretation": {
+        "clear": "Says 16 knowing double 8.",
+        "partial": "Counts to 16.",
+        "not_yet": "Says 8 or 10."
+      },
+      "child": {
+        "screen": "2 packs of 8 crayons. How many?",
+        "readAloudText": "Two packs of eight crayons. How many crayons?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 16,
+          "unit": "crayons"
+        }
+      }
+    }
+  ],
+  "extension": "Try 'double and take one': 7+6 using 7+7-1.",
+  "shorterVersion": {
+    "description": "Go straight to the near-double question.",
+    "stepIds": [
+      "hook",
+      "near",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use objects in two matching rows.",
+    "Read the domino dots aloud together."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "snack-budget",
+    "easier": "make-ten-cards",
+    "extension": "snack-budget"
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "slug": "tens-and-ones-bundles",
+  "title": "Tens and Ones Bundles",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 2,
+  "learningGoal": "See two-digit numbers as tens and ones by bundling objects.",
+  "conceptTags": [
+    "place_value",
+    "number_sense"
+  ],
+  "prerequisites": [
+    "counting"
+  ],
+  "realWorldHook": "Shops pack things in tens (eggs in some places, pencils, crayons) so they're quick to count.",
+  "materials": [
+    {
+      "item": "About 40 straws, sticks or paper strips",
+      "householdSubstitution": "Cut paper into thin strips, or use crayons"
+    },
+    {
+      "item": "Rubber bands or tape",
+      "householdSubstitution": "Hair ties or string"
+    }
+  ],
+  "noPurchaseRoute": "Cut scrap paper into strips and tape them into bundles of ten.",
+  "parentPreview": "Your child bundles strips into tens and builds numbers like 34 and 43, noticing the digit's place changes its value.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Is 34 the same as 43? Let's build them and find out."
+      },
+      "child": {
+        "screen": "Is 34 the same as 43?",
+        "readAloudText": "Is thirty-four the same as forty-three?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "same",
+              "label": "Same"
+            },
+            {
+              "key": "different",
+              "label": "Different"
+            }
+          ],
+          "correctKey": "different"
+        }
+      }
+    },
+    {
+      "id": "bundle",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Make bundles of ten strips each. Keep a few loose.",
+        "whyThisWorks": "A bundle you can hold makes 'ten' a single thing, which is what the tens digit means.",
+        "watchFor": [
+          "bundle_wrong_size"
+        ]
+      },
+      "child": {
+        "screen": "Make bundles of 10 strips.",
+        "readAloudText": "Make bundles of ten strips.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "build",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Show me 34 with bundles and loose strips.",
+        "watchFor": [
+          "digit_as_ones"
+        ]
+      },
+      "child": {
+        "screen": "Show 34. How many bundles?",
+        "readAloudText": "Show thirty-four. How many bundles of ten?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 3,
+          "unit": "bundles"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Now build 43. What changed? Why is it bigger?"
+      },
+      "child": {
+        "screen": "Build 43. Why is it bigger than 34?",
+        "readAloudText": "Build forty-three. Why is it bigger? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What's the biggest number we could make with these strips?"
+      },
+      "child": {
+        "screen": "You built big numbers!",
+        "readAloudText": "You built big numbers.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "34 = 3 bundles and 4 loose",
+    "43 has 4 bundles so it's bigger"
+  ],
+  "misconceptions": [
+    {
+      "key": "bundle_wrong_size",
+      "signal": "Bundles 8 or 12 instead of exactly 10.",
+      "supportiveNextQuestion": "Let's count one bundle together. Does it have exactly ten?"
+    },
+    {
+      "key": "digit_as_ones",
+      "signal": "Shows 34 as 3 strips and 4 strips (7 things).",
+      "supportiveNextQuestion": "What does the 3 in 34 stand for: 3 strips or 3 bundles?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "How many tens are in 52?",
+      "interpretation": {
+        "clear": "Says 5.",
+        "partial": "Says 5 after building it.",
+        "not_yet": "Says 2 or 52."
+      },
+      "child": {
+        "screen": "How many tens in 52?",
+        "readAloudText": "How many tens are in fifty-two?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 5,
+          "unit": "tens"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Eggs come in boxes of 10. You have 2 full boxes and 3 eggs. How many eggs?",
+      "interpretation": {
+        "clear": "Says 23 straight away.",
+        "partial": "Counts on to 23.",
+        "not_yet": "Says 5 or 32."
+      },
+      "child": {
+        "screen": "2 full boxes of 10 eggs and 3 more. How many?",
+        "readAloudText": "Two full boxes of ten eggs and three more. How many eggs?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 23,
+          "unit": "eggs"
+        }
+      }
+    }
+  ],
+  "extension": "Make a bundle of ten bundles. What number is that?",
+  "shorterVersion": {
+    "description": "Use pre-made bundles and build 34 and 43.",
+    "stepIds": [
+      "hook",
+      "build",
+      "explain",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use cups to hold groups of ten instead of bundling.",
+    "Use larger objects like socks if strips are fiddly."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "snack-budget",
+    "easier": "estimate-and-count"
+  }
+}

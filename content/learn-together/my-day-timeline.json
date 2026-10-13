@@ -1,0 +1,241 @@
+{
+  "slug": "my-day-timeline",
+  "title": "My Day Timeline",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Order events in time and read o'clock and half past.",
+  "conceptTags": [
+    "time"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "Clocks help families plan when to wake, eat and go to bed.",
+  "materials": [
+    {
+      "item": "Paper and pencil",
+      "householdSubstitution": "Sticky notes"
+    },
+    {
+      "item": "A clock (analogue if you have one)",
+      "householdSubstitution": "A drawn clock face or the clock on a phone"
+    }
+  ],
+  "noPurchaseRoute": "Draw a clock face on paper if you don't have an analogue clock.",
+  "parentPreview": "Your child puts the events of a day in order and matches a few to o'clock or half-past times.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "What's the first thing you do every morning?"
+      },
+      "child": {
+        "screen": "What do you do first every morning?",
+        "readAloudText": "What do you do first every morning?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "order",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Put these in order: dinner, wake up, school, bedtime.",
+        "whyThisWorks": "Ordering events is the foundation for understanding time passing.",
+        "watchFor": [
+          "order_mixed"
+        ]
+      },
+      "child": {
+        "screen": "Put your day in order!",
+        "readAloudText": "Put your day in order. Drag them from first to last.",
+        "interaction": {
+          "type": "ordering",
+          "items": [
+            {
+              "key": "wake",
+              "label": "Wake up"
+            },
+            {
+              "key": "school",
+              "label": "School"
+            },
+            {
+              "key": "dinner",
+              "label": "Dinner"
+            },
+            {
+              "key": "bed",
+              "label": "Bedtime"
+            }
+          ],
+          "correctOrder": [
+            "wake",
+            "school",
+            "dinner",
+            "bed"
+          ]
+        }
+      }
+    },
+    {
+      "id": "clock",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Show 7 o'clock on the clock. The long hand points to 12.",
+        "watchFor": [
+          "hands_mixed"
+        ]
+      },
+      "child": {
+        "screen": "The long hand points to 12. The short hand points to 7. What time is it?",
+        "readAloudText": "The long hand points to twelve. The short hand points to seven. What time is it?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 7,
+          "unit": "o'clock"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Which comes first: lunch or dinner? How do you know?"
+      },
+      "child": {
+        "screen": "Which comes first, lunch or dinner?",
+        "readAloudText": "Which comes first, lunch or dinner?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "lunch",
+              "label": "Lunch"
+            },
+            {
+              "key": "dinner",
+              "label": "Dinner"
+            }
+          ],
+          "correctKey": "lunch"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What's your favourite time of day?"
+      },
+      "child": {
+        "screen": "You made a timeline!",
+        "readAloudText": "You made a timeline of your day.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Wake up, school, dinner, bedtime",
+    "7 o'clock"
+  ],
+  "misconceptions": [
+    {
+      "key": "order_mixed",
+      "signal": "Puts events in a random order or by preference.",
+      "supportiveNextQuestion": "What happened just before you had breakfast?"
+    },
+    {
+      "key": "hands_mixed",
+      "signal": "Reads the long hand as the hour.",
+      "supportiveNextQuestion": "Which hand is shorter? That one tells us the hour."
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Short hand on 3, long hand on 12. What time?",
+      "interpretation": {
+        "clear": "Says 3 o'clock.",
+        "partial": "Says 3 after counting.",
+        "not_yet": "Says 12."
+      },
+      "child": {
+        "screen": "Short hand on 3, long hand on 12. What time?",
+        "readAloudText": "Short hand on three. Long hand on twelve. What time is it?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 3,
+          "unit": "o'clock"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "If the party starts at 4 o'clock and it's 2 o'clock now, how many hours do we wait?",
+      "interpretation": {
+        "clear": "Says 2 hours.",
+        "partial": "Counts on with help.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "Party at 4 o'clock. Now it's 2 o'clock. How many hours to wait?",
+        "readAloudText": "The party is at four o'clock. Now it's two o'clock. How many hours do we wait?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 2,
+          "unit": "hours"
+        }
+      }
+    }
+  ],
+  "extension": "Add half-past times to the timeline.",
+  "shorterVersion": {
+    "description": "Order the day only.",
+    "stepIds": [
+      "hook",
+      "order",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Draw pictures for each event.",
+    "Use a toy clock or turn the hands together."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "window-tally"
+  }
+}

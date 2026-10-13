@@ -35,3 +35,9 @@ yarn-error.log*
 # vercel
 .vercel
 .env*
+
+# learn-together tooling
+*.tsbuildinfo
+/test-results/
+/playwright-report/
+/tests/learn-together/e2e/.auth/

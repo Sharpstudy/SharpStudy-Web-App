@@ -1,0 +1,251 @@
+{
+  "slug": "which-holds-more",
+  "title": "Which Holds More?",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 2,
+  "learningGoal": "Compare capacity by filling and counting equal cups, not by how a container looks.",
+  "conceptTags": [
+    "measurement_capacity"
+  ],
+  "prerequisites": [
+    "measurement_length"
+  ],
+  "realWorldHook": "Cooks and gardeners need to know how much a container holds, and tall isn't always more.",
+  "materials": [
+    {
+      "item": "Two different containers (tall-thin and short-wide)",
+      "householdSubstitution": "Any two cups, bowls or clean jars"
+    },
+    {
+      "item": "A small cup or scoop",
+      "householdSubstitution": "A spoon or yogurt pot"
+    },
+    {
+      "item": "Water",
+      "householdSubstitution": "Dry rice or sand for a no-spill version"
+    }
+  ],
+  "noPurchaseRoute": "Use any two kitchen containers and a scoop; dry rice works if you want to avoid water.",
+  "parentPreview": "Your child predicts which container holds more, then tests by counting scoops of water. Tall containers often fool us.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Which of these holds more? Just look, don't touch.",
+        "whyThisWorks": "A prediction based on looks sets up a useful surprise.",
+        "watchFor": [
+          "tall_means_more"
+        ]
+      },
+      "child": {
+        "screen": "Which one holds more?",
+        "readAloudText": "Which one holds more? Just look.",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "tall",
+              "label": "The tall one"
+            },
+            {
+              "key": "wide",
+              "label": "The wide one"
+            },
+            {
+              "key": "same",
+              "label": "The same"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fill_tall",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Fill the tall one scoop by scoop. Count the scoops. Keep each scoop level.",
+        "whyThisWorks": "Equal scoops make a fair unit, like the hand spans or cubes.",
+        "watchFor": [
+          "unequal_scoops"
+        ]
+      },
+      "child": {
+        "screen": "Fill the tall one. Count the scoops.",
+        "readAloudText": "Fill the tall one. Count the scoops.",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "scoops"
+        }
+      }
+    },
+    {
+      "id": "fill_wide",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Now the wide one. Count again."
+      },
+      "child": {
+        "screen": "Now the wide one. Count the scoops.",
+        "readAloudText": "Now the wide one. Count the scoops.",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "scoops"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Which held more scoops? Was your guess right?"
+      },
+      "child": {
+        "screen": "Which held more?",
+        "readAloudText": "Which one held more?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "tall",
+              "label": "The tall one"
+            },
+            {
+              "key": "wide",
+              "label": "The wide one"
+            },
+            {
+              "key": "same",
+              "label": "The same"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Were you surprised? Why can tall containers trick our eyes?"
+      },
+      "child": {
+        "screen": "You tested capacity!",
+        "readAloudText": "You tested how much things hold.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Counts scoops for each",
+    "Compares numbers, not heights"
+  ],
+  "misconceptions": [
+    {
+      "key": "tall_means_more",
+      "signal": "Insists the taller one holds more even after counting.",
+      "supportiveNextQuestion": "The numbers say something different from our eyes. Which should we trust?"
+    },
+    {
+      "key": "unequal_scoops",
+      "signal": "Half-fills some scoops.",
+      "supportiveNextQuestion": "If some scoops are only half full, is our count fair?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Cup A holds 6 scoops, cup B holds 9 scoops. Which holds more?",
+      "interpretation": {
+        "clear": "Says B and how many more.",
+        "partial": "Says B.",
+        "not_yet": "Picks by looks or says A."
+      },
+      "child": {
+        "screen": "Cup A: 6 scoops. Cup B: 9 scoops. Which holds more?",
+        "readAloudText": "Cup A holds six scoops. Cup B holds nine. Which holds more?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "a",
+              "label": "Cup A"
+            },
+            {
+              "key": "b",
+              "label": "Cup B"
+            }
+          ],
+          "correctKey": "b"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "How could we find out which bath toy bucket holds more?",
+      "interpretation": {
+        "clear": "Suggests filling with the same scoop and counting.",
+        "partial": "Suggests filling but not counting.",
+        "not_yet": "Says look at it."
+      },
+      "child": {
+        "screen": "How could you find which bucket holds more?",
+        "readAloudText": "How could you find which bucket holds more? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Pour from one container into the other. What happens? Does it overflow?",
+  "shorterVersion": {
+    "description": "Use dry rice and compare two cups by pouring one into the other.",
+    "stepIds": [
+      "hook",
+      "fill_tall",
+      "explain",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use dry rice to avoid spills.",
+    "Use a bigger scoop so there are fewer to count."
+  ],
+  "filters": {
+    "lowMess": false,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "my-day-timeline",
+    "easier": "measure-with-hands"
+  }
+}

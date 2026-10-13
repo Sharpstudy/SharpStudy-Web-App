@@ -1,0 +1,296 @@
+{
+  "slug": "paper-shape-coin-lab",
+  "title": "Paper Shape Coin Lab",
+  "subject": "science",
+  "activityType": "science_at_home_lab",
+  "ageBands": [
+    "6-7",
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 15,
+  "difficulty": 2,
+  "learningGoal": "Test which folded paper shape holds the most weight, and keep the test fair.",
+  "conceptTags": [
+    "shapes_strength",
+    "fair_test",
+    "counting"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "Bridges and buildings use columns. Engineers test which shapes are strongest before they build.",
+  "materials": [
+    {
+      "item": "3 sheets of the same paper",
+      "householdSubstitution": "Any matching printer paper, magazine pages or used envelopes"
+    },
+    {
+      "item": "Tape",
+      "householdSubstitution": "A paper clip or a little glue"
+    },
+    {
+      "item": "A small stack of coins",
+      "householdSubstitution": "Large lego bricks, small books or wooden blocks",
+      "smallParts": true
+    }
+  ],
+  "noPurchaseRoute": "Use any three matching sheets of paper and anything small and stackable you already have; coins are optional.",
+  "parentPreview": "Your child folds the same paper into a tube, a triangle and a square column, guesses which will hold the most, then tests by stacking coins or blocks on a small book placed on top. You help keep the test fair: same paper, same height, same way of adding weight.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 90,
+        "parentSays": "Bridges stand on columns. If we fold paper into different shapes, which do you think can hold the most?",
+        "whyThisWorks": "A prediction gives your child something to check, which is the heart of an experiment."
+      },
+      "child": {
+        "screen": "Which paper shape is the strongest?",
+        "readAloudText": "Which paper shape is the strongest? Tap I'm ready.",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "predict",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 90,
+        "parentSays": "We'll make a tube, a triangle and a square. Which one do you predict will hold the most?",
+        "whyThisWorks": "There's no wrong guess. We record it so we can compare it with what happens."
+      },
+      "child": {
+        "screen": "Guess! Which shape will hold the most?",
+        "readAloudText": "Guess which shape will hold the most.",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "tube",
+              "label": "Tube"
+            },
+            {
+              "key": "triangle",
+              "label": "Triangle"
+            },
+            {
+              "key": "square",
+              "label": "Square"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "build",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Fold each sheet into its shape and tape it. Make them the same height so it's fair.",
+        "whyThisWorks": "Same paper and same height means only the shape changes. That's a fair test.",
+        "watchFor": [
+          "unfair_test"
+        ]
+      },
+      "child": {
+        "screen": "Fold and tape three shapes. Make them the same height.",
+        "readAloudText": "Fold and tape three shapes, all the same height.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "test",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 300,
+        "parentSays": "Stand one shape up, put a small book on top, and add coins one at a time until it squashes. Count how many it held.",
+        "whyThisWorks": "Adding one at a time and counting makes the result a number you can compare.",
+        "watchFor": [
+          "dumps_weight"
+        ]
+      },
+      "child": {
+        "screen": "Add coins one at a time. How many did the tube hold?",
+        "readAloudText": "Add coins one at a time. Count until it squashes.",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "coins"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 120,
+        "parentSays": "Which shape held the most? Why do you think it was stronger?",
+        "whyThisWorks": "Tubes spread weight all the way around with no weak corners. Your child doesn't need the word; noticing is enough.",
+        "watchFor": [
+          "prediction_is_wrong"
+        ]
+      },
+      "child": {
+        "screen": "Which shape won? Tell your grown-up why.",
+        "readAloudText": "Which shape held the most?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "tube",
+              "label": "Tube"
+            },
+            {
+              "key": "triangle",
+              "label": "Triangle"
+            },
+            {
+              "key": "square",
+              "label": "Square"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 120,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 60,
+        "parentSays": "Were you surprised? Where have you seen round columns in real life?"
+      },
+      "child": {
+        "screen": "You tested like an engineer!",
+        "readAloudText": "You tested like an engineer.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "The tube usually holds the most",
+    "Fair test: same paper, same height, add weight the same way"
+  ],
+  "misconceptions": [
+    {
+      "key": "unfair_test",
+      "signal": "Makes shapes different heights or uses different paper, or presses down.",
+      "supportiveNextQuestion": "If one column is taller, can we tell whether the shape or the height made the difference?"
+    },
+    {
+      "key": "dumps_weight",
+      "signal": "Drops several coins at once or pushes the book.",
+      "supportiveNextQuestion": "What could happen if we drop lots at once? How can we make each try the same?"
+    },
+    {
+      "key": "prediction_is_wrong",
+      "signal": "Upset that the guess didn't match, or changes the guess afterwards.",
+      "supportiveNextQuestion": "Scientists are often surprised. What did we learn because our guess was different?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "If we tested again, what must stay the same to be fair?",
+      "interpretation": {
+        "clear": "Names at least one: same paper, same height, same way of adding weight.",
+        "partial": "Says 'the same' without saying what.",
+        "not_yet": "Suggests changing several things at once."
+      },
+      "child": {
+        "screen": "To make it fair, what stays the same?",
+        "readAloudText": "To make it fair, what should stay the same?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "same",
+              "label": "The paper and height"
+            },
+            {
+              "key": "different",
+              "label": "Use different paper"
+            }
+          ],
+          "correctKey": "same"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Where in real life do you see round columns holding things up?",
+      "interpretation": {
+        "clear": "Gives an example (pillars, table legs, tree trunks, cans) and links it to the test.",
+        "partial": "Gives an example but can't link it.",
+        "not_yet": "No example yet."
+      },
+      "child": {
+        "screen": "Where do you see strong round shapes holding things up?",
+        "readAloudText": "Where do you see strong round shapes holding things up? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Try the tube with paper twice as thick (two sheets). Does doubling the paper double the coins?",
+  "shorterVersion": {
+    "description": "Build only a tube and a square and compare those two.",
+    "stepIds": [
+      "hook",
+      "build",
+      "test",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "You do the folding and taping; your child adds weight and counts.",
+    "Use large blocks instead of coins for easier handling.",
+    "Count out loud together."
+  ],
+  "safety": {
+    "hazards": [
+      "Coins and small items are a choking hazard",
+      "Collapsing stacks may slide off the table"
+    ],
+    "supervision": "An adult stays at the table the whole time. Coins and other small items are a choking hazard. Keep them away from younger siblings and use larger counters (blocks, bottle caps glued in pairs, or folded paper squares) if anyone in the room is under 3.",
+    "stopConditions": [
+      "Anyone puts a coin in their mouth",
+      "A younger sibling comes near the small items",
+      "The stack becomes taller than the child's shoulders"
+    ],
+    "cleanup": "Count the coins back into a container so none are left on the floor; recycle the paper."
+  },
+  "optionalKit": {
+    "kitKey": "engineer-starter",
+    "description": "A starter kit with card strips and large counters. Optional: everything here works with household items.",
+    "required": false
+  },
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "sink-or-float",
+    "extension": "paper-towel-race"
+  }
+}

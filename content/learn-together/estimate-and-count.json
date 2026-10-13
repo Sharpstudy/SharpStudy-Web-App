@@ -1,0 +1,234 @@
+{
+  "slug": "estimate-and-count",
+  "title": "Estimate, Then Count",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Make a sensible estimate and check it by counting in groups.",
+  "conceptTags": [
+    "estimation",
+    "number_sense"
+  ],
+  "prerequisites": [
+    "counting"
+  ],
+  "realWorldHook": "Shopkeepers and cooks estimate all the time: 'about how many will we need?'",
+  "materials": [
+    {
+      "item": "A cup of something countable (dry pasta, buttons)",
+      "householdSubstitution": "Socks in a basket, toy blocks, or crayons",
+      "smallParts": true
+    }
+  ],
+  "noPurchaseRoute": "Use any pile of 20 to 60 things you already have, like socks, blocks or crayons.",
+  "parentPreview": "Your child looks at a pile, makes an estimate, then counts by grouping into tens. Comparing the estimate with the count is the learning: close is great.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Look at this pile but don't count. About how many do you think there are?",
+        "whyThisWorks": "An estimate is a thoughtful guess. Writing it down makes the later count exciting.",
+        "watchFor": [
+          "wild_guess"
+        ]
+      },
+      "child": {
+        "screen": "Don't count yet! How many do you think?",
+        "readAloudText": "Don't count yet. How many do you think there are?",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "things"
+        }
+      }
+    },
+    {
+      "id": "group",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Now let's count by making little piles of ten.",
+        "whyThisWorks": "Grouping into tens is faster, easier to check, and builds place value.",
+        "watchFor": [
+          "loses_track"
+        ]
+      },
+      "child": {
+        "screen": "Make piles of 10.",
+        "readAloudText": "Make little piles of ten.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "count",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "How many piles of ten? How many left over? So how many altogether?"
+      },
+      "child": {
+        "screen": "How many altogether?",
+        "readAloudText": "How many altogether?",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "things"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Was your estimate close? Would you guess higher or lower next time?"
+      },
+      "child": {
+        "screen": "Was your guess close?",
+        "readAloudText": "Was your guess close, too high or too low?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "close",
+              "label": "Close!"
+            },
+            {
+              "key": "too_high",
+              "label": "Too high"
+            },
+            {
+              "key": "too_low",
+              "label": "Too low"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Where would estimating be useful at home?"
+      },
+      "child": {
+        "screen": "You estimated and counted!",
+        "readAloudText": "You estimated and counted.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "An estimate within about 10 of the count",
+    "Counting by tens and ones"
+  ],
+  "misconceptions": [
+    {
+      "key": "wild_guess",
+      "signal": "Guesses a very large or random number without looking.",
+      "supportiveNextQuestion": "If there were 100, would the pile be bigger or smaller than this?"
+    },
+    {
+      "key": "loses_track",
+      "signal": "Recounts from the start or double-counts items.",
+      "supportiveNextQuestion": "How could piles of ten help us not lose our place?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "3 piles of ten and 4 left over. How many?",
+      "interpretation": {
+        "clear": "Says 34 quickly.",
+        "partial": "Counts on from 30 or counts all.",
+        "not_yet": "Says 7 or another unrelated number."
+      },
+      "child": {
+        "screen": "3 piles of ten and 4 left over. How many?",
+        "readAloudText": "Three piles of ten and four left over. How many altogether?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 34
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "About how many people could sit in our living room? Is 5, 50 or 500 most sensible?",
+      "interpretation": {
+        "clear": "Chooses a sensible size and explains.",
+        "partial": "Chooses sensibly without a reason.",
+        "not_yet": "Chooses randomly."
+      },
+      "child": {
+        "screen": "How many people could fit in your living room?",
+        "readAloudText": "How many people could sit in your living room? About five, fifty or five hundred?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "5",
+              "label": "About 5"
+            },
+            {
+              "key": "50",
+              "label": "About 50"
+            },
+            {
+              "key": "500",
+              "label": "About 500"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "extension": "Estimate a bigger pile (100+). Use piles of ten and then groups of ten piles.",
+  "shorterVersion": {
+    "description": "Estimate and count one small pile.",
+    "stepIds": [
+      "hook",
+      "count",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use larger objects that are easier to pick up.",
+    "Use an egg carton or cups to hold the groups of ten."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "tens-and-ones-bundles",
+    "extension": "tens-and-ones-bundles"
+  }
+}

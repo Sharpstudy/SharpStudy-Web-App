@@ -1,0 +1,202 @@
+{
+  "slug": "make-ten-cards",
+  "title": "Make Ten Card Game",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Find pairs of numbers that make 10, a key building block for adding.",
+  "conceptTags": [
+    "addition_strategies",
+    "number_sense"
+  ],
+  "prerequisites": [
+    "counting"
+  ],
+  "realWorldHook": "Making 10 is a shortcut grown-ups use to add in their heads.",
+  "materials": [
+    {
+      "item": "A deck of cards with picture cards removed",
+      "householdSubstitution": "10 paper squares numbered 1 to 9 (twice)"
+    }
+  ],
+  "noPurchaseRoute": "Write numbers 1 to 9 twice on small paper squares.",
+  "parentPreview": "A quick card game: turn over cards and find pairs that add to 10. It builds fast recall of number bonds to 10.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "I'm thinking of two numbers that add to 10. Can you guess one pair?"
+      },
+      "child": {
+        "screen": "Two numbers that make 10. Can you think of one?",
+        "readAloudText": "Can you think of two numbers that make ten?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "play",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Lay out 8 cards face up. Take turns finding two that make 10. Say the sum out loud.",
+        "whyThisWorks": "Saying '7 and 3 make 10' links the pair to the total.",
+        "watchFor": [
+          "counts_all"
+        ]
+      },
+      "child": {
+        "screen": "Find two cards that make 10!",
+        "readAloudText": "Find two cards that make ten.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "missing",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "If I have a 6, what card do I need?",
+        "watchFor": [
+          "off_by_one"
+        ]
+      },
+      "child": {
+        "screen": "You have 6. What do you need to make 10?",
+        "readAloudText": "You have six. What do you need to make ten?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 4
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "How did you work out the partner? Fingers? Counting up?"
+      },
+      "child": {
+        "screen": "How did you find the partner number?",
+        "readAloudText": "How did you find the partner number? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Which pairs are easiest? Which are tricky?"
+      },
+      "child": {
+        "screen": "You made lots of tens!",
+        "readAloudText": "You made lots of tens.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Pairs: 1+9, 2+8, 3+7, 4+6, 5+5"
+  ],
+  "misconceptions": [
+    {
+      "key": "counts_all",
+      "signal": "Counts every dot on both cards from 1 each time.",
+      "supportiveNextQuestion": "Can you start from the bigger number and count on?"
+    },
+    {
+      "key": "off_by_one",
+      "signal": "Gets close but one away (e.g. 6 and 5).",
+      "supportiveNextQuestion": "Let's check on fingers: show 6, how many fingers are down?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "What goes with 8 to make 10?",
+      "interpretation": {
+        "clear": "Says 2 quickly.",
+        "partial": "Counts on to find 2.",
+        "not_yet": "Guesses."
+      },
+      "child": {
+        "screen": "8 and what make 10?",
+        "readAloudText": "Eight and what make ten?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 2
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "You have 7 stickers and need 10 for a page. How many more?",
+      "interpretation": {
+        "clear": "Says 3 and links it to the game.",
+        "partial": "Gets 3 by counting.",
+        "not_yet": "Adds instead (says 17)."
+      },
+      "child": {
+        "screen": "You have 7 stickers. You need 10. How many more?",
+        "readAloudText": "You have seven stickers. You need ten. How many more?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 3
+        }
+      }
+    }
+  ],
+  "extension": "Play 'make 20' with two decks.",
+  "shorterVersion": {
+    "description": "Skip the game; do the missing number and checks.",
+    "stepIds": [
+      "hook",
+      "missing",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use cards with dots so your child can count.",
+    "Use ten fingers as a visual."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "doubles-dominoes",
+    "extension": "snack-budget"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "slug": "measure-with-hands",
+  "title": "Hand-Span Measuring",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Measure length with repeated equal units and see why units must be the same size.",
+  "conceptTags": [
+    "measurement_length"
+  ],
+  "prerequisites": [
+    "counting"
+  ],
+  "realWorldHook": "Long ago people measured with hands and feet. Today we use rulers so everyone gets the same answer.",
+  "materials": [
+    {
+      "item": "A table or bed to measure",
+      "householdSubstitution": "Any long object: a sofa, a door, a rug"
+    }
+  ],
+  "noPurchaseRoute": "Nothing needed except hands and a long object at home.",
+  "parentPreview": "You and your child each measure the same table in hand spans, get different numbers, and figure out why. It introduces the idea that units need to be equal.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "How long is our table? Let's measure it with our hands."
+      },
+      "child": {
+        "screen": "How long is the table? Let's measure with hands!",
+        "readAloudText": "How long is the table? Let's measure with our hands.",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "child_measure",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Spread your hand wide and walk it along the edge without gaps. Count the spans.",
+        "whyThisWorks": "Units laid end to end without gaps or overlaps is the core idea behind every ruler.",
+        "watchFor": [
+          "gaps_overlaps"
+        ]
+      },
+      "child": {
+        "screen": "Measure the table with your hand. How many hands long?",
+        "readAloudText": "Spread your hand. Walk it along the table. Count.",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "hands"
+        }
+      }
+    },
+    {
+      "id": "parent_measure",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Now I'll measure with my hand. Count my spans with me."
+      },
+      "child": {
+        "screen": "Count your grown-up's hand spans. How many?",
+        "readAloudText": "Now count your grown-up's hand spans.",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "hands"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 120,
+        "parentSays": "Why did we get different numbers if the table didn't change?",
+        "whyThisWorks": "Discovering that the unit size matters is why we need standard units.",
+        "watchFor": [
+          "bigger_number_longer"
+        ]
+      },
+      "child": {
+        "screen": "Why did you get different numbers?",
+        "readAloudText": "Why did you get different numbers?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "hands",
+              "label": "Our hands are different sizes"
+            },
+            {
+              "key": "table",
+              "label": "The table changed"
+            }
+          ],
+          "correctKey": "hands"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What could we use so we always get the same answer?"
+      },
+      "child": {
+        "screen": "You measured like an explorer!",
+        "readAloudText": "You measured like an explorer.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Child's number is bigger because their hand is smaller",
+    "We need a unit that is always the same size"
+  ],
+  "misconceptions": [
+    {
+      "key": "gaps_overlaps",
+      "signal": "Leaves gaps or overlaps hands while measuring.",
+      "supportiveNextQuestion": "Let's make sure each hand starts exactly where the last one ended."
+    },
+    {
+      "key": "bigger_number_longer",
+      "signal": "Thinks the table is longer when measured by the child because the number is bigger.",
+      "supportiveNextQuestion": "Did the table grow? Or was the hand smaller?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "If a giant measured our table with their hand, would they get a bigger or smaller number?",
+      "interpretation": {
+        "clear": "Says smaller, because the giant's hand is bigger.",
+        "partial": "Says smaller but can't say why.",
+        "not_yet": "Says bigger."
+      },
+      "child": {
+        "screen": "A giant measures the table with a giant hand. Bigger or smaller number?",
+        "readAloudText": "A giant measures the table with a giant hand. Bigger or smaller number?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "smaller",
+              "label": "Smaller number"
+            },
+            {
+              "key": "bigger",
+              "label": "Bigger number"
+            }
+          ],
+          "correctKey": "smaller"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "How could two friends in different houses compare their beds fairly?",
+      "interpretation": {
+        "clear": "Suggests using the same object (a ruler, the same string, the same book).",
+        "partial": "Suggests measuring but not with a shared unit.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "How can two friends compare beds in different houses?",
+        "readAloudText": "How can two friends compare their beds fairly? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Measure with spoons, then with a book. Which unit gives the biggest number? Why?",
+  "shorterVersion": {
+    "description": "Measure once each and compare.",
+    "stepIds": [
+      "hook",
+      "child_measure",
+      "explain",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use a toy car or shoe as the unit if hand spans are hard.",
+    "Count together out loud."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "which-holds-more",
+    "extension": "which-holds-more"
+  }
+}

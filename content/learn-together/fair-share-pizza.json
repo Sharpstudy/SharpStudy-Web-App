@@ -1,0 +1,240 @@
+{
+  "slug": "fair-share-pizza",
+  "title": "Fair Share Paper Pizza",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Understand halves and quarters as equal parts of a whole.",
+  "conceptTags": [
+    "fractions_equal_parts"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "When we share food, everyone wants a fair piece. Fair means equal.",
+  "materials": [
+    {
+      "item": "A paper circle (trace a plate)",
+      "householdSubstitution": "Any paper; a square works too"
+    }
+  ],
+  "noPurchaseRoute": "Trace a plate on any paper and cut it out, or just fold a square sheet.",
+  "parentPreview": "Your child folds a paper 'pizza' to share fairly between 2, then 4 people, and checks the pieces are equal by laying them on top of each other.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "If two of us share a pizza, how can we make it fair?"
+      },
+      "child": {
+        "screen": "How can 2 people share a pizza fairly?",
+        "readAloudText": "How can two people share a pizza fairly?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "halves",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Fold the circle so both sides match exactly. Open it. How many pieces? Are they the same size?",
+        "whyThisWorks": "Matching edges is a physical way to check 'equal'.",
+        "watchFor": [
+          "unequal_parts"
+        ]
+      },
+      "child": {
+        "screen": "Fold the pizza so both sides match. How many pieces?",
+        "readAloudText": "Fold so both sides match. How many pieces?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 2,
+          "unit": "pieces"
+        }
+      }
+    },
+    {
+      "id": "quarters",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Now fold it again to share with four people. How many pieces now?",
+        "whyThisWorks": "Seeing that more people means smaller pieces builds intuition for fractions.",
+        "watchFor": [
+          "more_is_bigger"
+        ]
+      },
+      "child": {
+        "screen": "Fold again for 4 people. How many pieces now?",
+        "readAloudText": "Fold again for four people. How many pieces?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 4,
+          "unit": "pieces"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask which piece is bigger, a quarter or a half, then ask how they know.",
+        "watchFor": [
+          "more_is_bigger"
+        ]
+      },
+      "child": {
+        "screen": "Is one quarter bigger or smaller than one half?",
+        "readAloudText": "Is one quarter bigger or smaller than one half?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "smaller",
+              "label": "Smaller"
+            },
+            {
+              "key": "bigger",
+              "label": "Bigger"
+            }
+          ],
+          "correctKey": "smaller"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Where else do we share things fairly at home?"
+      },
+      "child": {
+        "screen": "You made fair shares!",
+        "readAloudText": "You made fair shares.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "2 equal halves",
+    "4 equal quarters",
+    "A quarter is smaller than a half"
+  ],
+  "misconceptions": [
+    {
+      "key": "unequal_parts",
+      "signal": "Calls any two pieces 'halves' even when one is clearly bigger.",
+      "supportiveNextQuestion": "Let's lay the pieces on top of each other. Do they match exactly?"
+    },
+    {
+      "key": "more_is_bigger",
+      "signal": "Thinks a quarter is bigger than a half because 4 is bigger than 2.",
+      "supportiveNextQuestion": "If four people share, does each person get more or less than if two share?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "If we cut a pizza into 2 pieces that don't match, is it halves?",
+      "interpretation": {
+        "clear": "Says no, halves must be equal.",
+        "partial": "Unsure, but checks by folding.",
+        "not_yet": "Says yes, any 2 pieces are halves."
+      },
+      "child": {
+        "screen": "2 pieces that don't match. Are they halves?",
+        "readAloudText": "Two pieces that don't match. Are they halves?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "no",
+              "label": "No"
+            },
+            {
+              "key": "yes",
+              "label": "Yes"
+            }
+          ],
+          "correctKey": "no"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Would you rather have half a sandwich or a quarter of the same sandwich? Why?",
+      "interpretation": {
+        "clear": "Chooses half and explains it's bigger.",
+        "partial": "Chooses half without a reason.",
+        "not_yet": "Chooses quarter because 4 is bigger."
+      },
+      "child": {
+        "screen": "Half a sandwich or a quarter of a sandwich: which is more?",
+        "readAloudText": "Half a sandwich or a quarter of a sandwich. Which is more?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "half",
+              "label": "Half"
+            },
+            {
+              "key": "quarter",
+              "label": "Quarter"
+            }
+          ],
+          "correctKey": "half"
+        }
+      }
+    }
+  ],
+  "extension": "Fold into eighths. Can you make a fair share for 3 people? (Harder!)",
+  "shorterVersion": {
+    "description": "Halves and quarters only, then the check.",
+    "stepIds": [
+      "hook",
+      "halves",
+      "quarters",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Pre-draw fold lines for easier folding.",
+    "Use a real sandwich or toast instead of paper."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "which-holds-more",
+    "extension": "tens-and-ones-bundles"
+  }
+}

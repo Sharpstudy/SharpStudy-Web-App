@@ -1,0 +1,271 @@
+{
+  "slug": "weather-watchers",
+  "title": "Weather Watchers",
+  "subject": "science",
+  "activityType": "science_at_home_lab",
+  "ageBands": [
+    "6-7",
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 1,
+  "learningGoal": "Observe and record weather using simple evidence: sky, wind and temperature feel.",
+  "conceptTags": [
+    "weather_observation",
+    "data_tally"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "Weather forecasters start by observing carefully, just like scientists.",
+  "materials": [
+    {
+      "item": "A strip of paper or ribbon",
+      "householdSubstitution": "A tissue or a light leaf"
+    },
+    {
+      "item": "Paper and pencil for a weather chart",
+      "householdSubstitution": "The back of an envelope"
+    }
+  ],
+  "noPurchaseRoute": "Use a strip of scrap paper as a wind streamer and draw the chart.",
+  "parentPreview": "You go to a window, doorway or garden together, observe the sky, test the wind with a paper streamer, and record it on a simple chart.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Scientists observe the weather every day. What's it like outside right now?"
+      },
+      "child": {
+        "screen": "What's the weather like right now?",
+        "readAloudText": "What's the weather like right now?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "sky",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Head to a window or doorway together and ask what the sky looks like right now.",
+        "whyThisWorks": "Naming what you see is the first step of recording evidence."
+      },
+      "child": {
+        "screen": "Look at the sky. What do you see?",
+        "readAloudText": "Look at the sky. Is it sunny, cloudy or rainy?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "sunny",
+              "label": "Sunny"
+            },
+            {
+              "key": "cloudy",
+              "label": "Cloudy"
+            },
+            {
+              "key": "rainy",
+              "label": "Rainy"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "wind",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Hold the paper streamer up. Does it hang down, wave a little, or fly straight out?",
+        "watchFor": [
+          "see_wind"
+        ]
+      },
+      "child": {
+        "screen": "Hold up your streamer. How is it moving?",
+        "readAloudText": "Hold up your streamer. How is it moving?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "still",
+              "label": "Hanging down"
+            },
+            {
+              "key": "breeze",
+              "label": "Waving a little"
+            },
+            {
+              "key": "windy",
+              "label": "Flying out"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "record",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Draw a symbol for the sky and wind on today's line of the chart."
+      },
+      "child": {
+        "screen": "Draw today's weather on your chart.",
+        "readAloudText": "Draw today's weather on your chart.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "How did the streamer help us know about wind we can't see?",
+        "watchFor": [
+          "see_wind"
+        ]
+      },
+      "child": {
+        "screen": "How did the streamer show the wind?",
+        "readAloudText": "How did the streamer show us the wind? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What do you predict the weather will be tomorrow? Let's check!"
+      },
+      "child": {
+        "screen": "You're a weather watcher!",
+        "readAloudText": "You're a weather watcher.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Sky and wind recorded with symbols",
+    "Explains the streamer shows wind moving it"
+  ],
+  "misconceptions": [
+    {
+      "key": "see_wind",
+      "signal": "Says there is no wind because you can't see it.",
+      "supportiveNextQuestion": "We can't see the wind itself. What can we see it doing?"
+    },
+    {
+      "key": "cloudy_means_rain",
+      "signal": "Thinks every cloud means rain right now.",
+      "supportiveNextQuestion": "Is it raining right now even though there are clouds?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "If the streamer flies straight out, what does that tell us?",
+      "interpretation": {
+        "clear": "Says it's windy.",
+        "partial": "Says something about the streamer moving.",
+        "not_yet": "No link yet."
+      },
+      "child": {
+        "screen": "The streamer flies straight out. What's the weather?",
+        "readAloudText": "The streamer flies straight out. Is it windy or still?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "windy",
+              "label": "Windy"
+            },
+            {
+              "key": "still",
+              "label": "Still"
+            }
+          ],
+          "correctKey": "windy"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "How could we tell if it rained in the night without seeing it?",
+      "interpretation": {
+        "clear": "Suggests evidence: puddles, wet ground, a cup left outside.",
+        "partial": "Has one idea with prompting.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "How could you tell it rained in the night?",
+        "readAloudText": "How could you tell if it rained in the night? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Record the weather every day for a week, then tally: how many sunny days?",
+  "shorterVersion": {
+    "description": "Sky and wind only, observed from a window.",
+    "stepIds": [
+      "hook",
+      "sky",
+      "wind",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Observe from a window if going outside is hard.",
+    "Use stickers or pictures for the chart."
+  ],
+  "safety": {
+    "hazards": [
+      "Going outside near roads or water",
+      "Sun or cold exposure"
+    ],
+    "supervision": "An adult goes outside with the child and stays close. Observe from a window or doorway if outside isn't safe.",
+    "stopConditions": [
+      "Thunder or lightning (go inside)",
+      "The child goes near a road or water",
+      "It is very hot or very cold"
+    ],
+    "cleanup": "Bring the streamer and chart inside."
+  },
+  "filters": {
+    "lowMess": true,
+    "setting": "either"
+  },
+  "pathway": {
+    "next": "sink-or-float",
+    "extension": "window-tally"
+  }
+}

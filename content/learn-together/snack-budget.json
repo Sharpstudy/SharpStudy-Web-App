@@ -1,0 +1,251 @@
+{
+  "slug": "snack-budget",
+  "title": "Snack Budget Mission",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 2,
+  "learningGoal": "Add small amounts of money and decide whether a choice fits a budget.",
+  "conceptTags": [
+    "money",
+    "addition_strategies",
+    "budgeting"
+  ],
+  "prerequisites": [
+    "number_sense"
+  ],
+  "realWorldHook": "Grown-ups plan what to buy so they don't spend more than they have. Today your child plans a pretend picnic.",
+  "materials": [
+    {
+      "item": "Paper and a pencil",
+      "householdSubstitution": "Any scrap paper, the back of an envelope, or a whiteboard"
+    },
+    {
+      "item": "Five small price cards you write yourself",
+      "householdSubstitution": "Sticky notes or torn paper squares"
+    }
+  ],
+  "noPurchaseRoute": "Write the five pretend prices on scraps of paper. Nothing needs to be bought; all prices are made up.",
+  "parentPreview": "Your child gets $10 of pretend money and five snack cards with made-up prices. They add prices to find combinations that fit. You ask questions; they do the adding. Prices are fictional and this never involves your real household spending.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 90,
+        "parentSays": "Imagine we're packing a picnic and we have exactly $10 of pretend money. What snacks would you want to bring?",
+        "whyThisWorks": "Starting with their own wishes makes the maths feel like their plan, not a worksheet."
+      },
+      "child": {
+        "screen": "We have $10 of pretend money for a picnic!",
+        "readAloudText": "We have ten pretend dollars for a picnic. Tap I'm ready when you are.",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "cards",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Write five price cards together (apple 2, banana 1, crackers 3, juice 4, cheese 5 dollars) and lay them where you can both see.",
+        "whyThisWorks": "Writing the prices themselves helps your child hold the numbers in mind."
+      },
+      "child": {
+        "screen": "Help make the snack cards: apple $2, banana $1, crackers $3, juice $4, cheese $5.",
+        "readAloudText": "Apple two dollars. Banana one dollar. Crackers three. Juice four. Cheese five.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "first_pick",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Pick three snacks you'd like. Add them up out loud. What's the total?",
+        "whyThisWorks": "Adding three small numbers invites strategies like making 5 or counting on from the biggest.",
+        "watchFor": [
+          "counts_items",
+          "adds_wrong_pair"
+        ]
+      },
+      "child": {
+        "screen": "Apple + crackers + juice. How much is that altogether?",
+        "readAloudText": "Apple, crackers and juice. How many dollars altogether?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 9,
+          "unit": "dollars"
+        }
+      }
+    },
+    {
+      "id": "fit",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 150,
+        "parentSays": "Does that fit in our $10? How much would be left over? Could we swap something to use the money better?",
+        "whyThisWorks": "Comparing to the budget and finding what's left is the start of subtraction as 'difference'.",
+        "watchFor": [
+          "ignores_budget"
+        ]
+      },
+      "child": {
+        "screen": "Is $9 enough room in our $10? Is there money left?",
+        "readAloudText": "Does nine dollars fit inside ten dollars?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "fits",
+              "label": "Yes, it fits!"
+            },
+            {
+              "key": "too_much",
+              "label": "No, it's too much"
+            }
+          ],
+          "correctKey": "fits"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 120,
+        "parentSays": "Tell me how you worked out the total. Did you start with the biggest number? Did you make a ten?",
+        "whyThisWorks": "Explaining a strategy helps it stick and shows you how they think, not just the answer."
+      },
+      "child": {
+        "screen": "Tell your grown-up how you worked it out.",
+        "readAloudText": "Tell your grown-up how you added the prices.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 120,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions. Your grown-up will read them.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 60,
+        "parentSays": "What was the trickiest part? What would you buy with $10 next time?"
+      },
+      "child": {
+        "screen": "You planned a whole picnic!",
+        "readAloudText": "You planned a whole picnic. Well done exploring money.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "$9 for apple, crackers and juice",
+    "Yes it fits; $1 left over",
+    "Strategies: start with the biggest price, make 5 or 10, count on"
+  ],
+  "misconceptions": [
+    {
+      "key": "counts_items",
+      "signal": "Says '3' because there are three snacks, instead of adding the prices.",
+      "supportiveNextQuestion": "What does the number on each card tell us? Let's add those numbers instead of counting cards."
+    },
+    {
+      "key": "adds_wrong_pair",
+      "signal": "Adds only two of the prices or adds one twice.",
+      "supportiveNextQuestion": "Can you point to each card as you add it, so we know we've counted each price once?"
+    },
+    {
+      "key": "ignores_budget",
+      "signal": "Thinks any total is fine, or that $12 fits in $10.",
+      "supportiveNextQuestion": "If we only have $10, what happens when the snacks cost $12? Which card could we swap?",
+      "suggestedActivitySlug": "snack-budget"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Banana $1, cheese $5 and crackers $3 — how much altogether?",
+      "interpretation": {
+        "clear": "Says $9, with or without counting on.",
+        "partial": "Gets close (8 or 10) or needs fingers for every step.",
+        "not_yet": "Counts cards or guesses without adding."
+      },
+      "child": {
+        "screen": "Banana + cheese + crackers. How much?",
+        "readAloudText": "Banana, cheese and crackers. How many dollars?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 9,
+          "unit": "dollars"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "You have $10 and buy juice for $4. How much money is left?",
+      "interpretation": {
+        "clear": "Says $6 and can explain (counting up from 4, or 10 take away 4).",
+        "partial": "Reaches 6 with help or says 5 or 7.",
+        "not_yet": "Adds instead of finding what's left (says 14)."
+      },
+      "child": {
+        "screen": "You have $10. Juice costs $4. How much is left?",
+        "readAloudText": "You have ten dollars. Juice costs four. How much is left?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 6,
+          "unit": "dollars"
+        }
+      }
+    }
+  ],
+  "extension": "Give a $7 budget and ask for the most snacks they can get. Then: is there more than one way?",
+  "shorterVersion": {
+    "description": "Skip making cards: say the prices aloud and do one pick plus the check.",
+    "stepIds": [
+      "hook",
+      "first_pick",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use real objects (toys) as snacks if reading is hard.",
+    "Let your child count on with fingers or a number line drawn on paper.",
+    "Turn on read-aloud on the child device."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "tens-and-ones-bundles",
+    "easier": "make-ten-cards",
+    "extension": "tens-and-ones-bundles"
+  }
+}

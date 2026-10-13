@@ -1,0 +1,205 @@
+{
+  "slug": "shape-hunt",
+  "title": "Shape Hunt at Home",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "6-7",
+    "7-8"
+  ],
+  "estimatedMinutes": 10,
+  "difficulty": 1,
+  "learningGoal": "Recognise circles, triangles, squares and rectangles by their sides and corners.",
+  "conceptTags": [
+    "geometry_shapes"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "Builders and designers choose shapes on purpose. Our home is full of them.",
+  "materials": [],
+  "noPurchaseRoute": "Nothing needed. Just walk around the house.",
+  "parentPreview": "Your child hunts for shapes around the house and describes them by sides and corners, not just by name.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Our house is full of shapes. Can you spot one right now?"
+      },
+      "child": {
+        "screen": "Spot a shape near you!",
+        "readAloudText": "Spot a shape near you.",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "hunt",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Send your child on a hunt: one round thing, one 3-sided thing and one 4-sided thing. They can point or bring them.",
+        "whyThisWorks": "Describing by sides and corners is more reliable than recognising a picture.",
+        "watchFor": [
+          "orientation"
+        ]
+      },
+      "child": {
+        "screen": "Find something round, something with 3 sides, and something with 4 sides.",
+        "readAloudText": "Find something round, something with three sides and something with four sides.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "sides",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Pick your 4-sided thing. Are all the sides the same length? Then is it a square or a rectangle?",
+        "watchFor": [
+          "square_not_rectangle"
+        ]
+      },
+      "child": {
+        "screen": "A door has 4 sides. Square or rectangle?",
+        "readAloudText": "A door has four sides. Is it a square or a rectangle?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "rectangle",
+              "label": "Rectangle"
+            },
+            {
+              "key": "square",
+              "label": "Square"
+            }
+          ],
+          "correctKey": "rectangle"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "How do you know your triangle is a triangle?"
+      },
+      "child": {
+        "screen": "How do you know it's a triangle?",
+        "readAloudText": "How do you know it's a triangle? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Which shape did we find the most?"
+      },
+      "child": {
+        "screen": "You were a shape detective!",
+        "readAloudText": "You were a shape detective.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Shapes named by number of sides and corners",
+    "A door is a rectangle"
+  ],
+  "misconceptions": [
+    {
+      "key": "orientation",
+      "signal": "Says a tilted square is a 'diamond' and not a square.",
+      "supportiveNextQuestion": "If we turn it back, does it change? Count its sides and check if they're equal."
+    },
+    {
+      "key": "square_not_rectangle",
+      "signal": "Thinks squares are never rectangles.",
+      "supportiveNextQuestion": "Does a square have four sides and four square corners like a rectangle?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "How many sides does a triangle have?",
+      "interpretation": {
+        "clear": "Says 3 confidently.",
+        "partial": "Counts sides to find out.",
+        "not_yet": "Says another number."
+      },
+      "child": {
+        "screen": "How many sides does a triangle have?",
+        "readAloudText": "How many sides does a triangle have?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 3,
+          "unit": "sides"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Why are wheels round and not square?",
+      "interpretation": {
+        "clear": "Explains that round things roll smoothly.",
+        "partial": "Says 'they just are' but tries a reason.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "Why are wheels round, not square?",
+        "readAloudText": "Why are wheels round and not square? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Look for hexagons (honeycomb, nuts, pencils) and count their sides.",
+  "shorterVersion": {
+    "description": "Find just one 4-sided shape and talk about it.",
+    "stepIds": [
+      "hook",
+      "sides",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Hunt only in one room.",
+    "Trace shapes with a finger for a touch-based version."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "fair-share-pizza",
+    "extension": "fair-share-pizza"
+  }
+}

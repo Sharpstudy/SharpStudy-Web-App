@@ -1,0 +1,236 @@
+{
+  "slug": "window-tally",
+  "title": "Window Tally Chart",
+  "subject": "math",
+  "activityType": "real_life_math_mission",
+  "ageBands": [
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 2,
+  "learningGoal": "Collect data with tally marks and read it to answer a question.",
+  "conceptTags": [
+    "data_tally",
+    "graphs"
+  ],
+  "prerequisites": [
+    "counting"
+  ],
+  "realWorldHook": "Town planners count cars and bikes to decide where to build roads and bike lanes.",
+  "materials": [
+    {
+      "item": "Paper and pencil",
+      "householdSubstitution": "A whiteboard or the back of an envelope"
+    },
+    {
+      "item": "A window or doorway with a view",
+      "householdSubstitution": "A picture book with lots of things to count"
+    }
+  ],
+  "noPurchaseRoute": "Any window, or a busy picture in a book you own.",
+  "parentPreview": "Your child counts what passes by (cars, people, birds) for a few minutes using tally marks, then reads the chart to answer 'which was most?'",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "What do you think goes past our window most: cars, people or birds?"
+      },
+      "child": {
+        "screen": "What goes past your window the most?",
+        "readAloudText": "What goes past your window the most?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "cars",
+              "label": "Cars"
+            },
+            {
+              "key": "people",
+              "label": "People"
+            },
+            {
+              "key": "birds",
+              "label": "Birds"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "tally",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Let's make three columns and draw a line every time we see one. Every fifth line crosses the other four.",
+        "whyThisWorks": "Tally marks in fives make counting quicker, just like counting in fives.",
+        "watchFor": [
+          "tally_bundle"
+        ]
+      },
+      "child": {
+        "screen": "Make a tally mark for each one you see!",
+        "readAloudText": "Make a tally mark for each one. Cross the fifth one.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "totals",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Count each column. Count the bundles of five first."
+      },
+      "child": {
+        "screen": "How many cars did you count?",
+        "readAloudText": "How many cars did you count?",
+        "interaction": {
+          "type": "number_entry",
+          "unit": "cars"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Which column has the most? How many more than the smallest?",
+        "watchFor": [
+          "tallest_not_most"
+        ]
+      },
+      "child": {
+        "screen": "Which was the most?",
+        "readAloudText": "Which was the most?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "cars",
+              "label": "Cars"
+            },
+            {
+              "key": "people",
+              "label": "People"
+            },
+            {
+              "key": "birds",
+              "label": "Birds"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "Was your first guess right? What else could we count?"
+      },
+      "child": {
+        "screen": "You collected real data!",
+        "readAloudText": "You collected real data.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Tallies grouped in fives",
+    "Correct totals",
+    "Identifies the largest category"
+  ],
+  "misconceptions": [
+    {
+      "key": "tally_bundle",
+      "signal": "Draws the fifth mark as a separate line, or crosses after four.",
+      "supportiveNextQuestion": "How many lines are in one bundle, counting the crossing line?"
+    },
+    {
+      "key": "tallest_not_most",
+      "signal": "Picks the column that looks longest even though bundles are uneven.",
+      "supportiveNextQuestion": "Let's count each column instead of looking. Which number is biggest?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Two bundles of five and three more marks. How many?",
+      "interpretation": {
+        "clear": "Says 13, counting by fives.",
+        "partial": "Counts each line one by one.",
+        "not_yet": "Says 3 or 5."
+      },
+      "child": {
+        "screen": "Two bundles of 5 and 3 more. How many?",
+        "readAloudText": "Two bundles of five and three more. How many?",
+        "interaction": {
+          "type": "number_entry",
+          "expected": 13
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "If we want to know our family's favourite fruit, how could we find out?",
+      "interpretation": {
+        "clear": "Suggests asking everyone and tallying.",
+        "partial": "Suggests asking but not recording.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "How could you find your family's favourite fruit?",
+        "readAloudText": "How could you find your family's favourite fruit? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Turn the tally into a bar chart with one square per item.",
+  "shorterVersion": {
+    "description": "Tally one thing for two minutes.",
+    "stepIds": [
+      "hook",
+      "tally",
+      "totals",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use stickers or counters instead of drawing tally marks.",
+    "Choose a slower scene (a picture book) if the street is too fast."
+  ],
+  "filters": {
+    "lowMess": true,
+    "setting": "either"
+  },
+  "pathway": {
+    "next": "estimate-and-count",
+    "extension": "tens-and-ones-bundles"
+  }
+}

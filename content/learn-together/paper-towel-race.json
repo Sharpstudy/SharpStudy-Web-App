@@ -1,0 +1,286 @@
+{
+  "slug": "paper-towel-race",
+  "title": "Soak-Up Race",
+  "subject": "science",
+  "activityType": "science_at_home_lab",
+  "ageBands": [
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 2,
+  "learningGoal": "Run a fair test to compare how well materials soak up water.",
+  "conceptTags": [
+    "absorption",
+    "fair_test"
+  ],
+  "prerequisites": [
+    "prediction"
+  ],
+  "realWorldHook": "Why do we use towels and not plastic to dry our hands? Some materials soak up water better.",
+  "materials": [
+    {
+      "item": "Strips of paper towel, printer paper and cloth",
+      "householdSubstitution": "Any three different papers or fabrics"
+    },
+    {
+      "item": "A shallow dish of water",
+      "householdSubstitution": "A saucer"
+    },
+    {
+      "item": "Food colouring (optional)",
+      "householdSubstitution": "Plain water works fine"
+    }
+  ],
+  "noPurchaseRoute": "Use any three materials you have and plain water.",
+  "parentPreview": "Your child dips the ends of three strips into water at the same time and watches which one the water climbs fastest. Keeping the test fair is the main idea.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "Why do we dry hands with a towel and not a plastic bag?"
+      },
+      "child": {
+        "screen": "Why do towels dry our hands?",
+        "readAloudText": "Why do we dry our hands with a towel?",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "predict",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 90,
+        "parentSays": "Which strip do you think will soak up water the fastest?"
+      },
+      "child": {
+        "screen": "Which strip will soak up water fastest?",
+        "readAloudText": "Which strip will soak up water the fastest?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "towel",
+              "label": "Paper towel"
+            },
+            {
+              "key": "paper",
+              "label": "Printer paper"
+            },
+            {
+              "key": "cloth",
+              "label": "Cloth"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "setup",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Cut the strips the same width and length. Dip them in at exactly the same time.",
+        "whyThisWorks": "Same size and same start time means only the material changes.",
+        "watchFor": [
+          "unfair_test"
+        ]
+      },
+      "child": {
+        "screen": "Make the strips the same size. Dip them all at once!",
+        "readAloudText": "Make the strips the same size and dip them all at once.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "watch",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 180,
+        "parentSays": "Watch for one minute. Which one has water climbing highest?"
+      },
+      "child": {
+        "screen": "Watch! Which one is winning?",
+        "readAloudText": "Look closely for one minute. Which one is winning?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "towel",
+              "label": "Paper towel"
+            },
+            {
+              "key": "paper",
+              "label": "Printer paper"
+            },
+            {
+              "key": "cloth",
+              "label": "Cloth"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 90,
+        "parentSays": "Why do you think that one won?",
+        "watchFor": [
+          "thick_means_more"
+        ]
+      },
+      "child": {
+        "screen": "Why did that one win?",
+        "readAloudText": "Why did that one win? Tell your grown-up.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What else could we test this way?"
+      },
+      "child": {
+        "screen": "You ran a fair race!",
+        "readAloudText": "You ran a fair race.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Paper towel usually wins",
+    "Same size strips, same start time"
+  ],
+  "misconceptions": [
+    {
+      "key": "unfair_test",
+      "signal": "Dips strips at different times or uses different sizes.",
+      "supportiveNextQuestion": "If one strip started earlier, could we say it was the best?"
+    },
+    {
+      "key": "thick_means_more",
+      "signal": "Thinks the thickest material must win.",
+      "supportiveNextQuestion": "Was the thickest one the fastest? What else might matter?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Why must all strips be the same size?",
+      "interpretation": {
+        "clear": "Explains it keeps the test fair.",
+        "partial": "Says 'to be fair' without detail.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "Why make all the strips the same size?",
+        "readAloudText": "Why make all the strips the same size?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "fair",
+              "label": "So the race is fair"
+            },
+            {
+              "key": "pretty",
+              "label": "So they look nice"
+            }
+          ],
+          "correctKey": "fair"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Which would be best for mopping a spill: a sponge or a plastic plate?",
+      "interpretation": {
+        "clear": "Chooses sponge and links to the test.",
+        "partial": "Chooses sponge.",
+        "not_yet": "Chooses plate."
+      },
+      "child": {
+        "screen": "Best for mopping a spill?",
+        "readAloudText": "What's best for mopping a spill? A sponge or a plastic plate?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "sponge",
+              "label": "Sponge"
+            },
+            {
+              "key": "plate",
+              "label": "Plastic plate"
+            }
+          ],
+          "correctKey": "sponge"
+        }
+      }
+    }
+  ],
+  "extension": "Try tissues, kitchen roll brands or an old sock. Make a chart of results.",
+  "shorterVersion": {
+    "description": "Test two materials only.",
+    "stepIds": [
+      "hook",
+      "setup",
+      "watch",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use food colouring so the water line is easier to see.",
+    "Pre-cut the strips."
+  ],
+  "safety": {
+    "hazards": [
+      "Spilled water can make floors slippery",
+      "Food colouring can stain"
+    ],
+    "supervision": "An adult stays at the table. Scissors are used only by the adult.",
+    "stopConditions": [
+      "Water spills on the floor (dry it first)",
+      "Anyone tries to drink the coloured water"
+    ],
+    "cleanup": "Pour water away, put wet strips in the bin, wipe the table."
+  },
+  "filters": {
+    "lowMess": false,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "weather-watchers",
+    "easier": "sink-or-float"
+  }
+}

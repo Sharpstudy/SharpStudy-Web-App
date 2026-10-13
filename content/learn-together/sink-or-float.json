@@ -1,0 +1,256 @@
+{
+  "slug": "sink-or-float",
+  "title": "Sink or Float?",
+  "subject": "science",
+  "activityType": "science_at_home_lab",
+  "ageBands": [
+    "6-7",
+    "7-8",
+    "8-9"
+  ],
+  "estimatedMinutes": 12,
+  "difficulty": 1,
+  "learningGoal": "Predict and test whether objects sink or float, and notice it isn't only about size.",
+  "conceptTags": [
+    "floating_sinking",
+    "prediction"
+  ],
+  "prerequisites": [],
+  "realWorldHook": "Huge ships float while a tiny coin sinks. How can that be?",
+  "materials": [
+    {
+      "item": "A tub or sink of water",
+      "householdSubstitution": "A large bowl"
+    },
+    {
+      "item": "5 household objects (spoon, apple, cork, crayon, lid)",
+      "householdSubstitution": "Anything waterproof: plastic toys, a sponge, a key",
+      "smallParts": true
+    }
+  ],
+  "noPurchaseRoute": "Use a bowl of water and any five waterproof things you already have.",
+  "parentPreview": "Your child sorts objects into 'sink' or 'float' predictions, tests each one, and notices surprises, like a big apple floating and a small key sinking.",
+  "scriptSteps": [
+    {
+      "id": "hook",
+      "parent": {
+        "phase": "connect",
+        "suggestedSeconds": 60,
+        "parentSays": "A huge ship floats but a tiny pebble sinks. Strange! Let's investigate."
+      },
+      "child": {
+        "screen": "Big ships float. Tiny pebbles sink. Let's find out why!",
+        "readAloudText": "Big ships float. Tiny pebbles sink. Let's investigate.",
+        "interaction": {
+          "type": "ready_button"
+        }
+      }
+    },
+    {
+      "id": "predict",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 120,
+        "parentSays": "Sort the objects into two piles: 'I think it will sink' and 'I think it will float'.",
+        "whyThisWorks": "Predicting first makes the test meaningful. Surprises are the best part."
+      },
+      "child": {
+        "screen": "Sort: sink pile or float pile?",
+        "readAloudText": "Make a sink pile and a float pile.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "test",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 240,
+        "parentSays": "Gently place each object in the water. Did it do what you predicted?",
+        "watchFor": [
+          "big_sinks",
+          "drop_vs_place"
+        ]
+      },
+      "child": {
+        "screen": "Test each one gently. Did it sink or float?",
+        "readAloudText": "Put each one in the water gently. Watch closely.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "apple",
+      "parent": {
+        "phase": "do",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask what happened to the apple. Many children expect it to sink.",
+        "watchFor": [
+          "big_sinks"
+        ]
+      },
+      "child": {
+        "screen": "What did the apple do?",
+        "readAloudText": "What did the apple do?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "float",
+              "label": "Floated"
+            },
+            {
+              "key": "sink",
+              "label": "Sank"
+            }
+          ],
+          "correctKey": "float"
+        }
+      }
+    },
+    {
+      "id": "explain",
+      "parent": {
+        "phase": "explain",
+        "suggestedSeconds": 120,
+        "parentSays": "Was anything a surprise? Why do you think it floated or sank?"
+      },
+      "child": {
+        "screen": "Which one surprised you?",
+        "readAloudText": "Which one surprised you? Tell your grown-up why.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "check",
+      "parent": {
+        "phase": "check",
+        "suggestedSeconds": 90,
+        "parentSays": "Ask the two check questions below. Give your child time to think, then note how each one went."
+      },
+      "child": {
+        "screen": "Two quick questions!",
+        "readAloudText": "Two quick questions.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    },
+    {
+      "id": "reflect",
+      "parent": {
+        "phase": "reflect",
+        "suggestedSeconds": 45,
+        "parentSays": "What would you like to test next time?"
+      },
+      "child": {
+        "screen": "You were a water scientist!",
+        "readAloudText": "You were a water scientist.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "expectedResponses": [
+    "Predictions recorded before testing",
+    "Notices big things can float and small things can sink"
+  ],
+  "misconceptions": [
+    {
+      "key": "big_sinks",
+      "signal": "Thinks big or heavy-looking things always sink.",
+      "supportiveNextQuestion": "The apple is bigger than the key. Which one floated?"
+    },
+    {
+      "key": "drop_vs_place",
+      "signal": "Drops objects from a height so they splash under and look like they sink.",
+      "supportiveNextQuestion": "If we place it gently, does it do the same thing?"
+    }
+  ],
+  "checkQuestions": [
+    {
+      "key": "near",
+      "parentAsks": "Does a big object always sink?",
+      "interpretation": {
+        "clear": "Says no, with an example from the test.",
+        "partial": "Says no without an example.",
+        "not_yet": "Says yes."
+      },
+      "child": {
+        "screen": "Do big things always sink?",
+        "readAloudText": "Do big things always sink?",
+        "interaction": {
+          "type": "choice",
+          "options": [
+            {
+              "key": "no",
+              "label": "No"
+            },
+            {
+              "key": "yes",
+              "label": "Yes"
+            }
+          ],
+          "correctKey": "no"
+        }
+      }
+    },
+    {
+      "key": "transfer",
+      "parentAsks": "Why do you think boats are hollow inside?",
+      "interpretation": {
+        "clear": "Links hollow/air inside to floating.",
+        "partial": "Has a guess about air or shape.",
+        "not_yet": "No idea yet."
+      },
+      "child": {
+        "screen": "Why are boats hollow inside?",
+        "readAloudText": "Why are boats hollow inside? Tell your grown-up your idea.",
+        "interaction": {
+          "type": "done_button"
+        }
+      }
+    }
+  ],
+  "extension": "Make a foil boat. How many coins or blocks can it carry before it sinks?",
+  "shorterVersion": {
+    "description": "Test three objects only.",
+    "stepIds": [
+      "hook",
+      "test",
+      "apple",
+      "check",
+      "reflect"
+    ]
+  },
+  "accessibilityAdaptations": [
+    "Use a deep tray at table height.",
+    "Use bigger objects that are easy to grip."
+  ],
+  "safety": {
+    "hazards": [
+      "Spilled water can make floors slippery",
+      "Small objects can be a choking hazard"
+    ],
+    "supervision": "An adult stays within arm's reach the whole time. Use a shallow tub on a towel. Coins and other small items are a choking hazard. Keep them away from younger siblings and use larger counters (blocks, bottle caps glued in pairs, or folded paper squares) if anyone in the room is under 3.",
+    "stopConditions": [
+      "Water spills on the floor (stop and dry it first)",
+      "Anyone puts an object in their mouth",
+      "A child leans over or into the water"
+    ],
+    "cleanup": "Empty the water into a sink or plants, dry the objects and wipe the floor."
+  },
+  "filters": {
+    "lowMess": false,
+    "setting": "indoor"
+  },
+  "pathway": {
+    "next": "paper-towel-race",
+    "extension": "paper-shape-coin-lab"
+  }
+}
