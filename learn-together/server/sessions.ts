@@ -345,6 +345,7 @@ export async function childState(d: DevicePrincipal, groupId: string) {
     seq: g.seq,
     state: g.state,
     currentStepIndex: g.currentStepIndex,
+    stepChangedAt: g.stepChangedAt,
     activity: projectActivity(content, g.durationMode),
     children: parts.map((part) => {
       const kid = kids.find((k) => k.id === part.childProfileId)!;
@@ -500,6 +501,15 @@ async function sessionInGroup(p: ParentPrincipal, groupId: string, childProfileI
   return { g, s };
 }
 
+/** Parent-side records (checks, notes, reflections) also advance seq so every view refetches. */
+async function markUpdated(groupId: string, familyId: string) {
+  const out = await withTx(async (t) => {
+    const g = await familyGroup(familyId, groupId, t);
+    return { g, seq: await bumpSeq(g, t) };
+  });
+  await broadcast(out.g, "session.updated", out.seq, {}, {});
+}
+
 export const checkInput = z.object({ childProfileId: z.string().uuid(), questionKey: z.enum(["near", "transfer"]), interpretation: z.enum(["clear", "partial", "not_yet"]) });
 export async function recordCheck(p: ParentPrincipal, groupId: string, input: unknown) {
   const data = checkInput.parse(input);
@@ -507,6 +517,7 @@ export async function recordCheck(p: ParentPrincipal, groupId: string, input: un
   const existing = await SessionCheck.findOne({ where: { sessionId: s.id, questionKey: data.questionKey } });
   if (existing) await existing.update({ parentInterpretation: data.interpretation, recordedByUserId: p.userId });
   else await SessionCheck.create({ sessionId: s.id, questionKey: data.questionKey, parentInterpretation: data.interpretation, recordedByUserId: p.userId });
+  await markUpdated(groupId, p.familyId);
   await track("lt_check_recorded", { questionKey: data.questionKey, interpretation: data.interpretation, activityVersionId: g.activityVersionId }, { familyId: p.familyId });
   if (s.status === "completed") await recomputeChildProgress(data.childProfileId, { familyId: p.familyId });
 }
@@ -518,6 +529,7 @@ export async function recordMisconception(p: ParentPrincipal, groupId: string, i
   const { content } = await versionContent(g.activityVersionId);
   if (!content.misconceptions.some((m) => m.key === data.misconceptionKey)) throw new HttpError(422, "Unknown misconception");
   await MisconceptionSeen.create({ sessionId: s.id, childProfileId: data.childProfileId, misconceptionKey: data.misconceptionKey, stepId: data.stepId || null, at: new Date() });
+  await markUpdated(groupId, p.familyId);
   await track("lt_misconception_observed", { activityVersionId: g.activityVersionId }, { familyId: p.familyId });
 }
 
@@ -535,6 +547,7 @@ export async function recordReflection(p: ParentPrincipal, groupId: string, inpu
   const note = data.parentNote?.trim() || null;
   if (existing) await existing.update({ outcome: data.outcome, parentNote: note, editedAt: new Date() });
   else await Observation.create({ sessionId: s.id, childProfileId: data.childProfileId, conceptTags: content.conceptTags, outcome: data.outcome, parentNote: note, recordedByUserId: p.userId });
+  await markUpdated(groupId, p.familyId);
   await track("lt_reflection_recorded", { outcome: data.outcome, activityVersionId: g.activityVersionId }, { familyId: p.familyId });
   if (data.confidence) {
     const c = await ParentConfidence.findOne({ where: { sessionId: s.id, userId: p.userId } });
@@ -546,7 +559,7 @@ export async function recordReflection(p: ParentPrincipal, groupId: string, inpu
 }
 
 /** Move a child whose device dropped onto the parent's device (single-device for that child). */
-export async function useThisDeviceFor(p: ParentPrincipal, groupId: string, childProfileId: string) {
+export async function moveChildToParentDevice(p: ParentPrincipal, groupId: string, childProfileId: string) {
   const out = await withTx(async (t) => {
     const g = await familyGroup(p.familyId, groupId, t);
     const part = await SessionParticipant.findOne({ where: { groupId, childProfileId }, transaction: t });
@@ -577,5 +590,5 @@ export async function lobbyForDevice(d: DevicePrincipal) {
   const parts = await SessionParticipant.findAll({ where: { childProfileId: d.childProfileIds, childDeviceId: d.deviceId } });
   const groups = parts.length ? await SessionGroup.findAll({ where: { id: parts.map((x) => x.groupId), state: { [Op.ne]: "ended" } }, order: [["created_at", "DESC"]] }) : [];
   const fresh = groups.filter((g) => Date.now() - new Date(g.updated_at).getTime() < STALE_GROUP_MS);
-  return fresh.map((g) => ({ groupId: g.id, seq: g.seq, state: g.state, childProfileIds: parts.filter((x) => x.groupId === g.id).map((x) => x.childProfileId) }));
+  return fresh.map((g) => ({ groupId: g.id, seq: g.seq, state: g.state, launchedAt: g.startedAt, childProfileIds: parts.filter((x) => x.groupId === g.id).map((x) => x.childProfileId) }));
 }

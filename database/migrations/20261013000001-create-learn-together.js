@@ -213,7 +213,7 @@ module.exports = {
 			seq: { type: Sequelize.INTEGER, allowNull: false, defaultValue: 0 },
 			duration_mode: enumOf(["full", "short"], { allowNull: false, defaultValue: "full" }),
 			step_changed_at: Sequelize.DATE(3),
-			started_at: Sequelize.DATE,
+			started_at: Sequelize.DATE(3),
 			ended_at: Sequelize.DATE,
 			...ts,
 		});

@@ -40,7 +40,7 @@ describe("session state machine", () => {
 });
 
 describe("sync seq handling", () => {
-  const ev = (seq: number, groupId: string | undefined = "g") => ({ v: SYNC_VERSION, seq, groupId });
+  const ev = (seq: number, groupId: string | undefined = "g") => ({ v: SYNC_VERSION as typeof SYNC_VERSION, seq, groupId });
   it("applies in-order, ignores stale/duplicate, resyncs on gaps", () => {
     expect(decide(4, ev(5))).toBe("apply");
     expect(decide(4, ev(4))).toBe("ignore");

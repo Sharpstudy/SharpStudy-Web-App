@@ -10,7 +10,7 @@ import {
   recordCheck,
   recordMisconception,
   recordReflection,
-  useThisDeviceFor,
+  moveChildToParentDevice,
 } from "@/learn-together/server/sessions";
 import { HttpError } from "@/learn-together/server/errors";
 
@@ -37,7 +37,7 @@ export default route({
         case "help-ack":
           return acknowledgeHelp(parent, id, z.object({ helpId: z.string().uuid() }).parse(body).helpId);
         case "use-this-device":
-          return useThisDeviceFor(parent, id, child.parse(body).childProfileId);
+          return moveChildToParentDevice(parent, id, child.parse(body).childProfileId);
         // Single-device mode: the child answers on the parent's device.
         case "respond":
           return childRespond(await parentDeviceActor(parent, child.parse(body).childProfileId), id, body, req);

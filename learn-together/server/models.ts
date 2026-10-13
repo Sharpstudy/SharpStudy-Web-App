@@ -8,7 +8,6 @@ const T = DataTypes;
 const uuidPk = { type: T.UUID, defaultValue: T.UUIDV4, primaryKey: true };
 
 // Rows are handled as plain records; typing every model generically adds little here.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Row = Model<any, any> & Record<string, any>;
 export type M = ModelStatic<Row>;
 
@@ -143,7 +142,7 @@ export const SessionGroup = define("LtSessionGroup", "lt_session_groups", {
   seq: { type: T.INTEGER, defaultValue: 0 },
   durationMode: { type: T.ENUM("full", "short"), defaultValue: "full" },
   stepChangedAt: T.DATE(3),
-  startedAt: T.DATE,
+  startedAt: T.DATE(3),
   endedAt: T.DATE,
 });
 

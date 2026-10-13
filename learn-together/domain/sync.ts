@@ -16,6 +16,7 @@ export type SyncEventType =
   | "child.help_raised"
   | "child.help_acknowledged"
   | "presence.changed"
+  | "session.updated"
   | "pairing.claimed"
   | "pairing.resolved"
   | "device.revoked";
