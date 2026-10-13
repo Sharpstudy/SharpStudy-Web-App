@@ -1,6 +1,8 @@
 # Learn Together — Phase 0 Plan
 
-Status: **awaiting approval**. No feature code has been written. Branch: `feature/learn-together`.
+Status: **approved 2026-10-13 and executed** — see PROGRESS.md. Branch: `feature/learn-together`.
+
+Decisions received: D1 proceed without the PRD · D2 Ably + polling · D3 TypeScript for new code · D4 new deps approved · D5 Layout change **not** approved · Navbar entry **not** approved.
 
 ---
 
