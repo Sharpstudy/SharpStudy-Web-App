@@ -59,6 +59,12 @@ const initUser = (sequelize, Types) => {
 			tableName: "users",
 			createdAt: "created_at",
 			updatedAt: "updated_at",
+			// Never select the password hash or reset token by default, so no API
+			// can leak them by returning a whole user row. Code that genuinely
+			// needs the hash (sign-in, re-authentication) uses User.unscoped().
+			defaultScope: {
+				attributes: { exclude: ["password", "reset_password_token"] },
+			},
 		}
 	);
 	return User;

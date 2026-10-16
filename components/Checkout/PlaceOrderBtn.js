@@ -20,18 +20,22 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 		setStripeAmount(stripeTotal);
 	}, [cartItems]);
 
-	const handleCheckout = async () => {
+	const handleCheckout = async (stripeResult) => {
 		setLoading(true);
 		try {
+			// Only the courses, coupon codes and Stripe's payment token are sent;
+			// the server decides the buyer, the prices and whether payment succeeded.
 			const payload = {
-				cartItems,
-				userId: user.id,
-				buyer_name: user.first_name,
-				buyer_email: user.email,
-				buyer_avatar: user.profile_photo,
+				cartItems: cartItems.map(({ id, price, coupon }) => ({ id, price, coupon })),
+				stripeToken: stripeResult && stripeResult.id,
 			};
 			const url = `${baseUrl}/api/checkout`;
 			const response = await axios.post(url, payload);
+			if (response.status === 202) {
+				toast(response.data.message);
+				setLoading(false);
+				return;
+			}
 			toast.success(response.data.message, {
 				style: {
 					border: "1px solid #4BB543",
@@ -50,11 +54,10 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 			router.push("/learning/my-courses");
 		} catch (err) {
 			// console.log(err.response);
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
+			setLoading(false);
+			const message =
+				(err.response && err.response.data && err.response.data.message) ||
+				"We could not reach the server. You have not been charged.";
 			toast.error(message, {
 				style: {
 					border: "1px solid #ff0033",
@@ -68,7 +71,6 @@ const PlaceOrderBtn = ({ user, cartItems }) => {
 			});
 		}
 	};
-	console.log("process.env.STRIPE_PUBLISHABLE_KEY", process.env.STRIPE_PUBLISHABLE_KEY);
 
 	return (
 		<StripeCheckout

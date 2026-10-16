@@ -16,7 +16,7 @@ const Index = ({ user }) => {
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const response = await axios.get(`${baseUrl}/api/students`);
+			const response = await axios.get(`${baseUrl}/api/students`, { headers: { Authorization: edmy_users_token } });
 			setUsers(response.data.students);
 			setLoading(false);
 		} catch (err) {

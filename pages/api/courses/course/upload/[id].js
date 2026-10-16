@@ -1,9 +1,15 @@
 import Video from "database/models/video";
+import { requireUser, requireCourseManager, requireVideoManager, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	const actor = await requireUser(req, res, TEACHER_ROLES);
+	if (!actor) return;
+	// GET addresses a course, DELETE a video; the caller must manage the owning course.
+	const allowed =
+		req.method === "DELETE"
+			? await requireVideoManager(res, actor, req.query.id)
+			: await requireCourseManager(res, actor, req.query.id);
+	if (!allowed) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);
@@ -43,7 +49,7 @@ const handleDelete = async (req, res) => {
 			where: { id: id },
 		});
 
-		video.destroy();
+		await video.destroy();
 
 		res.status(200).json({ message: "Video deleted successfully" });
 	} catch (e) {

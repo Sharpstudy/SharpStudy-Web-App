@@ -48,11 +48,9 @@ const LoginForm = () => {
 				},
 			});
 		} catch (err) {
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
+			const message =
+					err?.response?.data?.message ||
+					"Could not sign in right now, please try again.";
 			toast.error(message, {
 				style: {
 					border: "1px solid #ff0033",

@@ -6,7 +6,8 @@
       "@/public/*": ["public/*"],
       "@/utils/*": ["utils/*"],
       "@/database/*": ["database/*"],
-      "@/store/*": ["store/*"]
+      "@/store/*": ["store/*"],
+      "@/lib/*": ["lib/*"]
     }
   }
 }

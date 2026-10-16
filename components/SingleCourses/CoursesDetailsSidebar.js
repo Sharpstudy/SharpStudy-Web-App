@@ -17,6 +17,8 @@ const CoursesDetailsSidebar = ({ current_user, course }) => {
 	const [apply, setApplyCoupon] = useState(false);
 	const [coupon, setCoupon] = useState({ coupon: "" });
 	const discount = useSelector((state) => state.cart.discount);
+	const couponCode = useSelector((state) => state.cart.couponCode);
+	const couponPercent = useSelector((state) => state.cart.couponPercent);
 
 	useEffect(() => {
 		const courseExist = cartItems.find((cart) => {
@@ -40,7 +42,9 @@ const CoursesDetailsSidebar = ({ current_user, course }) => {
 		courseObj["id"] = courseCart.id;
 		courseObj["title"] = courseCart.title;
 		courseObj["slug"] = courseCart.slug;
-		courseObj["price"] = discount > 0 ? discount : courseCart.latest_price;
+		// Price shown in the cart; the server recomputes it from the database and the coupon code.
+		courseObj["price"] = couponPercent > 0 ? calculateDiscount(couponPercent, courseCart.latest_price) : courseCart.latest_price;
+		if (couponPercent > 0 && couponCode) courseObj["coupon"] = couponCode;
 		courseObj["regular_price"] = courseCart.before_price;
 		courseObj["image"] = courseCart.image;
 		courseObj["lessons"] = courseCart.lessons;
@@ -68,6 +72,10 @@ const CoursesDetailsSidebar = ({ current_user, course }) => {
 
 			// console.log(response.data.discount);
 
+			dispatch({
+				type: "GET_COUPON",
+				data: { code: String(typeof coupon === "string" ? coupon : coupon.coupon || "").trim(), percent: response.data.discount.discount },
+			});
 			dispatch({
 				type: "GET_DISCOUNT",
 				data: calculateDiscount(

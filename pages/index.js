@@ -8,6 +8,7 @@ import { Categories, HowItWorks, Benefits, Audiences, FinalCta } from "@/compone
 import { Testimonials, Partners } from "@/components/Home/Trust";
 import { Button, EmptyState, SectionHeader } from "@/components/ui";
 import baseUrl from "@/utils/baseUrl";
+import { landingRedirect } from "@/lib/auth/landing";
 
 const Home = ({ courses, categories, user }) => {
 	return (
@@ -74,7 +75,10 @@ const Home = ({ courses, categories, user }) => {
 };
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+	// Signed-in students/instructors never see the marketing homepage.
+	const redirect = await landingRedirect(req).catch(() => null);
+	if (redirect) return { redirect };
 	// Fetch data from external API
 	const res = await fetch(`${baseUrl}/api/home-courses`);
 	const json = await res.json(); const courses = json.courses ?? []; const categories = json.categories ?? []

@@ -11,6 +11,8 @@ const items = [
 	{ href: "/admin/testimonials/", match: "/admin/testimonials", label: "Testimonials", icon: "ri-chat-quote-line" },
 	{ href: "/admin/categories/", match: "/admin/categories", label: "Categories", icon: "ri-folder-2-line" },
 	{ href: "/admin/coupons/", match: "/admin/coupons", label: "Coupons", icon: "ri-coupon-3-line" },
+	{ href: "/admin/meetings/", match: "/admin/meetings", label: "Meeting requests", icon: "ri-calendar-check-line" },
+	{ href: "/admin/mastery/", match: "/admin/mastery", label: "Mastery Ladder", icon: "ri-stairs-line" },
 ];
 
 const AdminSideNav = ({ user }) => {

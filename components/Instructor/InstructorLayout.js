@@ -5,10 +5,14 @@ import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
 
 const nav = [
+	{ href: "/instructor/dashboard/", label: "Dashboard", icon: "ri-dashboard-3-line" },
 	{ href: "/instructor/courses/", label: "My courses", icon: "ri-book-2-line" },
 	{ href: "/instructor/course/create/", label: "Create course", icon: "ri-add-box-line" },
 	{ href: "/instructor/course/create-quiz/", label: "Create quiz", icon: "ri-questionnaire-line" },
+	{ href: "/instructor/live/", label: "Live sessions", icon: "ri-calendar-event-line" },
 	{ href: "/instructor/course/create-class/", label: "Create class room", icon: "ri-live-line" },
+	{ href: "/instructor/students/", label: "Students", icon: "ri-group-line" },
+	{ href: "/instructor/profile/", label: "Teaching profile", icon: "ri-profile-line" },
 ];
 
 const norm = (p) => p.replace(/\/$/, "");

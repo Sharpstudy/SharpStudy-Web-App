@@ -5,7 +5,7 @@ import NProgress from "nprogress";
 import { useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchForm from "./SearchForm";
-import { accountLinks, primaryNav } from "./accountLinks";
+import { navModel, dashboardHome, isShoppingArea } from "./accountLinks";
 import { handleLogout } from "@/utils/auth";
 
 Router.onRouteChangeStart = () => NProgress.start();
@@ -34,6 +34,9 @@ const Navbar = ({ user }) => {
 	const router = useRouter();
 	const [drawer, setDrawer] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
+	// `user` is verified server-side in _app (token -> database), so this is
+	// correct on first render, on refresh and on direct navigation.
+	const { dash, primary: nav, account } = navModel(user, router.pathname);
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 8);
@@ -67,7 +70,7 @@ const Navbar = ({ user }) => {
 			</a>
 			<header id="navbar" className={`ss-header${scrolled ? " is-scrolled" : ""}`}>
 				<div className="ss-container ss-container--wide ss-header__inner">
-					<Link href="/">
+					<Link href={dash ? dashboardHome(user.role) : "/"}>
 						<a className="ss-header__brand" aria-label="SharpStudy home">
 							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src="/images/sharpstudy.png" alt="SharpStudy" width="170" height="28" />
@@ -76,7 +79,7 @@ const Navbar = ({ user }) => {
 
 					<nav className="ss-header__nav" aria-label="Main">
 						<ul>
-							{primaryNav.map((item) => (
+							{nav.map((item) => (
 								<li key={item.href}>
 									<Link href={item.href}>
 										<a
@@ -91,14 +94,16 @@ const Navbar = ({ user }) => {
 						</ul>
 					</nav>
 
-					<div className="ss-header__search">
-						<SearchForm formClass="ss-search" btnClass="ss-search__btn" />
-					</div>
+					{!dash && (
+						<div className="ss-header__search">
+							<SearchForm formClass="ss-search" btnClass="ss-search__btn" />
+						</div>
+					)}
 
 					<div className="ss-header__actions">
-						<CartLink />
+						{(!dash || isShoppingArea(router.pathname)) && <CartLink />}
 						{user ? (
-							<ProfileDropdown {...user} />
+							<ProfileDropdown {...user} links={account} />
 						) : (
 							<>
 								<Link href="/auth">
@@ -150,11 +155,11 @@ const Navbar = ({ user }) => {
 				</div>
 
 				<div className="ss-drawer__body">
-					<SearchForm formClass="ss-search" btnClass="ss-search__btn" />
+					{!dash && <SearchForm formClass="ss-search" btnClass="ss-search__btn" />}
 
 					<nav aria-label="Mobile">
 						<ul className="ss-drawer__list">
-							{primaryNav.map((item) => (
+							{nav.map((item) => (
 								<li key={item.href}>
 									<Link href={item.href}>
 										<a
@@ -173,7 +178,7 @@ const Navbar = ({ user }) => {
 						<>
 							<p className="ss-drawer__label">Account</p>
 							<ul className="ss-drawer__list ss-drawer__list--icons">
-								{accountLinks(user.role).map((l) => (
+								{account.map((l) => (
 									<li key={l.href}>
 										<Link href={l.href}>
 											<a>

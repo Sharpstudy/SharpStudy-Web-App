@@ -55,18 +55,20 @@ const Index = ({
 };
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
 	// Fetch data from external API
-	const res = await fetch(`${baseUrl}/api/funfacts`);
+	const res = await fetch(`${baseUrl}/api/funfacts`, { headers: { Authorization: (req.cookies && req.cookies.edmy_users_token) || "" } });
+	// Non-admins get 401 here; the page itself redirects them, so render zeros.
+	const data = res.ok ? await res.json() : {};
 	const {
-		students,
-		instructors,
-		courses,
-		enrolments,
-		earningsTotal,
-		videos,
-		assets,
-	} = await res.json();
+		students = 0,
+		instructors = 0,
+		courses = 0,
+		enrolments = 0,
+		earningsTotal = "0.00",
+		videos = 0,
+		assets = 0,
+	} = data;
 
 	// Pass data to the page via props
 	return {

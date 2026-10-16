@@ -1,5 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useCurrentUser } from "./UserContext";
+import { useDashboardHeader } from "./accountLinks";
 
 const columns = [
 	{
@@ -28,6 +31,10 @@ const columns = [
 ];
 
 const Footer = () => {
+	const user = useCurrentUser();
+	const { pathname } = useRouter();
+	// Not rendered at all on student/instructor dashboard pages (public chrome only).
+	if (useDashboardHeader(user, pathname)) return null;
 	const currentYear = new Date().getFullYear();
 	return (
 		<footer className="ss-footer">

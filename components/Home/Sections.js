@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 import { Button, SectionHeader } from "@/components/ui";
 
-const HUBSPOT_URL = "https://meetings.hubspot.com/mike1162";
 
 export const Categories = ({ categories }) => {
 	if (!categories || categories.length === 0) return null;
@@ -179,7 +178,7 @@ export const Audiences = () => (
 					Elevate your team with corporate training workshops tailored to build skills
 					and confidence for modern technical and business challenges.
 				</p>
-				<Button href={HUBSPOT_URL} external variant="light" icon="ri-calendar-line">
+				<Button href="/schedule-a-call/" variant="light" icon="ri-calendar-line">
 					Talk to our team
 				</Button>
 			</div>

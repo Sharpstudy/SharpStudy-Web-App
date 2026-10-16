@@ -1,9 +1,9 @@
+
+import { requireRole } from "@/lib/auth/requireRole";
 import Coupon from "database/models/coupon";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "POST":
 			await handlePostRequest(req, res);

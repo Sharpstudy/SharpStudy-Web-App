@@ -10,6 +10,7 @@ const sections = {
 		title: "My learning",
 		tabs: [
 			{ href: "/learning/my-courses/", label: "My courses", icon: "ri-book-read-line" },
+			{ href: "/learning/live/", label: "Live sessions", icon: "ri-live-line" },
 			{ href: "/learning/wishlist/", label: "Wishlist", icon: "ri-heart-3-line" },
 			{ href: "/learning/my-purchase-history/", label: "Purchases", icon: "ri-bank-card-line" },
 		],

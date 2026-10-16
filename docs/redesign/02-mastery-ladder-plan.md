@@ -1,5 +1,8 @@
 # Mastery Ladder — UI Readiness Plan (Phase 9)
 
+> **Superseded:** the Mastery Ladder is now implemented — see
+> `docs/mastery-ladder/IMPLEMENTATION_STATUS.md`. Kept for history.
+
 > **Status: plan only — nothing here is implemented.** The detailed Mastery Ladder
 > specification is **not in the repository**. This plan is limited to the feature
 > list named in the redesign brief. Please share the spec (MASTER_PROMPT.md or

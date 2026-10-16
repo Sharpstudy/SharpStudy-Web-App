@@ -1,9 +1,15 @@
 import Course_Asset from "database/models/course_asset";
+import { requireUser, requireCourseManager, requireAssetManager, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	const actor = await requireUser(req, res, TEACHER_ROLES);
+	if (!actor) return;
+	// GET/POST address a course; DELETE addresses an asset. Either way the caller must manage that course.
+	const allowed =
+		req.method === "DELETE"
+			? await requireAssetManager(res, actor, req.query.id)
+			: await requireCourseManager(res, actor, req.query.id);
+	if (!allowed) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);
@@ -66,7 +72,7 @@ const handleDelete = async (req, res) => {
 			where: { id: id },
 		});
 
-		course_asset.destroy();
+		await course_asset.destroy();
 
 		res.status(200).json({ message: "Asset deleted successfully" });
 	} catch (e) {

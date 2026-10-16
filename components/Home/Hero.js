@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui";
 
-const HUBSPOT_URL = "https://meetings.hubspot.com/mike1162";
 
 const highlights = [
 	{ icon: "ri-lightbulb-flash-line", label: "Project-based learning" },
@@ -29,7 +28,7 @@ const Hero = () => (
 					<Button href="/courses/" size="lg" iconRight="ri-arrow-right-line">
 						Explore courses
 					</Button>
-					<Button href={HUBSPOT_URL} external size="lg" variant="secondary" icon="ri-calendar-line">
+					<Button href="/schedule-a-call/" size="lg" variant="secondary" icon="ri-calendar-line">
 						Schedule a call
 					</Button>
 				</div>

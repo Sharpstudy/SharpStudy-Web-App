@@ -1,19 +1,13 @@
 import { Enrolment } from "database/models";
+import { optionalActor } from "@/lib/auth/access";
 
+// Has the signed-in user bought this course? Visitors simply get false; a
+// userId in the query is ignored so other people's purchases cannot be probed.
 export default async function handler(req, res) {
-	const { userId, courseId } = req.query;
-	// console.log(courseId);
+	const { courseId } = req.query;
 	try {
-		let enroll;
-		enroll = await Enrolment.findOne({
-			where: { userId: userId, courseId: courseId },
-		});
-
-		if (enroll) {
-			enroll = true;
-		} else {
-			enroll = false;
-		}
+		const actor = await optionalActor(req);
+		const enroll = actor && courseId ? !!(await Enrolment.findOne({ where: { userId: actor.userId, courseId } })) : false;
 
 		res.status(200).json({
 			enroll,

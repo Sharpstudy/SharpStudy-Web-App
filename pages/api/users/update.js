@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "database/models/user";
+import { InstructorApplication } from "@/database/models/instructor_application";
 
 export default async (req, res) => {
 	if (!("authorization" in req.headers)) {
@@ -30,7 +31,17 @@ const userGetById = async (req, res) => {
 			where: { id: userId },
 		});
 
-		res.status(200).json({ user });
+		// Status of the user's own instructor application (drives the navigation only; every
+		// protected page and API re-checks the real role). Tolerates the migration not being applied yet.
+		let instructor_application_status = null;
+		try {
+			const app = user && (await InstructorApplication.findOne({ where: { user_id: userId }, attributes: ["status"] }));
+			instructor_application_status = app ? app.status : null;
+		} catch (err) {
+			instructor_application_status = null;
+		}
+
+		res.status(200).json({ user: user ? { ...user.get({ plain: true }), instructor_application_status } : user });
 	} catch (e) {
 		res.status(400).json({
 			error_code: "get_user_by_id",

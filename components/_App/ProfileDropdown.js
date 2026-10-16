@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { handleLogout } from "@/utils/auth";
-import { accountLinks } from "./accountLinks";
 
 // Click / keyboard operated account menu (was hover-only, unusable on touch).
-const ProfileDropdown = ({ first_name, last_name, email, role, profile_photo }) => {
+const ProfileDropdown = ({ first_name, last_name, email, profile_photo, links = [] }) => {
 	const [open, setOpen] = useState(false);
 	const ref = useRef(null);
 	const router = useRouter();
@@ -58,7 +57,7 @@ const ProfileDropdown = ({ first_name, last_name, email, role, profile_photo }) 
 							<div className="ss-menu__email ss-truncate">{email}</div>
 						</div>
 					</div>
-					{accountLinks(role).map((l) => (
+					{links.map((l) => (
 						<Link href={l.href} key={l.href}>
 							<a className="ss-menu__item" role="menuitem">
 								<i className={l.icon} aria-hidden="true"></i>
