@@ -5,6 +5,8 @@ import * as types from "./types";
 const initialState = {
 	cartItems: [],
 	discount: 0.0,
+	couponCode: "",
+	couponPercent: 0,
 };
 
 // COUNTER REDUCER
@@ -30,6 +32,13 @@ const cartReducer = (state = initialState, action) => {
 			return {
 				...state,
 				discount: action.data,
+			};
+
+		case types.GET_COUPON:
+			return {
+				...state,
+				couponCode: action.data.code,
+				couponPercent: action.data.percent,
 			};
 
 		case types.REMOVE_CART:

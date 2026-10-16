@@ -1,0 +1,509 @@
+// Instructor application, review and teaching screens. Uses the existing tokens;
+// single column on phones, two columns from tablet width, no horizontal overflow.
+
+.ia-page {
+	padding: 32px 0 72px;
+	overflow-x: clip;
+}
+
+.ia-card,
+.ia-form,
+.ia-detail {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 24px;
+	background: var(--ss-surface);
+	border: 1px solid var(--ss-border);
+	border-radius: 14px;
+	box-shadow: var(--ss-shadow-xs);
+	@media (max-width: 575.98px) {
+		padding: 16px;
+	}
+}
+.ia-detail {
+	max-width: none;
+	margin: 0 0 24px;
+}
+.ia-form {
+	// inside the instructor dashboard shell the form should not add a second card frame
+	.ss-dash & {
+		box-shadow: none;
+	}
+}
+
+.ia-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 8px;
+	h2 {
+		margin: 0;
+		font-size: var(--ss-fs-xl, 1.5rem);
+		overflow-wrap: anywhere;
+	}
+	&__side {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+.ia-section {
+	min-width: 0;
+	margin: 24px 0 0;
+	padding: 0;
+	border: 0;
+	legend {
+		float: none;
+		width: 100%;
+		margin-bottom: 4px;
+		padding: 0 0 8px;
+		font-size: 1.05rem;
+		font-weight: 700;
+		border-bottom: 1px solid var(--ss-border);
+	}
+}
+.ia-hint {
+	margin: 8px 0 0;
+	color: var(--ss-muted);
+	font-size: var(--ss-fs-sm);
+}
+.ia-grid {
+	display: grid;
+	gap: 0 16px;
+	margin-top: 12px;
+	grid-template-columns: minmax(0, 1fr);
+	@media (min-width: 768px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	.form-control,
+	textarea,
+	select {
+		max-width: 100%;
+	}
+}
+.ia-wide {
+	grid-column: 1 / -1;
+}
+.ia-choices {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+}
+.ia-choice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	min-height: 32px;
+	margin: 4px 0;
+	cursor: pointer;
+	input {
+		margin-top: 4px;
+		flex-shrink: 0;
+	}
+}
+.ia-photo {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 44px;
+}
+.ia-actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 16px;
+}
+.ia-feedback {
+	margin: 12px 0;
+	padding: 10px 14px;
+	border-left: 3px solid var(--ss-primary);
+	background: var(--ss-primary-50);
+	border-radius: 0 8px 8px 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.ia-note {
+	margin: 12px 0;
+	font-size: var(--ss-fs-sm);
+}
+.ia-pre {
+	white-space: pre-wrap;
+}
+.ia-confirm {
+	padding: 14px;
+	border: 1px solid var(--ss-border);
+	border-radius: 12px;
+	background: var(--ss-surface-2, #f8f9fc);
+}
+
+.ia-summary {
+	display: grid;
+	gap: 8px 16px;
+	margin: 12px 0;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	min-width: 0;
+	> div {
+		min-width: 0;
+	}
+	dt {
+		font-size: var(--ss-fs-xs);
+		font-weight: 600;
+		color: var(--ss-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+	dd {
+		margin: 0;
+		overflow-wrap: anywhere;
+	}
+	&--stack {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+.ia-row {
+	min-width: 0;
+}
+.ia-cols {
+	display: grid;
+	gap: 24px;
+	grid-template-columns: minmax(0, 1fr);
+	@media (min-width: 992px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.ia-timeline {
+	margin: 12px 0 0;
+	padding: 0 0 0 18px;
+	border-left: 2px solid var(--ss-border);
+	list-style: none;
+	li {
+		position: relative;
+		padding: 0 0 12px 12px;
+		overflow-wrap: anywhere;
+		&::before {
+			content: "";
+			position: absolute;
+			left: -24px;
+			top: 6px;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--ss-primary);
+		}
+		p {
+			margin: 2px 0 0;
+		}
+	}
+}
+
+.ia-cards {
+	display: grid;
+	gap: 12px;
+	margin: 16px 0;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	@media (min-width: 768px) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	@media (min-width: 1200px) {
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+}
+.ia-card-stat {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: 10px;
+	min-height: 64px;
+	padding: 10px 14px;
+	text-align: left;
+	background: var(--ss-surface);
+	border: 1px solid var(--ss-border);
+	border-radius: 12px;
+	i {
+		grid-row: span 2;
+		font-size: 22px;
+		color: var(--ss-primary);
+	}
+	strong {
+		font-size: 1.3rem;
+		line-height: 1.1;
+	}
+	span {
+		font-size: var(--ss-fs-xs);
+		color: var(--ss-muted);
+	}
+	&.is-active {
+		border-color: var(--ss-primary);
+		box-shadow: 0 0 0 2px var(--ss-primary-50);
+	}
+}
+.ia-filters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 12px 0;
+	.form-control {
+		flex: 1 1 200px;
+		min-width: 0;
+		max-width: 360px;
+	}
+}
+.ia-rubric {
+	display: grid;
+	gap: 8px 16px;
+	margin-bottom: 12px;
+	grid-template-columns: minmax(0, 1fr);
+	@media (min-width: 576px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	label {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		font-size: var(--ss-fs-sm);
+	}
+}
+.ia-pager {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 16px;
+}
+.ia-list {
+	margin: 0 0 8px;
+	padding: 0;
+	list-style: none;
+	li {
+		display: flex;
+		flex-direction: column;
+		padding: 8px 0;
+		border-bottom: 1px solid var(--ss-border);
+		overflow-wrap: anywhere;
+	}
+}
+
+.ss-link-btn {
+	padding: 0;
+	background: none;
+	border: 0;
+	color: var(--ss-primary);
+	text-decoration: underline;
+	cursor: pointer;
+	font: inherit;
+}
+
+// ---- Students directory ----
+// Layout notes (the one-character-per-line bug):
+//  - The student cell used `overflow-wrap: anywhere`, which lets a table column shrink to ONE character, and the
+//    legacy `.table span { display:flex }` rule also turned every span in the table into a flex column.
+//  - A grid's implicit column is `auto`, so a wide table stretched the whole page instead of scrolling in its wrapper.
+// Fixes: a real min-width per column, `overflow-wrap: break-word` (does not shrink columns), the grid column is
+// `minmax(0, 1fr)`, the table scrolls inside its own wrapper, and below 1340px the page uses cards instead.
+$sd-table-bp: 1340px; // the table needs ~974px; the dashboard content is 1022px wide at 1366
+
+.sd {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 16px;
+	min-width: 0;
+	max-width: 100%;
+
+	&-summary {
+		display: grid;
+		gap: 12px;
+		grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	}
+	&-filters {
+		display: grid;
+		gap: 12px;
+		grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+		align-items: end;
+	}
+	&-avatar {
+		flex-shrink: 0;
+		display: inline-grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		overflow: hidden;
+		background: var(--ss-primary-50);
+		color: var(--ss-primary-ink);
+		font-size: 20px;
+		font-weight: 700;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+	&-who {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		min-width: 0;
+
+		&__text {
+			display: grid;
+			gap: 2px;
+			min-width: 0;
+			line-height: 1.35;
+		}
+	}
+	&-name {
+		color: var(--ss-ink);
+		font-weight: 600;
+		overflow-wrap: break-word; // breaks only a word that cannot fit; never shrinks the column
+	}
+	&-email {
+		color: var(--ss-muted);
+		font-size: var(--ss-fs-sm);
+		overflow-wrap: break-word;
+	}
+	&-actions {
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		.ss-btn { white-space: nowrap; padding-inline: 12px; }
+	}
+	&-bulk {
+		position: sticky;
+		bottom: 8px;
+		z-index: 5;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		align-items: center;
+		padding: 10px 14px;
+		border-radius: 12px;
+		background: var(--ss-ink, #1b2540);
+		color: #fff;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+	}
+	&-table {
+		display: none;
+		min-width: 0;
+		max-width: 100%;
+		overflow-x: auto; // the table scrolls in here; it never widens the page
+		-webkit-overflow-scrolling: touch;
+		@media (min-width: $sd-table-bp) {
+			display: block;
+		}
+
+		table {
+			width: 100%;
+			min-width: 960px; // = about the sum of the column minimums below: every column keeps a readable width
+			margin: 0;
+			table-layout: auto;
+		}
+		th {
+			padding: 12px 12px;
+			font-size: var(--ss-fs-xs);
+			font-weight: 700;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			color: var(--ss-muted);
+			background: var(--ss-surface-2);
+			white-space: nowrap;
+			vertical-align: middle;
+		}
+		td {
+			padding: 14px 12px;
+			vertical-align: middle;
+			overflow-wrap: break-word;
+		}
+		tbody tr + tr td {
+			border-top: 1px solid var(--ss-border);
+		}
+		tbody tr:hover td {
+			background: var(--ss-surface-2);
+		}
+		tr.is-open td {
+			background: var(--ss-primary-50);
+		}
+		// The legacy `.table span` rule makes every span a flex column; undo it for this table only.
+		.table span,
+		table span {
+			display: inline;
+			flex-direction: row;
+			min-width: 0;
+		}
+		table .ss-badge { display: inline-flex; }
+		table .sd-avatar { display: inline-grid; }
+		table .sd-who__text { display: grid; }
+		table .sd-who__text > span { display: block; }
+		table .ss-btn span { display: inline; }
+		table .sd-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+		table .ss-badge { white-space: normal; max-width: 100%; text-align: left; line-height: 1.4; }
+
+		// Column widths: [select] [student] [grade] [subjects] [courses] [assignments] [last activity] [actions]
+		.sd-col-pick { width: 44px; min-width: 44px; text-align: center; }
+		.sd-col-student { min-width: 210px; }
+		.sd-col-grade { min-width: 80px; }
+		.sd-col-subjects { min-width: 100px; }
+		.sd-col-courses { min-width: 170px; }
+		.sd-col-assign { min-width: 120px; }
+		.sd-col-last { min-width: 90px; white-space: nowrap; }
+		.sd-col-actions { min-width: 140px; }
+	}
+	&-cards {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 12px;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+		@media (min-width: $sd-table-bp) {
+			display: none;
+		}
+		> li {
+			min-width: 0;
+			display: grid;
+			gap: 8px;
+			align-content: start;
+			p { margin: 0; }
+		}
+		.sd-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+		.ss-badge { white-space: normal; max-width: 100%; text-align: left; line-height: 1.4; }
+	}
+	&-detail {
+		display: grid;
+		gap: 14px;
+
+		&__head {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			justify-content: space-between;
+			align-items: flex-start;
+		}
+		&__who {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			min-width: 0;
+		}
+	}
+	&-courses {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 10px;
+	}
+	&-onboard {
+		padding: 14px;
+		border: 1px dashed var(--ss-border-strong);
+		border-radius: 12px;
+		display: grid;
+		gap: 10px;
+	}
+}

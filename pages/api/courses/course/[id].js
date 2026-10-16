@@ -1,9 +1,11 @@
 import Course from "database/models/course";
+import { requireUser, requireCourseManager, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	// Instructors (their own courses) and admins only; 401 invalid token, 403 other roles/owners.
+	const actor = await requireUser(req, res, TEACHER_ROLES);
+	if (!actor) return;
+	if (!(await requireCourseManager(res, actor, req.query.id))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);
@@ -55,7 +57,7 @@ const handlePut = async (req, res) => {
 		catId,
 	} = req.body;
 	try {
-		const course = await Course.update(
+		await Course.update(
 			{
 				title,
 				short_desc,
@@ -92,7 +94,7 @@ const handleDelete = async (req, res) => {
 			where: { id: id },
 		});
 
-		course.destroy();
+		await course.destroy();
 
 		res.status(200).json({ message: "Course deleted successfully" });
 	} catch (e) {

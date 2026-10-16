@@ -7,6 +7,9 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
+		"test": "node --test \"tests/mastery/*.test.mjs\" \"tests/live-questions/*.test.mjs\" \"tests/live-sessions/*.test.mjs\" \"tests/nav/*.test.mjs\" \"tests/payments/*.test.mjs\" \"tests/jitsi/*.test.mjs\" \"tests/meetings/*.test.mjs\" \"tests/instructor/*.test.mjs\"",
+		"check:email": "env-cmd node scripts/check-email.mjs",
+		"test:e2e": "node tests/e2e/mastery.e2e.mjs",
 		"model:generate": "env-cmd sequelize-cli model:generate",
 		"seed:generate": "env-cmd sequelize-cli seed:generate",
 		"seed": "env-cmd sequelize-cli db:seed:all",
@@ -15,6 +18,7 @@
 		"migrate:rollback:all": "env-cmd sequelize-cli db:migrate:undo:all"
 	},
 	"dependencies": {
+		"@anthropic-ai/sdk": "^0.133.0",
 		"@emotion/react": "^11.10.5",
 		"@etchteam/next-pagination": "^3.5.4",
 		"@mantine/core": "^5.10.1",

@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
+import { requireUser } from "@/lib/auth/access";
 import { Course, User, Favourite, Enrolment } from "database/models";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	// 401 for a missing/invalid token (verified, not just present)
+	if (!(await requireUser(req, res))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGetRequest(req, res);

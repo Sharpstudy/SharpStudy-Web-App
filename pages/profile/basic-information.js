@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import Link from "next/link";
+import StudentLayout from "@/components/Learning/StudentLayout";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import baseUrl from "@/utils/baseUrl";
@@ -64,24 +62,8 @@ const BasicInformation = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
-					<h2 className="fw-bold mb-4">Profile & Settings</h2>
-
-					<ul className="nav-style1">
-						<li>
-							<Link href="/profile/basic-information">
-								<a className="active">Profile</a>
-							</Link>
-						</li>
-						<li>
-							<Link href="/profile/photo">
-								<a>Profile Picture</a>
-							</Link>
-						</li>
-					</ul>
+			<StudentLayout user={user} section="account">
+				<div className="ss-card ss-form-card">
 
 					<div className="basic-profile-information-form">
 						<form onSubmit={handleSubmit}>
@@ -231,9 +213,7 @@ const BasicInformation = ({ user }) => {
 						</form>
 					</div>
 				</div>
-			</div>
-
-			<Footer />
+			</StudentLayout>
 		</>
 	);
 };

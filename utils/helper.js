@@ -33,3 +33,6 @@ export const calculateDiscount = (discount, listPrice) => {
 	// return { afterDiscount, beforeDiscount, discountAmount, discount };
 	return afterDiscount.toFixed(2);
 };
+
+// "1 student" / "3 students"
+export const plural = (n, word) => `${n} ${word}${Number(n) === 1 ? "" : "s"}`;

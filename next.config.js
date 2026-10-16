@@ -23,8 +23,8 @@ const nextConfig = {
       "https://api.cloudinary.com/v1_1/dvoomq0ii/video/upload",
     CLOUDINARY_ZIP_URL:
       "https://api.cloudinary.com/v1_1/dvoomq0ii/raw/upload",
-    STRIPE_SECRET_KEY: "sk_test_51MR86LFhxR0VYolQfG7Gl91HS5uQHaNkmiQI8WVr8uHT3HEor3qJaIsnW65Q5FxSeiLPB0BOmFPA2vSgv2Uj1KTm006oH9ZxHD",
-    STRIPE_PUBLISHABLE_KEY: "pk_test_51MR86LFhxR0VYolQvZbXEvfZ0IWno5uFXYYVmvyE2olwhYK2hMDt6os2j3SYl5Ht4WUuTcOogQsNFjnGPNl1kSoA00tCgbSpT1",
+    // Publishable key is public by design; it still comes from the environment.
+    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
   },
 };
 

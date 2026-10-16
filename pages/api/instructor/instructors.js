@@ -1,9 +1,8 @@
+import { requireRole } from "@/lib/auth/requireRole";
 import User from "database/models/user";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);
@@ -17,8 +16,11 @@ export default async function handler(req, res) {
 
 const handleGet = async (req, res) => {
 	try {
+		// Everyone who currently HAS instructor access (the role is the source of truth,
+		// not the legacy request flags).
 		const instructors = await User.findAll({
-			where: { instructor_request_confirmed: true },
+			where: { role: "instructor" },
+			order: [["created_at", "DESC"]],
 		});
 
 		res.status(200).json({ instructors });

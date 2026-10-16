@@ -1,109 +1,84 @@
 import React from "react";
-import Link from "next/link";
-import CoursesList from "@/components/Courses/CoursesList";
-import Banner from "@/components/Index/Banner";
 import Navbar from "@/components/_App/Navbar";
-import Categories from "@/components/Index/Categories";
-import Transform from "@/components/Index/Transform";
-import Features from "@/components/Index/Features";
-import Testimonials from "@/components/Index/Testimonials";
-import Partners from "@/components/Index/Partners";
-import Teaching from "@/components/Index/Teaching";
-import Business from "@/components/Index/Business";
 import Footer from "@/components/_App/Footer";
+import CoursesList from "@/components/Courses/CoursesList";
+import FaqList from "@/components/Common/FaqList";
+import Hero from "@/components/Home/Hero";
+import { Categories, HowItWorks, Benefits, Audiences, FinalCta } from "@/components/Home/Sections";
+import { Testimonials, Partners } from "@/components/Home/Trust";
+import { Button, EmptyState, SectionHeader } from "@/components/ui";
 import baseUrl from "@/utils/baseUrl";
-import { motion } from "framer-motion";
+import { landingRedirect } from "@/lib/auth/landing";
 
-const index = ({ courses, categories, user }) => {
-	const variants = {
-		visible: {
-			opacity: 1,
-			scale: 1,
-			transition: { delay: 0.2, type: "spring", duration: 1 },
-		},
-		hidden: { opacity: 0, scale: 0 },
-	};
+const Home = ({ courses, categories, user }) => {
 	return (
 		<>
 			<Navbar user={user} />
-			<Banner />
-			<div className="courses-area pt-100 pb-70">
-				<div className="container">
-					<motion.div
-						className="section-title"
-						initial="hidden"
-						whileInView="visible"
-						variants={variants}
-					>
-						<span className="top-title">Popular Courses</span>
-						<h2>Expand Your Career Opportunity With Our Courses</h2>
-					</motion.div>
-					<CoursesList courses={courses} user={user} />
-				</div>
-			</div>
+			<main>
+				<Hero />
+				<Categories categories={categories} />
 
-			{/* <div className="feature-dcourses-area bg-color-f6fafb pt-100 pb-70">
-				<div className="container">
-					<div className="title-btn d-flex justify-content-between align-items-center">
-						<motion.div
-							className="section-title left-title"
-							initial="hidden"
-							whileInView="visible"
-							variants={variants}
-						>
-							<span className="top-title">Featured Courses</span>
-							<h2>Find Yours From The Featured</h2>
-						</motion.div>
-						<Link href="/courses">
-							<a className="default-btn">View All</a>
-						</Link>
+				<section className="ss-section" aria-labelledby="popular-title">
+					<div className="ss-container">
+						<SectionHeader
+							eyebrow="Popular courses"
+							title={<span id="popular-title">Expand your career opportunities</span>}
+							description="Hand-picked courses from our catalogue."
+							action={
+								<Button href="/courses/" variant="secondary" iconRight="ri-arrow-right-line">
+									View all courses
+								</Button>
+							}
+						/>
+						<CoursesList
+							courses={courses}
+							user={user}
+							empty={
+								<EmptyState
+									icon="ri-star-smile-line"
+									title="Featured courses are coming soon"
+									description="Our team hasn't featured any courses on the homepage yet. You can still explore everything in the catalogue."
+									action={<Button href="/courses/">Explore the catalogue</Button>}
+								/>
+							}
+						/>
 					</div>
-					<CoursesList courses={courses} user={user} />
-				</div>
+				</section>
 
-				<img
-					src="/images/courses-shape.png"
-					className="courses-shape"
-					alt="Image"
-				/>
-			</div> */}
+				<HowItWorks />
+				<Benefits />
+				<Testimonials />
+				<Partners />
+				<Audiences />
 
-			{/* <div className="feature-dcourses-area bg-color-f6fafb pb-70">
-				<div className="container">
-					<div className="title-btn d-flex justify-content-between align-items-center wow animate__animated animate__fadeInUp delay-0-2s">
-						<motion.div
-							className="section-title left-title"
-							initial="hidden"
-							whileInView="visible"
-							variants={variants}
-						>
-							<span className="top-title">
-								Most Viewed Courses
-							</span>
-							<h2>Students Are Also Viewing</h2>
-						</motion.div>
-						<Link href="/courses">
-							<a className="default-btn">View All</a>
-						</Link>
+				<section className="ss-section ss-section--tint" aria-labelledby="faq-title">
+					<div className="ss-container ss-faq-wrap">
+						<SectionHeader
+							eyebrow="FAQ"
+							title={<span id="faq-title">Questions, answered</span>}
+							description="Everything you need to know before you start."
+							action={
+								<Button href="/faq/" variant="ghost" iconRight="ri-arrow-right-line">
+									All FAQs
+								</Button>
+							}
+						/>
+						<FaqList limit={4} />
 					</div>
-					<CoursesList courses={courses} user={user} />
-				</div>
-			</div> */}
+				</section>
 
-			{/* <Categories categories={categories} /> */}
-			<Transform />
-			<Features />
-			<Testimonials />
-			<Partners />
-			<Teaching />
-			<Business />
+				<FinalCta user={user} />
+			</main>
 			<Footer />
 		</>
 	);
 };
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+	// Signed-in students/instructors never see the marketing homepage.
+	const redirect = await landingRedirect(req).catch(() => null);
+	if (redirect) return { redirect };
 	// Fetch data from external API
 	const res = await fetch(`${baseUrl}/api/home-courses`);
 	const json = await res.json(); const courses = json.courses ?? []; const categories = json.categories ?? []
@@ -112,4 +87,4 @@ export async function getServerSideProps() {
 	return { props: { courses, categories } };
 }
 
-export default index;
+export default Home;

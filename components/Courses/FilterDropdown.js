@@ -16,7 +16,8 @@ const FilterDropdown = () => {
 	return (
 		<li>
 			<select
-				className="form-select form-control"
+				className="form-select"
+				aria-label="Sort courses"
 				name="short"
 				value={short}
 				onChange={(e) => setShort(e.target.value)}

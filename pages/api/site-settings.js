@@ -1,8 +1,20 @@
 import fs from "fs";
+import { requireRole } from "@/lib/auth/requireRole";
 let siteSettings = require("../../public/settings.json");
 
 export default async function handler(req, res) {
-	const { site, image_url } = req.body;
+	if (req.method !== "POST") {
+		return res.status(405).json({ message: `Method ${req.method} not allowed` });
+	}
+	// This rewrites public/settings.json (the homepage pop-up), so it is admin-only.
+	if (!(await requireRole(req, res, ["admin"]))) return;
+	const { site, image_url } = req.body || {};
+	if (image_url !== undefined && image_url !== null && image_url !== "" && !(typeof image_url === "string" && /^https:\/\/[^\s"<>]{1,500}$/.test(image_url))) {
+		return res.status(422).json({ message: "image_url must be an https URL" });
+	}
+	if (!image_url && typeof site !== "boolean") {
+		return res.status(422).json({ message: "site must be true or false" });
+	}
 
 	try {
 		if (image_url) {

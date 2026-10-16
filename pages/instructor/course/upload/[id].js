@@ -1,6 +1,5 @@
 import React from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
 import PageNavigation from "@/components/Instructor/PageNavigation";
 import { useRouter } from "next/router";
 import UploadVideoForm from "@/components/Instructor/UploadVideoForm";
@@ -10,22 +9,16 @@ const Index = ({ user }) => {
 	const { id: courseId } = router.query;
 	return (
 		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
+			<InstructorLayout user={user}>
 					<PageNavigation
 						courseId={courseId}
 						activeClassname="upload"
 					/>
 
-					<div className="create-course-form">
+					<div className="create-course-form ss-card ss-form-card">
 						<UploadVideoForm courseId={courseId} />
 					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</InstructorLayout>
 		</>
 	);
 };

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import InstructorHeader from "@/components/Instructor/InstructorHeader";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
+import CourseSkeletonLoader from "@/utils/CourseSkeletonLoader";
+import { Button, EmptyState } from "@/components/ui";
 import CoursesCard from "@/components/Instructor/CoursesCard";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import baseUrl from "@/utils/baseUrl";
-import GeneralLoader from "@/utils/GeneralLoader";
 import toast from "react-hot-toast";
 
 const Index = ({ user }) => {
@@ -20,9 +19,12 @@ const Index = ({ user }) => {
 			headers: { Authorization: edmy_users_token },
 		};
 
-		const response = await axios.get(`${baseUrl}/api/courses`, payload);
-		setCourses(response.data.courses);
-		setLoading(false);
+		try {
+			const response = await axios.get(`${baseUrl}/api/courses`, payload);
+			setCourses(response.data.courses);
+		} finally {
+			setLoading(false);
+		}
 	};
 	useEffect(() => {
 		fetchCourses();
@@ -91,63 +93,33 @@ const Index = ({ user }) => {
 	};
 
 	return (
-		<>
-			<Navbar user={user} />
-
-			{/* Instructor header */}
-			<InstructorHeader />
-			{/* End Instructor header */}
-
-			<div className="pb-100">
-				<div className="container">
-					<h3 className="mb-5 text-center">My Courses</h3>
-
-					<div className="row justify-content-center">
-						{loading && <GeneralLoader />}
-						{courses.length > 0 ? (
-							courses.map((course) => (
-								<CoursesCard
-									key={course.id}
-									{...course}
-									onDelete={() => confirmDelete(course.id)}
-								/>
-							))
-						) : (
-							<h3>Empty</h3>
-						)}
-
-						{/* Pagination */}
-						{/* <div className="col-lg-12 col-md-12">
-							<div className="pagination-area text-center mt-3">
-								<a href="#" className="prev page-numbers">
-									<i className="bx bx-chevrons-left"></i>
-								</a>
-								<span
-									className="page-numbers current"
-									aria-current="page"
-								>
-									1
-								</span>
-								<a href="#" className="page-numbers">
-									2
-								</a>
-								<a href="#" className="page-numbers">
-									3
-								</a>
-								<a href="#" className="page-numbers">
-									4
-								</a>
-								<a href="#" className="next page-numbers">
-									<i className="bx bx-chevrons-right"></i>
-								</a>
-							</div>
-						</div> */}
-					</div>
+		<InstructorLayout
+			user={user}
+			title="My courses"
+			description="Create, edit and manage your courses, videos and assets."
+			actions={
+				<Button href="/instructor/course/create/" icon="ri-add-line">
+					Create course
+				</Button>
+			}
+		>
+			{loading ? (
+				<CourseSkeletonLoader count={3} />
+			) : courses.length > 0 ? (
+				<div className="ss-grid ss-grid--cards">
+					{courses.map((course) => (
+						<CoursesCard key={course.id} {...course} onDelete={() => confirmDelete(course.id)} />
+					))}
 				</div>
-			</div>
-
-			<Footer />
-		</>
+			) : (
+				<EmptyState
+					icon="ri-book-2-line"
+					title="You haven't created a course yet"
+					description="Start with the basics — title, price and description. You can add videos and assets afterwards."
+					action={<Button href="/instructor/course/create/">Create your first course</Button>}
+				/>
+			)}
+		</InstructorLayout>
 	);
 };
 

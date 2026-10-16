@@ -1,7 +1,7 @@
 import React from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import Link from "next/link";
+import AdminLayout from "@/components/_App/AdminLayout";
+import { StatTile } from "@/components/ui";
 import baseUrl from "@/utils/baseUrl";
 
 const Index = ({
@@ -16,97 +16,59 @@ const Index = ({
 }) => {
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
-								<div className="row justify-content-center">
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-group"></i>
-											<h1>{students}</h1>
-											<p>Total Students</p>
-										</div>
-									</div>
-
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bxs-file"></i>
-											<h1>{courses}</h1>
-											<p>Total Courses</p>
-										</div>
-									</div>
-
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-group"></i>
-											<h1>{instructors}</h1>
-											<p>Total Instructors</p>
-										</div>
-									</div>
-
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-cart"></i>
-											<h1>{enrolments}</h1>
-											<p>Course Enrolled</p>
-										</div>
-									</div>
-
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-cart"></i>
-											<h1>${earningsTotal}</h1>
-											<p>Total Sale</p>
-										</div>
-									</div>
-
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-cart"></i>
-											<h1>{videos}</h1>
-											<p>Course Videos</p>
-										</div>
-									</div>
-									<div className="col-lg-4 col-sm-6">
-										<div className="info-box-card">
-											<i className="bx bx-cart"></i>
-											<h1>{assets}</h1>
-											<p>Course Assets</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+			<AdminLayout user={user} title="Dashboard" description="An overview of activity across SharpStudy.">
+				<div className="ss-stats">
+					<StatTile icon="ri-group-line" value={students} label="Total students" />
+					<StatTile icon="ri-slideshow-2-line" tone="info" value={instructors} label="Total instructors" />
+					<StatTile icon="ri-book-2-line" value={courses} label="Total courses" />
+					<StatTile icon="ri-user-follow-line" tone="success" value={enrolments} label="Course enrolments" />
+					<StatTile icon="ri-money-dollar-circle-line" tone="success" value={`$${earningsTotal}`} label="Total sales" />
+					<StatTile icon="ri-video-line" tone="accent" value={videos} label="Course videos" />
+					<StatTile icon="ri-folder-2-line" tone="accent" value={assets} label="Course assets" />
 				</div>
-			</div>
 
-			<Footer />
+				<h2 className="ss-subhead">Quick links</h2>
+				<div className="ss-grid ss-grid--3">
+					<Link href="/admin/courses/new-arrival/">
+						<a className="ss-card ss-card--interactive ss-quicklink">
+							<i className="ri-inbox-archive-line" aria-hidden="true"></i>
+							<span><strong>Review new courses</strong><small>Approve submitted courses</small></span>
+						</a>
+					</Link>
+					<Link href="/admin/instructor/requests/">
+						<a className="ss-card ss-card--interactive ss-quicklink">
+							<i className="ri-user-add-line" aria-hidden="true"></i>
+							<span><strong>Instructor requests</strong><small>Review applications</small></span>
+						</a>
+					</Link>
+					<Link href="/admin/coupons/create/">
+						<a className="ss-card ss-card--interactive ss-quicklink">
+							<i className="ri-coupon-3-line" aria-hidden="true"></i>
+							<span><strong>Create a coupon</strong><small>Add a discount code</small></span>
+						</a>
+					</Link>
+				</div>
+			</AdminLayout>
 		</>
 	);
 };
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
 	// Fetch data from external API
-	const res = await fetch(`${baseUrl}/api/funfacts`);
+	const res = await fetch(`${baseUrl}/api/funfacts`, { headers: { Authorization: (req.cookies && req.cookies.edmy_users_token) || "" } });
+	// Non-admins get 401 here; the page itself redirects them, so render zeros.
+	const data = res.ok ? await res.json() : {};
 	const {
-		students,
-		instructors,
-		courses,
-		enrolments,
-		earningsTotal,
-		videos,
-		assets,
-	} = await res.json();
+		students = 0,
+		instructors = 0,
+		courses = 0,
+		enrolments = 0,
+		earningsTotal = "0.00",
+		videos = 0,
+		assets = 0,
+	} = data;
 
 	// Pass data to the page via props
 	return {

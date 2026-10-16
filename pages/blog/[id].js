@@ -22,7 +22,7 @@ const SingleBlog = ({ user }) => {
         homePageText="Home"
         activePageText={blog.title}
       />
-      <section className="section blog-wrap bg-gray pt-100">
+      <section className="section blog-wrap bg-gray ss-section--tight">
         <div className="container">
           <div className="row">
             <div className="col-lg-8">
@@ -35,7 +35,7 @@ const SingleBlog = ({ user }) => {
                       className="img-fluid rounded"
                       style={{ width: "100%", objectFit: "cover" }}
                     />
-                    <div className="blog-item-content bg-white p-5">
+                    <div className="blog-item-content bg-white p-3 p-md-5">
                       <div className="blog-item-meta bg-gray py-1 px-2">
                         <span className="text-muted text-capitalize mr-3">
                           <i className="ti-pencil-alt mr-2" />
@@ -43,7 +43,7 @@ const SingleBlog = ({ user }) => {
                         </span>
                       </div>
                       <h2 className="mt-3 mb-4">
-                        <a href="blog-single.html">{blog.title}</a>
+                        {blog.title}
                       </h2>
                       <p>{blog.description}</p>
                       <div className="tag-option mt-5 clearfix">

@@ -9,63 +9,47 @@ const Blogs = ({ user }) => {
   return (
     <>
       <Navbar user={user} />
-      <PageBanner
-        pageTitle="Blogs"
-        homePageUrl="/"
-        homePageText="Home"
-        activePageText="Learning Blogs"
-      />
-      <div className="courses-area ptb-100">
-        <div className="container">
-          <div className="row justify-content-center">
-            {blogData.map((blog) => (
-              <div className="col-lg-3 col-md-6 " key={blog.id}>
-                <Link href={`/blog/${blog.id}`}>
-                  <div className="single-courses pe-auto" style={{cursor:"pointer"}}>
-                    <div
-                      className="courses-main-img"
-                      style={{ maxHeight: "200px" }}
-                    >
-                      <img
-                        src={blog.image}
-                        alt={blog.title}
-                        style={{
-                          height: "190px",
-                          width: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    </div>
-                    <div className="courses-content">
-                      
+      <main>
+        <PageBanner
+          pageTitle="Blogs"
+          homePageUrl="/"
+          homePageText="Home"
+          activePageText="Learning blog"
+          description="Ideas, stories and inspiration from the SharpStudy community."
+        />
+        <section className="ss-section ss-section--tight">
+          <div className="ss-container ss-container--wide">
+            <div className="ss-grid ss-grid--cards">
+              {blogData.map((blog) => (
+                <article className="ss-course-card" key={blog.id}>
+                  <div className="ss-course-card__media">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={blog.image} alt="" loading="lazy" />
+                  </div>
+                  <div className="ss-course-card__body">
+                    <h2 className="ss-course-card__title">
+                      <Link href={`/blog/${blog.id}`}>
                         <a>{blog.title}</a>
-                      
-
-                      <ul className="admin pt-2">
-                        <li>
-                          <img
-                            src="/images/testimonials/testimonial-1.png"
-                            className="rounded-circle"
-                            alt="user_image"
-                            style={{
-                              height: "25px",
-                              width: "25px",
-                            }}
-                          />
-                        </li>
-                        <li>
-                          <span>By</span>
-                        </li>
-                        <li>Admin</li>
-                      </ul>
+                      </Link>
+                    </h2>
+                    <div className="ss-course-card__meta">
+                      <span className="ss-course-card__author">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          className="ss-avatar ss-avatar--sm"
+                          src="/images/testimonials/testimonial-1.png"
+                          alt=""
+                        />
+                        By Admin
+                      </span>
                     </div>
                   </div>
-                </Link>
-              </div>
-            ))}
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       <Footer />
     </>

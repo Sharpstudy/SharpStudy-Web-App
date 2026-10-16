@@ -5,6 +5,7 @@ import isEmail from "validator/lib/isEmail";
 import isLength from "validator/lib/isLength";
 
 import User from "database/models/user";
+import { rateLimit } from "@/lib/mastery-server/http";
 
 import { confirmEmailAddress } from "email-templates/account-confirmation";
 
@@ -21,6 +22,8 @@ export default async function handler(req, res) {
 }
 
 const userSignup = async (req, res) => {
+  // Each signup sends an e-mail and creates a row: limit per client address.
+  if (!rateLimit(req, res, "signup", { windowMs: 60 * 60 * 1000, max: 20 })) return;
   const confirmToken = uuidv4();
   let { first_name, last_name, email, password } = req.body;
   try {

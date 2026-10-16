@@ -1,8 +1,10 @@
 import cookie from "js-cookie";
 import Router from "next/router";
 import jwt from 'jsonwebtoken';
+import { clearLearnerSession } from "@/lib/mastery-client/api";
 
 export const handleLogin = (t, routeNext) => {
+  clearLearnerSession(); // a profile unlocked under a previous login must not follow this one
   cookie.set("edmy_users_token", t);
   if (routeNext.query && routeNext.query.next) {
     Router.push(routeNext.query.next);
@@ -13,11 +15,13 @@ export const handleLogin = (t, routeNext) => {
 
 export const handleLogout = () => {
   cookie.remove("edmy_users_token");
+  clearLearnerSession();
   Router.push("/");
 };
 
 export const destroyCookie = () => {
   cookie.remove("edmy_users_token");
+  clearLearnerSession();
   Router.reload("/");
 };
 

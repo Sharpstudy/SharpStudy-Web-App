@@ -1,78 +1,33 @@
-import Stripe from "stripe";
-import { v4 as uuidv4 } from "uuid";
-import { Enrolment, Instructor_Earning, Course } from "database/models";
-import { calculateCartTotal } from "@/utils/calculateCartTotal";
-// import { checkoutConfirmation } from "email-templates/checkout-confirmation";
+import { Enrolment, Instructor_Earning, Course, User } from "database/models";
+import Coupon from "database/models/coupon";
+import { requireUser } from "@/lib/auth/access";
+import { getStripe } from "@/lib/payments/stripe";
+import { runCheckout, CheckoutError } from "@/lib/payments/checkout";
 
-const stripeSecret = Stripe(process.env.STRIPE_SECRET_KEY);
+const repo = {
+	getUser: (id) => User.findOne({ where: { id }, attributes: ["id", "first_name", "email", "profile_photo"] }).then((u) => u && u.get({ plain: true })),
+	getCourse: (id) => Course.findOne({ where: { id } }).then((c) => c && c.get({ plain: true })),
+	isEnrolled: async (userId, courseId) => !!(await Enrolment.findOne({ where: { userId, courseId }, attributes: ["id"] })),
+	getCoupon: (code) => Coupon.findOne({ where: { code } }).then((c) => c && c.get({ plain: true })),
+	createEnrolment: (row) => Enrolment.create(row),
+	createEarning: (row) => Instructor_Earning.create(row),
+};
 
 export default async function handler(req, res) {
-	switch (req.method) {
-		case "POST":
-			await handlePostRequest(req, res);
-			break;
-		default:
-			res.status(405).json({
-				message: `Method ${req.method} not allowed`,
-			});
+	if (req.method !== "POST") {
+		return res.status(405).json({ message: `Method ${req.method} not allowed` });
+	}
+	// 401 for a missing/invalid token. The buyer is always the signed-in user.
+	const actor = await requireUser(req, res);
+	if (!actor) return;
+	try {
+		const result = await runCheckout({ repo, stripe: getStripe() }, actor, req.body || {});
+		res.status(result.status).json(result.body);
+	} catch (e) {
+		if (e instanceof CheckoutError) {
+			return res.status(e.status).json({ error_code: e.code, message: e.message, ...(e.extra || {}) });
+		}
+		console.error(`[checkout] ${e && e.message}`);
+		res.status(400).json({ error_code: "create_enroled", message: "Checkout failed. You have not been charged." });
 	}
 }
-
-const handlePostRequest = async (req, res) => {
-	const { cartItems, userId, buyer_name, buyer_email, buyer_avatar } =
-		req.body;
-
-	const { stripeTotal } = calculateCartTotal(cartItems);
-
-	try {
-		await stripeSecret.charges.create(
-			{
-				amount: stripeTotal,
-				currency: "usd",
-				source: "tok_mastercard",
-				receipt_email: buyer_email,
-				description: `Checkout | ${buyer_email} | ${userId}`,
-			},
-			{
-				idempotencyKey: uuidv4(),
-			}
-		);
-
-		cartItems.forEach(async (cart) => {
-			Enrolment.create({
-				bought_price: cart.price,
-				payment_method: "Card",
-				buyer_name: buyer_name,
-				buyer_email: buyer_email,
-				buyer_avatar: buyer_avatar,
-				userId: userId,
-				courseId: cart.id,
-				status: "paid",
-			});
-
-			const courseInstractor = await Course.findOne({
-				attributes: ["userId"],
-				where: { id: cart.id },
-			});
-
-			await Instructor_Earning.create({
-				earnings: cart.price,
-				userId: courseInstractor.userId,
-				courseId: cart.id,
-			});
-		});
-
-		// console.log(cartItems);
-
-		// checkoutConfirmation(cartItems, buyer_name, buyer_email);
-
-		res.status(200).json({
-			message: "Enroled successfully.",
-		});
-	} catch (e) {
-		res.status(400).json({
-			error_code: "create_enroled",
-			message: e.message,
-		});
-	}
-};

@@ -3,6 +3,13 @@ import jwt from "jsonwebtoken";
 import isEmail from "validator/lib/isEmail";
 
 import User from "database/models/user";
+import masteryRepo from "@/lib/mastery-server/repo";
+
+// Mastery Ladder audit trail. Never blocks or alters the login response.
+const auditLogin = (action, userId, req) =>
+	masteryRepo
+		.addAudit({ actor_user_id: userId, action, details: {}, ip: String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].slice(0, 64) })
+		.catch(() => {});
 
 export default async function handler(req, res) {
 	switch (req.method) {
@@ -26,7 +33,8 @@ const userSignin = async (req, res) => {
 				.json({ message: "Email should be a valid email address" });
 		}
 
-		const user = await User.findOne({
+		// unscoped: the default scope hides the password hash, which sign-in needs
+		const user = await User.unscoped().findOne({
 			where: { email: email },
 		});
 
@@ -52,6 +60,7 @@ const userSignin = async (req, res) => {
 
 		const passwordsMatch = await bcrypt.compare(password, user.password);
 		if (passwordsMatch) {
+			await auditLogin("auth.login", user.id, req);
 			const edmy_users_token = jwt.sign(
 				{
 					userId: user.id,
@@ -69,10 +78,19 @@ const userSignin = async (req, res) => {
 				edmy_users_token,
 			});
 		} else {
+			await auditLogin("auth.login_failed", user.id, req);
 			res.status(401).json({ message: "Password is not correct" });
 		}
 	} catch (e) {
-		// console.error(error)
+		// Database unreachable (e.g. MySQL not running): Sequelize connection
+		// errors carry an empty message, which used to surface as a blank 400.
+		if (e?.name?.startsWith("SequelizeConnection")) {
+			console.error("signin: database unavailable:", e.name, e.parent?.code);
+			return res.status(503).json({
+				error_code: "db_unavailable",
+				message: "Service temporarily unavailable, please try again shortly.",
+			});
+		}
 		res.status(400).json({
 			error_code: "user_login",
 			message: e.message,
