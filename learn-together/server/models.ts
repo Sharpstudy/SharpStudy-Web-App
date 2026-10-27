@@ -301,4 +301,97 @@ export const RateLimit = define(
   { timestamps: false }
 );
 
+// ---------- UX v2 models ----------
+
+export const FamilyValue = define("LtFamilyValue", "lt_family_values", {
+  familyId: T.UUID,
+  valueCategory: T.STRING(40),
+  importance: T.TINYINT,
+});
+
+export const WeeklyPlan = define("LtWeeklyPlan", "lt_weekly_plans", {
+  familyId: T.UUID,
+  childProfileId: T.UUID,
+  weekStart: T.DATEONLY,
+  subject: T.STRING(40),
+  dayOfWeek: T.TINYINT,
+  lessonSlug: T.STRING(80),
+  position: { type: T.TINYINT, defaultValue: 0 },
+  completedAt: T.DATEONLY,
+});
+
+export const ShopItem = define("LtShopItem", "lt_shop_items", {
+  name: T.STRING(120),
+  description: T.TEXT,
+  category: T.ENUM("math", "reading", "science", "arts", "other"),
+  imageKey: T.STRING(80),
+  priceCents: T.INTEGER,
+  stripeProductId: T.STRING(80),
+  active: { type: T.BOOLEAN, defaultValue: true },
+});
+
+export const ShopPurchase = define("LtShopPurchase", "lt_shop_purchases", {
+  familyId: T.UUID,
+  userId: T.UUID,
+  shopItemId: T.UUID,
+  pricePaidCents: T.INTEGER,
+  stripePaymentIntentId: T.STRING(120),
+  purchasedAt: { type: T.DATE, defaultValue: T.NOW },
+});
+
+export const Subscription = define("LtSubscription", "lt_subscriptions", {
+  familyId: T.UUID,
+  plan: T.ENUM("free", "family", "family_pro"),
+  stripeSubscriptionId: T.STRING(120),
+  stripeCustomerId: T.STRING(120),
+  currentPeriodEnd: T.DATE,
+  canceledAt: T.DATE,
+});
+
+export const Coach = define("LtCoach", "lt_coaches", {
+  userId: T.UUID,
+  bio: T.TEXT,
+  subjects: T.JSON,
+  hourlyRateCents: T.INTEGER,
+  rating: T.DECIMAL(3, 2),
+  reviewCount: { type: T.INTEGER, defaultValue: 0 },
+  active: { type: T.BOOLEAN, defaultValue: true },
+});
+
+export const CoachBooking = define("LtCoachBooking", "lt_coach_bookings", {
+  coachId: T.UUID,
+  familyId: T.UUID,
+  bookedByUserId: T.UUID,
+  scheduledAt: T.DATE,
+  durationMinutes: { type: T.INTEGER, defaultValue: 60 },
+  status: T.ENUM("pending", "confirmed", "completed", "cancelled"),
+  stripePaymentIntentId: T.STRING(120),
+  notes: T.TEXT,
+});
+
+export const ChildReflection = define("LtChildReflection", "lt_child_reflections", {
+  childProfileId: T.UUID,
+  sessionId: T.UUID,
+  text: T.TEXT,
+  mood: T.ENUM("great", "good", "okay", "hard"),
+});
+
+export const ReviewGardenItem = define("LtReviewGardenItem", "lt_review_garden_items", {
+  childProfileId: T.UUID,
+  conceptTag: T.STRING(80),
+  activitySlug: T.STRING(80),
+  nextReviewAt: { type: T.DATE, defaultValue: T.NOW },
+  interval: { type: T.INTEGER, defaultValue: 1 },
+  easeFactor: { type: T.DECIMAL(5, 2), defaultValue: 2.5 },
+  repetitions: { type: T.INTEGER, defaultValue: 0 },
+});
+
+export const FamilyBadge = define("LtFamilyBadge", "lt_family_badges", {
+  familyId: T.UUID,
+  childProfileId: T.UUID,
+  badgeKey: T.STRING(60),
+  earnedAt: { type: T.DATE, defaultValue: T.NOW },
+  metadata: T.JSON,
+});
+
 export { sequelize };

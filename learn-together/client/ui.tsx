@@ -48,6 +48,9 @@ export function Loading({ label = "Loading…" }: { label?: string }) {
 const SUBNAV: [string, string][] = [
   ["/learn", t("nav.home")],
   ["/learn/explore", t("nav.explore")],
+  ["/learn/week", "Week"],
+  ["/learn/shop", "Shop"],
+  ["/learn/coaches", "Coaches"],
   ["/learn/family", t("nav.family")],
   ["/learn/privacy", t("nav.privacy")],
 ];

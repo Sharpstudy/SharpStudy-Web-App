@@ -13,9 +13,18 @@ interface Device {
   childProfileIds: string[];
 }
 
+interface BillingData {
+  subscription: { plan: string; currentPeriodEnd: string | null; canceledAt: string | null };
+  members: { userId: string; role: string; firstName: string; email: string }[];
+  childCount: number;
+}
+
+const PLAN_LABEL: Record<string, string> = { free: "Free", family: "Family", family_pro: "Family Pro" };
+
 export default function Family({ user }: { user: unknown }) {
   const { me, error, setMe } = useMe();
   const [devices, setDevices] = useState<Device[]>([]);
+  const [billing, setBilling] = useState<BillingData | null>(null);
   const [err, setErr] = useState<unknown>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
@@ -38,7 +47,10 @@ export default function Family({ user }: { user: unknown }) {
   }, [setMe]);
 
   useEffect(() => {
-    if (me) parentApi.get<{ devices: Device[] }>("/api/learn/devices").then((d) => setDevices(d.devices), setErr);
+    if (me) {
+      parentApi.get<{ devices: Device[] }>("/api/learn/devices").then((d) => setDevices(d.devices), setErr);
+      parentApi.get<BillingData>("/api/learn/billing").then(setBilling).catch(() => undefined);
+    }
   }, [me?.family?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!me) return <LearnShell user={user} title="Family">{error ? <ErrorNote error={error} /> : <Loading />}</LearnShell>;
@@ -63,6 +75,53 @@ export default function Family({ user }: { user: unknown }) {
           {notice}
         </div>
       )}
+
+      {/* Membership & billing */}
+      <section className={s.card} aria-labelledby="billing-h" style={{ marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <h2 id="billing-h">Membership</h2>
+            {billing && (
+              <span className={`${s.planBadge} ${s[billing.subscription.plan]}`}>
+                {PLAN_LABEL[billing.subscription.plan] || billing.subscription.plan}
+              </span>
+            )}
+            {billing?.subscription.currentPeriodEnd && (
+              <p className={s.muted} style={{ fontSize: 13, marginTop: 6 }}>
+                Renews {fmtDate(billing.subscription.currentPeriodEnd)}
+              </p>
+            )}
+          </div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {billing?.subscription.plan !== "family_pro" && (
+              <button className={s.btn}>Upgrade to Family Pro</button>
+            )}
+            {billing?.subscription.plan !== "free" && (
+              <button className={s.btnGhost}>Cancel subscription</button>
+            )}
+          </div>
+        </div>
+
+        {/* Family member circles */}
+        <div style={{ marginTop: 20 }}>
+          <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 10 }}>Family members</p>
+          <div className={s.memberAvatars}>
+            {me.children.map((c) => (
+              <div key={c.id} className={s.memberAvatar}>
+                <div className={s.circle}>{c.nickname[0]}</div>
+                <span>{c.nickname}</span>
+              </div>
+            ))}
+            {me.members.map((m) => (
+              <div key={m.userId} className={s.memberAvatar}>
+                <div className={s.circle}>{(m.firstName || m.email)[0]?.toUpperCase()}</div>
+                <span>{m.firstName || "Parent"}</span>
+              </div>
+            ))}
+            <button className={s.addMemberCircle} onClick={() => setAdding(true)} title="Add child">+</button>
+          </div>
+        </div>
+      </section>
 
       <section className={s.card} aria-labelledby="kids-h">
         <h2 id="kids-h">Children</h2>

@@ -336,34 +336,58 @@ export function Lobby() {
           )
         ) : (
           <>
-            <div className={s.pop} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+            <div style={{ textAlign: "center", padding: "16px 0 8px" }}>
               <Avatar avatarKey={active.avatarKey} large label={active.nickname} />
-              <h1 className={s.kidScreen}>Hi {active.nickname}!</h1>
-              <p role="status" aria-live="polite" style={{ margin: 0 }}>
-                {group ? "Here we go!" : t("kid.waiting")}
-              </p>
+              <h1 className={s.kidScreen} style={{ marginTop: 10 }}>Hi {active.nickname}!</h1>
+              <p style={{ color: "#666", margin: "4px 0 0" }}>Ready for an adventure?</p>
+              {group && <p role="status" aria-live="polite" style={{ color: "#286bad", fontWeight: 600, margin: "8px 0 0" }}>Here we go! 🚀</p>}
             </div>
-            <section aria-labelledby="journey-h" style={{ width: "100%" }}>
-              <h2 id="journey-h" style={{ fontSize: 22, marginTop: 20 }}>
-                {t("kid.journey")}
-              </h2>
-              {active.journey.length ? (
+
+            <div className={s.kidCardGrid} style={{ marginTop: 16, width: "100%", maxWidth: 480 }}>
+              {/* Daily Spark */}
+              <a className={`${s.kidCard} ${s.kidCardMath}`} href="/learn/explore?maxMinutes=10" style={{ textDecoration: "none" }}>
+                <span className={s.kidCardIcon}>⚡</span>
+                <span className={s.kidCardTitle}>Daily Spark</span>
+                <span className={s.kidCardSub}>Today&apos;s activity</span>
+              </a>
+
+              {/* Review Garden */}
+              <a className={`${s.kidCard} ${s.kidCardReview}`} href="/learn/kid/review" style={{ textDecoration: "none" }}>
+                <span className={s.kidCardIcon}>🌱</span>
+                <span className={s.kidCardTitle}>Review Garden</span>
+                <span className={s.kidCardSub}>Practice what you know</span>
+              </a>
+
+              {/* My Reflections */}
+              <a className={`${s.kidCard} ${s.kidCardReflect}`} href="/learn/kid/reflections" style={{ textDecoration: "none" }}>
+                <span className={s.kidCardIcon}>📓</span>
+                <span className={s.kidCardTitle}>My Reflections</span>
+                <span className={s.kidCardSub}>How did it feel?</span>
+              </a>
+
+              {/* Family Badges */}
+              <a className={`${s.kidCard} ${s.kidCardBadges}`} href="/learn/kid/badges" style={{ textDecoration: "none" }}>
+                <span className={s.kidCardIcon}>🏅</span>
+                <span className={s.kidCardTitle}>Family Badges</span>
+                <span className={s.kidCardSub}>See what you&apos;ve earned</span>
+              </a>
+            </div>
+
+            {active.journey.length > 0 && (
+              <section aria-labelledby="journey-h" style={{ width: "100%", maxWidth: 480, marginTop: 16 }}>
+                <h2 id="journey-h" style={{ fontSize: 18, marginBottom: 8 }}>
+                  {t("kid.journey")}
+                </h2>
                 <ul className={s.journey}>
                   {active.journey.map((j) => (
                     <li key={j.conceptTag} className={cx(j.isNew && s.isNew, j.exploredAgain && s.again)}>
-                      <span className={s.icon} aria-hidden="true">
-                        {conceptIcon(j.conceptTag)}
-                      </span>
+                      <span className={s.icon} aria-hidden="true">{conceptIcon(j.conceptTag)}</span>
                       {conceptLabel(j.conceptTag)}
-                      {j.isNew && <span className={s.srOnly}> (new)</span>}
-                      {j.exploredAgain && <span className={s.srOnly}> (explored again)</span>}
                     </li>
                   ))}
                 </ul>
-              ) : (
-                <p className={s.muted}>Your adventures will appear here.</p>
-              )}
-            </section>
+              </section>
+            )}
           </>
         )}
       </main>

@@ -56,10 +56,63 @@ export default function Progress({ user }: { user: unknown }) {
   if (!data) return <LearnShell user={user} title="Progress">{error || err ? <ErrorNote error={error || err} /> : <Loading />}</LearnShell>;
   const max = Math.max(1, ...data.weeklyRhythm.map((w) => w.sessions));
   const name = data.child.nickname;
+  const totalMinutes = data.weeklyRhythm.reduce((acc, w) => acc + w.sessions * 20, 0);
+  const totalHours = Math.round(totalMinutes / 60);
+  const totalLessons = data.weeklyRhythm.reduce((acc, w) => acc + w.sessions, 0);
+  const streakWeeks = data.weeklyRhythm.filter((w) => w.sessions > 0).length;
+
+  // Group concepts by subject (using prefix of conceptTag)
+  const subjectGroups: Record<string, typeof data.conceptMap> = {};
+  data.conceptMap.forEach((c) => {
+    const subj = c.conceptTag.includes("math") || c.conceptTag.includes("number") || c.conceptTag.includes("fraction") || c.conceptTag.includes("time") ? "Math" : "Science";
+    if (!subjectGroups[subj]) subjectGroups[subj] = [];
+    subjectGroups[subj].push(c);
+  });
 
   return (
     <LearnShell user={user} title={`${name}'s progress`}>
       <ErrorNote error={err} />
+
+      {/* Portfolio CTA */}
+      <div className={s.portfolioCta}>
+        <div>
+          <h3>Portfolio &amp; Report</h3>
+          <p>Download a full learning portfolio to share with anyone who needs a record.</p>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button className={s.btn} style={{ background: "#fff", color: "#286bad", borderColor: "#fff" }} onClick={() => window.print()}>
+            Download report
+          </button>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div className={s.statRow} style={{ marginBottom: 20 }}>
+        <div className={s.statBox}><span className={s.statNum}>{totalHours}h</span><span className={s.statLabel}>Total learning time</span></div>
+        <div className={s.statBox}><span className={s.statNum}>{totalLessons}</span><span className={s.statLabel}>Lessons done</span></div>
+        <div className={s.statBox}><span className={s.statNum}>{streakWeeks}</span><span className={s.statLabel}>Active weeks</span></div>
+        <div className={s.statBox}><span className={s.statNum}>{data.conceptMap.filter(c => c.status === "confident").length}</span><span className={s.statLabel}>Concepts confident</span></div>
+      </div>
+
+      {/* Mastery map */}
+      {data.conceptMap.length > 0 && (
+        <section className={s.card} aria-labelledby="mastery-h" style={{ marginBottom: 20 }}>
+          <h2 id="mastery-h">Mastery map</h2>
+          {Object.entries(subjectGroups).map(([subj, concepts]) => (
+            <div key={subj} style={{ marginBottom: 16 }}>
+              <p style={{ fontWeight: 700, marginBottom: 8 }}>{subj}</p>
+              <div className={s.masteryGrid}>
+                {concepts.map((c) => (
+                  <div key={c.conceptTag} className={`${s.masteryCell} ${s[c.status]}`} title={c.explanation}>
+                    {conceptLabel(c.conceptTag)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+      )}
+
       <div className={s.pageHead}>
         <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
           <Avatar avatarKey={data.child.avatarKey} large label={name} />

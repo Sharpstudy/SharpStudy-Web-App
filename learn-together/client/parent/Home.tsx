@@ -25,6 +25,18 @@ interface HomeState {
   pendingApprovals: PendingApproval[];
 }
 
+const GREETING = () => {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+};
+
+const TODAY_LABEL = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+
+const WEEK_SUBJECTS = ["Math", "Reading", "Science"];
+const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+
 // Pre-selects a child in the launch dialog without putting any child id in the URL.
 export function rememberPreselect(childId: string) {
   try {
@@ -85,14 +97,61 @@ export default function Home({ user }: { user: unknown }) {
             <ApprovalPrompt key={p.requestId} request={p} onResolved={live.refresh} />
           ))}
 
+          {/* Greeting + streak */}
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 20 }}>
+            <div>
+              <h1 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 4px" }}>
+                {GREETING()}, {me?.user.firstName}
+              </h1>
+              <p className={s.muted}>{TODAY_LABEL}</p>
+            </div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span className={s.streakBadge}>🔥 {home.children[0] ? "Keep going!" : "Start your streak"}</span>
+              {firstRec && <span className={s.streakBadge} style={{ background: "#e8f2fc", borderColor: "#286bad", color: "#1d5287" }}>⚡ Daily Spark due</span>}
+            </div>
+          </div>
+
+          {/* Daily Spark card */}
+          {firstRec && (
+            <div className={s.sparkCard}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+                <div>
+                  <h3>⚡ Today&apos;s Daily Spark</h3>
+                  <p>{firstRec.title}</p>
+                  <p className={s.muted} style={{ fontSize: 13, marginTop: 4 }}>{firstRec.reason}</p>
+                </div>
+                <Link href={`/learn/activity/${firstRec.slug}${firstRec.durationMode === "short" ? "?short=1" : ""}`}>
+                  <a className={`${s.btn} ${s.btnSmall}`}>{t("home.cta")}</a>
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Mini week grid */}
+          <div className={s.card} style={{ marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h2 style={{ margin: 0, fontSize: 18 }}>This week</h2>
+              <Link href="/learn/week"><a className={`${s.btnGhost} ${s.btnSmall}`}>View full week ›</a></Link>
+            </div>
+            <div className={s.miniWeek}>
+              <div />
+              {WEEK_DAYS.map((d) => <div key={d} className={s.dayLabel}>{d}</div>)}
+              {WEEK_SUBJECTS.map((subj) => (
+                <React.Fragment key={subj}>
+                  <div className={s.subjectLabel}>{subj}</div>
+                  {[1,2,3,4,5].map((day) => (
+                    <div key={day} className={s.miniCell} />
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+
           <section className={s.hero} aria-labelledby="lt-hero">
-            <h1 id="lt-hero" style={{ fontSize: 30, marginBottom: 8 }}>
-              Learn together, {me?.user.firstName}
+            <h1 id="lt-hero" style={{ fontSize: 24, marginBottom: 8 }}>
+              Your children
             </h1>
             <p style={{ maxWidth: 560 }}>Short, practical activities you guide and your child explores. No prep beyond things you already have at home.</p>
-            <Link href={firstRec ? `/learn/activity/${firstRec.slug}${firstRec.durationMode === "short" ? "?short=1" : ""}` : "/learn/explore?maxMinutes=10"}>
-              <a className={s.btn}>{t("home.cta")}</a>
-            </Link>
           </section>
 
           {home.openGroups.length > 0 && (
