@@ -13,6 +13,10 @@ const ICON = {
 	live_session_rescheduled: "ri-calendar-event-line",
 	live_session_cancelled: "ri-calendar-close-line",
 	live_session_reminder: "ri-alarm-line",
+	student_removal_requested: "ri-user-unfollow-line",
+	student_removal_approved: "ri-user-unfollow-line",
+	student_removal_rejected: "ri-user-unfollow-line",
+	student_link_removed: "ri-user-unfollow-line",
 };
 
 // The signed-in user's own notifications (live-session assignments, changes, reminders).

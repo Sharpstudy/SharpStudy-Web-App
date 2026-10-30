@@ -128,6 +128,11 @@ const Index = ({ user }) => {
 											<a className="active">Admins</a>
 										</Link>
 									</li>
+									<li>
+										<Link href="/admin/students/removal-requests/">
+											<a>Removal requests</a>
+										</Link>
+									</li>
 								</ul>
 								{loading ? (
 									<GeneralLoader />

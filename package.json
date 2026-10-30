@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"test": "node --test \"tests/mastery/*.test.mjs\" \"tests/live-questions/*.test.mjs\" \"tests/live-sessions/*.test.mjs\" \"tests/nav/*.test.mjs\" \"tests/payments/*.test.mjs\" \"tests/jitsi/*.test.mjs\" \"tests/meetings/*.test.mjs\" \"tests/instructor/*.test.mjs\"",
+		"test": "node --test \"tests/mastery/*.test.mjs\" \"tests/live-questions/*.test.mjs\" \"tests/live-sessions/*.test.mjs\" \"tests/nav/*.test.mjs\" \"tests/payments/*.test.mjs\" \"tests/jitsi/*.test.mjs\" \"tests/meetings/*.test.mjs\" \"tests/instructor/*.test.mjs\" \"tests/removals/*.test.mjs\"",
 		"check:email": "env-cmd node scripts/check-email.mjs",
 		"test:e2e": "node tests/e2e/mastery.e2e.mjs",
 		"model:generate": "env-cmd sequelize-cli model:generate",

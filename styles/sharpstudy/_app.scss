@@ -456,6 +456,7 @@
 .ss-text-danger { --_fg: var(--ss-danger); --_bg-hover: var(--ss-danger-50); }
 .ss-menu__item.is-danger { color: var(--ss-danger); i { color: var(--ss-danger); } }
 .ss-action-menu .ss-menu__panel { width: 220px; }
+.ss-menu__item[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; &:hover, &:focus-visible { background: transparent; } }
 .ss-asset {
 	&__thumb {
 		flex-shrink: 0;

@@ -5,7 +5,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { EmptyState, StatTile, ProgressBar } from "@/components/ui";
+import { EmptyState, StatTile, ProgressBar, Badge as UiBadge } from "@/components/ui";
+import ActionMenu from "@/components/ui/ActionMenu";
+import RemovalRequestDialog from "@/components/Instructor/RemovalRequestDialog";
+import RemovalRequestsPanel from "@/components/Instructor/RemovalRequestsPanel";
 import { api } from "@/lib/mastery-client/api";
 import { GRADES } from "@/lib/mastery/profile";
 import LearnerForm, { ProfileFields, profilePayload, SUBJECT_OPTIONS } from "@/components/Mastery/LearnerForm";
@@ -293,6 +296,8 @@ const StudentDirectory = () => {
 	const [open, setOpen] = useState(null);
 	const [selected, setSelected] = useState([]);
 	const [assigning, setAssigning] = useState(null);
+	const [removing, setRemoving] = useState(null); // the row a removal request is being written for
+	const [requests, setRequests] = useState(null); // this instructor's own removal requests (newest first)
 	const timer = useRef(null);
 	const reqId = useRef(0);
 
@@ -310,6 +315,13 @@ const StudentDirectory = () => {
 			.catch((e) => id === reqId.current && setError(msg(e)))
 			.finally(() => id === reqId.current && setLoading(false));
 	}, [f, page]);
+	const loadRequests = useCallback(() => {
+		// Requests are optional extras: a failure (or the feature not being set up yet) must never hide the directory.
+		axios.get("/api/instructor/student-removals").then((r) => setRequests(r.data.requests)).catch(() => setRequests([]));
+	}, []);
+	useEffect(() => {
+		loadRequests();
+	}, [loadRequests]);
 	useEffect(() => {
 		clearTimeout(timer.current);
 		timer.current = setTimeout(load, f.q ? 250 : 0);
@@ -325,6 +337,25 @@ const StudentDirectory = () => {
 	const toggle = (key) => setSelected((s) => (s.includes(key) ? s.filter((x) => x !== key) : [...s, key]));
 	const chosen = rows.filter((r) => selected.includes(r.key) && r.canAssign);
 	const openRow = open && (rows.find((r) => r.key === open) || null);
+	// newest request per learner (the API returns newest first)
+	const latest = new Map();
+	for (const r of requests || []) if (r.learnerId && !latest.has(r.learnerId)) latest.set(r.learnerId, r);
+	const menuFor = (s) => {
+		const req = s.learnerId ? latest.get(s.learnerId) : null;
+		const items = [{ label: "View Details", icon: "ri-eye-line", onClick: () => setOpen(s.key) }];
+		if (s.canAssign) items.push({ label: "Assign Worksheet", icon: "ri-file-list-3-line", onClick: () => setAssigning([s]) });
+		if (req && req.status === "pending") items.push({ label: "Removal pending approval", icon: "ri-time-line", disabled: true, hint: "An administrator has not decided yet." });
+		else if (s.removal && s.removal.allowed) items.push({ label: "Request Removal", icon: "ri-user-unfollow-line", danger: true, onClick: () => setRemoving(s) });
+		else items.push({ label: "Request Removal", icon: "ri-user-unfollow-line", disabled: true, hint: (s.removal && s.removal.reason) || "Not available for this student." });
+		return items;
+	};
+	const removalBadge = (s) => {
+		const req = s.learnerId ? latest.get(s.learnerId) : null;
+		if (!req) return null;
+		if (req.status === "pending") return <div><UiBadge tone="warning">Pending approval</UiBadge></div>;
+		if (req.status === "rejected") return <div title={req.decisionNote || undefined}><UiBadge tone="danger">Removal rejected</UiBadge></div>;
+		return null;
+	};
 
 	const assignStudents = (list) => ({
 		list: list.map((r) => ({ id: r.learnerId, displayName: r.name, avatar: r.avatar || "🙂", grade: r.grade, gradeLabel: r.gradeLabel, subjects: r.subjects })),
@@ -413,6 +444,16 @@ const StudentDirectory = () => {
 			)}
 
 			{openRow && <Detail key={openRow.key} row={openRow} onClose={() => setOpen(null)} onChanged={load} onAssign={setAssigning} />}
+			{removing && (
+				<RemovalRequestDialog
+					student={removing}
+					onClose={() => setRemoving(null)}
+					onDone={() => {
+						setRemoving(null);
+						loadRequests();
+					}}
+				/>
+			)}
 
 			{chosen.length > 0 && (
 				<div className="sd-bulk" role="region" aria-label="Selected students">
@@ -454,7 +495,7 @@ const StudentDirectory = () => {
 											<input type="checkbox" disabled={!s.canAssign} checked={selected.includes(s.key)} onChange={() => toggle(s.key)} aria-label={s.canAssign ? `Select ${s.name}` : `${s.name} cannot be assigned work yet`} />
 										</td>
 										<td className="sd-col-student">
-											<div className="sd-who"><Avatar s={s} /><div className="sd-who__text"><strong className="sd-name">{s.name}</strong>{s.email && <span className="sd-email"><Email value={s.email} /></span>}</div></div>
+											<div className="sd-who"><Avatar s={s} /><div className="sd-who__text"><strong className="sd-name">{s.name}</strong>{s.email && <span className="sd-email"><Email value={s.email} /></span>}{removalBadge(s)}</div></div>
 										</td>
 										<td className="sd-col-grade">{s.gradeLabel || <span className="ss-muted">–</span>}{s.age != null && <span className="ss-muted"> · {s.age}y</span>}</td>
 										<td className="sd-col-subjects">{s.subjects.length ? s.subjects.map(subjectName).join(", ") : <span className="ss-muted">–</span>}</td>
@@ -467,6 +508,7 @@ const StudentDirectory = () => {
 										<td className="sd-col-actions sd-actions">
 											<button type="button" className="ss-btn ss-btn--secondary ss-btn--sm" aria-expanded={open === s.key} onClick={() => setOpen(open === s.key ? null : s.key)}>View details</button>
 											{s.canAssign ? <button type="button" className="ss-btn ss-btn--sm" onClick={() => setAssigning([s])}>Assign worksheet</button> : s.profileState === "needs_profile" ? <button type="button" className="ss-btn ss-btn--secondary ss-btn--sm" onClick={() => setOpen(s.key)}>Set up profile</button> : null}
+											<ActionMenu label={`More actions for ${s.name}`} items={menuFor(s)} />
 										</td>
 									</tr>
 								))}
@@ -477,7 +519,7 @@ const StudentDirectory = () => {
 					<ul className="sd-cards">
 						{rows.map((s) => (
 							<li key={s.key} className="ml-card">
-								<div className="sd-who"><Avatar s={s} /><div className="sd-who__text"><strong className="sd-name">{s.name}</strong>{s.email && <span className="sd-email"><Email value={s.email} /></span>}</div></div>
+								<div className="sd-who"><Avatar s={s} /><div className="sd-who__text"><strong className="sd-name">{s.name}</strong>{s.email && <span className="sd-email"><Email value={s.email} /></span>}{removalBadge(s)}</div></div>
 								<p className="ml-small">{s.gradeLabel || "Grade not set"}{s.age != null ? ` · age ${s.age}` : ""} · {s.subjects.length ? s.subjects.map(subjectName).join(", ") : "no subjects"}</p>
 								<p className="sd-badges"><CourseBadges courses={s.courses} /></p>
 								<p><Badge status={s.status} /> {s.counts.assigned > 0 && <span className="ml-small">{s.counts.completed}/{s.counts.assigned} done</span>}</p>
@@ -486,6 +528,7 @@ const StudentDirectory = () => {
 									{s.canAssign && <label className="ml-check-row"><input type="checkbox" checked={selected.includes(s.key)} onChange={() => toggle(s.key)} /> Select</label>}
 									<button type="button" className="ss-btn ss-btn--secondary ss-btn--sm" onClick={() => setOpen(open === s.key ? null : s.key)}>View details</button>
 									{s.canAssign && <button type="button" className="ss-btn ss-btn--sm" onClick={() => setAssigning([s])}>Assign worksheet</button>}
+									<ActionMenu label={`More actions for ${s.name}`} items={menuFor(s)} />
 								</div>
 							</li>
 						))}
@@ -500,6 +543,8 @@ const StudentDirectory = () => {
 					<button type="button" className="ss-btn ss-btn--ghost ss-btn--sm" disabled={page >= data.pages} onClick={() => setPage(page + 1)}>Next</button>
 				</nav>
 			)}
+
+			<RemovalRequestsPanel requests={requests} />
 		</div>
 	);
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 // Small click/keyboard "more actions" menu. items: [{ label, icon, href } |
-// { label, icon, onClick, danger }]
+// { label, icon, onClick, danger, disabled, hint }]
 const ActionMenu = ({ label = "More actions", items }) => {
 	const [open, setOpen] = useState(false);
 	const ref = useRef(null);
@@ -47,7 +47,11 @@ const ActionMenu = ({ label = "More actions", items }) => {
 								type="button"
 								role="menuitem"
 								className={`ss-menu__item${it.danger ? " is-danger" : ""}`}
+								// a disabled item stays focusable (aria-disabled) so its reason can be read, but does nothing
+								aria-disabled={it.disabled ? "true" : undefined}
+								title={it.hint || undefined}
 								onClick={() => {
+									if (it.disabled) return;
 									setOpen(false);
 									it.onClick();
 								}}
