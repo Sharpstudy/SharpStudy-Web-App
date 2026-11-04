@@ -25,7 +25,11 @@ const userSignup = async (req, res) => {
   // Each signup sends an e-mail and creates a row: limit per client address.
   if (!rateLimit(req, res, "signup", { windowMs: 60 * 60 * 1000, max: 20 })) return;
   const confirmToken = uuidv4();
-  let { first_name, last_name, email, password } = req.body;
+  let { first_name, last_name, email, password, next } = req.body || {};
+  // Missing / non-string fields are validation failures (422 below), not a thrown validator error (400).
+  [first_name, last_name, email, password] = [first_name, last_name, email, password].map((v) =>
+    typeof v === "string" ? v : ""
+  );
   try {
     if (!isLength(first_name, { min: 3 })) {
       return res.status(422).json({
@@ -70,7 +74,7 @@ const userSignup = async (req, res) => {
       reset_password_send_at: Date.now(),
     });
 
-    confirmEmailAddress(newUser);
+    confirmEmailAddress(newUser, next);
     const edmy_users_token = jwt.sign(
       {
         userId: newUser.id,

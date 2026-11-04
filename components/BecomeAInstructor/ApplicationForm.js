@@ -177,7 +177,7 @@ const ApplicationForm = ({ user }) => {
 	const noEmail = !data.email_confirmed;
 	const resendConfirmation = async () => {
 		try {
-			const r = await axios.post("/api/users/send-confirmation-email", { email: data.prefill.email });
+			const r = await axios.post("/api/users/send-confirmation-email", { email: data.prefill.email, next: "/become-an-instructor/" });
 			toast.success(r.data.message || "Please check your email and confirm.");
 		} catch (err) {
 			toast.error(msg(err));

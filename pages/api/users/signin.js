@@ -4,6 +4,7 @@ import isEmail from "validator/lib/isEmail";
 
 import User from "database/models/user";
 import masteryRepo from "@/lib/mastery-server/repo";
+import { accountIsActive } from "@/lib/auth/accountState";
 
 // Mastery Ladder audit trail. Never blocks or alters the login response.
 const auditLogin = (action, userId, req) =>
@@ -51,7 +52,7 @@ const userSignin = async (req, res) => {
 			});
 		}
 
-		if (!user.status) {
+		if (!accountIsActive(user)) {
 			return res.status(404).json({
 				message:
 					"This account is temporarily disabled, please contact the support email",

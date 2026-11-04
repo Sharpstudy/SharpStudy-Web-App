@@ -42,7 +42,7 @@ const submitted = async (ctx, id = "ann", extra) => {
 
 test("signup never reads a role from the request and the model defaults to student", () => {
 	const src = readFileSync(new URL("../../pages/api/users/signup.js", import.meta.url), "utf8");
-	assert.match(src, /let \{ first_name, last_name, email, password \} = req\.body;/);
+	assert.match(src, /let \{ first_name, last_name, email, password, next \} = req\.body \|\| \{\};/);
 	const create = src.slice(src.indexOf("User.create("), src.indexOf("});", src.indexOf("User.create(")));
 	assert.doesNotMatch(create, /role|instructor/);
 	assert.match(readFileSync(new URL("../../database/models/user.js", import.meta.url), "utf8"), /defaultValue: "student"/);

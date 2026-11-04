@@ -6,6 +6,8 @@
 let seq = 0;
 const id = () => `id-${++seq}-${Math.random().toString(36).slice(2, 8)}`;
 const clone = (x) => (x == null ? x : JSON.parse(JSON.stringify(x)));
+// users.status is `tinyint(1) DEFAULT 1`: a row that never set it reads back as active (an explicit false/0/null is kept).
+const userRow = (u) => (u ? { status: true, ...clone(u) } : null);
 
 export function createMemoryRepo() {
 	const db = {
@@ -30,13 +32,13 @@ export function createMemoryRepo() {
 		_db: db,
 		// users
 		async getUserWithPassword(uid) {
-			return clone(db.users.find((u) => u.id === uid)) || null;
+			return userRow(db.users.find((u) => u.id === uid));
 		},
 		async getUser(uid) {
-			return clone(db.users.find((u) => u.id === uid)) || null;
+			return userRow(db.users.find((u) => u.id === uid));
 		},
 		async findUserByEmail(email) {
-			return clone(db.users.find((u) => u.email === email)) || null;
+			return userRow(db.users.find((u) => u.email === email));
 		},
 		async listUsers({ q = "" } = {}) {
 			const rows = db.users.filter((u) => !q || u.email.includes(q)).map(clone);
@@ -182,7 +184,7 @@ export function createMemoryRepo() {
 			return (db.courseEnrolments || []).filter((e) => courseIds.includes(e.courseId) && e.status === "paid").map(clone);
 		},
 		async getUsersByIds(ids) {
-			return db.users.filter((u) => ids.includes(u.id)).map(clone);
+			return db.users.filter((u) => ids.includes(u.id)).map(userRow);
 		},
 		async lessonStats(courseIds, userIds) {
 			const totals = {};

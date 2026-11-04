@@ -7,11 +7,15 @@ import axios from "axios";
 import baseUrl from "@/utils/baseUrl";
 import GeneralLoader from "@/utils/GeneralLoader";
 import { parseCookies } from "nookies";
+import AccountFilters, { filterAccounts } from "@/components/Admin/AccountFilters";
+import useAccountManager from "@/components/Admin/useAccountManager";
 
 const Index = ({ user }) => {
 	const { edmy_users_token } = parseCookies();
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [q, setQ] = useState("");
+	const [statusFilter, setStatusFilter] = useState("");
 
 	const fetchData = async () => {
 		setLoading(true);
@@ -44,6 +48,9 @@ const Index = ({ user }) => {
 	useEffect(() => {
 		fetchData();
 	}, []);
+
+	const { itemsFor, dialogs } = useAccountManager(fetchData);
+	const visible = filterAccounts(users, q, statusFilter);
 
 	const handleAdmin = async (userId) => {
 		try {
@@ -113,6 +120,7 @@ const Index = ({ user }) => {
 										</Link>
 									</li>
 								</ul>
+								<AccountFilters q={q} status={statusFilter} onQ={setQ} onStatus={setStatusFilter} />
 								{loading ? (
 									<GeneralLoader />
 								) : (
@@ -126,19 +134,21 @@ const Index = ({ user }) => {
 													<th scope="col">
 														Email Confirmed
 													</th>
+													<th scope="col">Status</th>
 													<th scope="col">Text</th>
 													<th scope="col">
 														Make Admin
 													</th>
-													{/* <th scope="col">Action</th> */}
+													<th scope="col">Actions</th>
 												</tr>
 											</thead>
 											<tbody>
-												{users.length > 0 ? (
-													users.map((user) => (
+												{visible.length > 0 ? (
+													visible.map((user) => (
 														<StudentsRaw
 															key={user.id}
 															{...user}
+															menuItems={itemsFor(user)}
 															onAdmin={() =>
 																handleAdmin(
 																	user.id
@@ -149,10 +159,10 @@ const Index = ({ user }) => {
 												) : (
 													<tr>
 														<td
-															colSpan="7"
+															colSpan="8"
 															className="text-center py-4 ss-muted"
 														>
-															Nothing here yet.
+															{users.length ? "No students match your search." : "Nothing here yet."}
 														</td>
 													</tr>
 												)}
@@ -193,6 +203,7 @@ const Index = ({ user }) => {
 										</a>
 									</div>
 								</div> */}
+				{dialogs}
 			</AdminLayout>
 		</>
 	);

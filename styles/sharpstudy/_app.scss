@@ -455,8 +455,18 @@
 .ss-subhead { font-size: var(--ss-fs-lg); margin: var(--ss-space-8) 0 var(--ss-space-4); }
 .ss-text-danger { --_fg: var(--ss-danger); --_bg-hover: var(--ss-danger-50); }
 .ss-menu__item.is-danger { color: var(--ss-danger); i { color: var(--ss-danger); } }
-.ss-action-menu .ss-menu__panel { width: 220px; }
+/* Rendered in a portal on <body> (see components/ui/ActionMenu.js): fixed, so no table/overflow ancestor can clip it. */
 .ss-menu__item[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; &:hover, &:focus-visible { background: transparent; } }
+.ss-menu__panel--floating {
+	position: fixed;
+	right: auto;
+	z-index: 2000; /* above the sticky nav and drawers (<=1050), below confirmation dialogs (3000) */
+	margin: 0;
+	width: 220px;
+	max-width: calc(100vw - 16px);
+	overflow-y: auto;
+	animation: none;
+}
 .ss-asset {
 	&__thumb {
 		flex-shrink: 0;
@@ -496,6 +506,16 @@
 	span { display: flex; flex-direction: column; min-width: 0; }
 	small { color: var(--ss-muted); font-size: var(--ss-fs-sm); }
 	&:hover { color: var(--ss-ink); }
+}
+// Sub-links of an expandable sidebar group (Admin > Telecallers): indented under their group on large screens, and plain
+// extra pills in the horizontal row on small ones.
+.ss-dash__nav a.ss-dash__sub {
+	i { font-size: 16px; }
+	@include up($bp-lg) {
+		margin-left: 18px;
+		min-height: 36px;
+		font-size: var(--ss-fs-xs);
+	}
 }
 .ss-dash--admin {
 	.table-responsive { margin-bottom: var(--ss-space-6); }

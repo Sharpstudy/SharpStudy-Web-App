@@ -22,13 +22,13 @@ test("student dashboard navigation: no instructor-only links", () => {
 	assert.deepEqual(m.primary.map((l) => l.label), ["My Learning", "Mastery Ladder", "Family", "Browse Courses", "Purchases"]);
 	const hrefs = all(m);
 	for (const bad of ["/instructor/courses", "/instructor/course/create", "/admin"]) assert.ok(!hrefs.includes(bad), `student must not get ${bad}`);
-	assert.deepEqual(m.account.map((l) => l.label), ["Wishlist", "Account Settings"]);
+	assert.deepEqual(m.account.map((l) => l.label), ["My Books", "Browse Books", "Wishlist", "Account Settings"]);
 });
 
 test("instructor keeps course management; account section holds only what primary lacks", () => {
 	const m = navModel(u("instructor"), "/family");
 	assert.deepEqual(m.primary.map((l) => l.label), ["Dashboard", "My Courses", "Create Course", "Mastery Ladder", "Learners", "Browse Courses"]);
-	assert.deepEqual(m.account.map((l) => l.label), ["Students", "Teaching Profile", "My Learning", "Purchases", "Wishlist", "Account Settings"]);
+	assert.deepEqual(m.account.map((l) => l.label), ["Students", "Teaching Profile", "My Learning", "My Books", "Browse Books", "Purchases", "Wishlist", "Account Settings"]);
 });
 
 test("a student with an instructor application sees its status page but no instructor tools", () => {

@@ -5,24 +5,35 @@ import toast from "react-hot-toast";
 import InstructorLayout from "@/components/Instructor/InstructorLayout";
 import { Field } from "@/components/ui/Form";
 import { Button } from "@/components/ui";
+import { normalizePhone, PHONE_HINT, PHONE_MAX_LENGTH } from "@/lib/phone";
 
 // Your own teaching profile (the API only ever edits the signed-in account).
 const Profile = ({ user }) => {
 	const [p, setP] = useState(null);
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState("");
+	const [phoneError, setPhoneError] = useState("");
 	useEffect(() => {
 		axios.get("/api/instructor/profile").then((r) => setP(r.data.profile)).catch((e) => setError((e.response && e.response.data && e.response.data.message) || "Could not load your profile."));
 	}, []);
 	const bind = (k) => ({ value: (p && p[k]) || "", onChange: (e) => setP((x) => ({ ...x, [k]: e.target.value })) });
 	const save = async (e) => {
 		e.preventDefault();
+		// the server validates again; this only gives instant feedback
+		const phone = normalizePhone(p.phone);
+		if (!phone.ok) {
+			setPhoneError(phone.error);
+			return;
+		}
+		setPhoneError("");
 		setSaving(true);
 		try {
 			setP((await axios.put("/api/instructor/profile", p)).data.profile);
 			toast.success("Profile saved.");
 		} catch (err) {
-			toast.error((err.response && err.response.data && err.response.data.message) || "Could not save.");
+			const data = err.response && err.response.data;
+			if (data && data.code === "invalid_phone") setPhoneError(data.message);
+			toast.error((data && data.message) || "Could not save.");
 		} finally {
 			setSaving(false);
 		}
@@ -40,6 +51,21 @@ const Profile = ({ user }) => {
 					<div className="ia-grid">
 						<Field label="Professional title" maxLength={120} {...bind("designation")} />
 						<Field label="Location" maxLength={120} {...bind("location")} />
+						<Field
+							label="Phone number"
+							type="tel"
+							inputMode="tel"
+							autoComplete="tel"
+							maxLength={PHONE_MAX_LENGTH}
+							placeholder="+91 98765 43210"
+							hint={PHONE_HINT}
+							error={phoneError}
+							value={(p && p.phone) || ""}
+							onChange={(e) => {
+								setPhoneError("");
+								setP((x) => ({ ...x, phone: e.target.value }));
+							}}
+						/>
 						<Field label="Biography" className="ia-wide"><textarea className="form-control" rows={5} maxLength={3000} {...bind("bio")} /></Field>
 						<Field label="Qualifications" className="ia-wide"><textarea className="form-control" rows={3} maxLength={2000} {...bind("qualifications")} /></Field>
 						<Field label="Teaching subjects" maxLength={300} {...bind("subjects")} />

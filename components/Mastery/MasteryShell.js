@@ -24,7 +24,7 @@ const MasteryShell = ({ user, children, bare, className = "" }) => {
 		{!bare && <Navbar user={user} />}
 		<main className={`ml-shell ${className}`}>{children}</main>
 		{!bare && <Footer />}
-		<FeedbackButton />
+		{!bare && <FeedbackButton />}
 	</>
 	);
 };

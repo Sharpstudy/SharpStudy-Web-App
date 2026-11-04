@@ -146,8 +146,8 @@ const instructorPerks = [
 ];
 
 export const Audiences = () => (
-	<section className="ss-section ss-section--tight" aria-label="For instructors and organisations">
-		<div className="ss-container ss-grid ss-grid--2">
+	<section className="ss-section ss-section--tight" aria-label="For instructors, organisations and telecallers">
+		<div className="ss-container ss-grid ss-grid--3">
 			<div className="ss-card ss-audience">
 				<span className="ss-icon-tile ss-icon-tile--lg ss-icon-tile--info" aria-hidden="true">
 					<i className="ri-slideshow-2-line"></i>
@@ -180,6 +180,19 @@ export const Audiences = () => (
 				</p>
 				<Button href="/schedule-a-call/" variant="light" icon="ri-calendar-line">
 					Talk to our team
+				</Button>
+			</div>
+			<div className="ss-card ss-audience">
+				<span className="ss-icon-tile ss-icon-tile--lg ss-icon-tile--info" aria-hidden="true">
+					<i className="ri-customer-service-2-line"></i>
+				</span>
+				<h2>Become a Telecaller</h2>
+				<p>
+					Join SharpStudy as a telecaller. Connect with customers, coordinate meeting
+					requests and help people discover our services.
+				</p>
+				<Button href="/become-a-telecaller/" variant="soft" iconRight="ri-arrow-right-line">
+					Apply as Telecaller
 				</Button>
 			</div>
 		</div>

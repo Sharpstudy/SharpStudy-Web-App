@@ -7,6 +7,7 @@ import StudentLayout from "@/components/Learning/StudentLayout";
 import CourseSkeletonLoader from "@/utils/CourseSkeletonLoader";
 import { Button, EmptyState } from "@/components/ui";
 import NotificationList from "@/components/Notifications/NotificationList";
+import { ContinueReadingLoader } from "@/components/Books/ContinueReading";
 
 const Index = ({ user }) => {
 	const { edmy_users_token } = parseCookies();
@@ -37,6 +38,7 @@ const Index = ({ user }) => {
 	return (
 		<StudentLayout user={user} section="learning">
 			<NotificationList limit={3} />
+			<ContinueReadingLoader />
 			{loading ? (
 				<CourseSkeletonLoader count={3} />
 			) : enrolments && enrolments.length > 0 ? (

@@ -6,9 +6,13 @@ import GoTop from "@/components/_App/GoTop";
 import { AnimatePresence } from "framer-motion";
 import Modal from "../Modal";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { designMode } from "./designMode";
 import baseUrl from "@/utils/baseUrl";
 
 const Layout = ({ children }) => {
+	const { pathname } = useRouter();
+	const mode = designMode(pathname);
 	const [modalOpen, setModalOpen] = useState();
 	const [modalImage, setModalImage] = useState("");
 
@@ -43,7 +47,8 @@ const Layout = ({ children }) => {
 				/>
 			</Head>
 
-			{children}
+			{/* Playful for readers and visitors, restrained for instructor and admin work (tokens in _tokens.scss). */}
+			<div className={`ss-app ss-mode--${mode}`}>{children}</div>
 			<Script
         strategy="lazyOnload"
         src="https://www.googletagmanager.com/gtag/js?id=G-QQHKTTTD86"

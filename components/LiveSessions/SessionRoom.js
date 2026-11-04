@@ -64,6 +64,28 @@ const SessionRoom = ({ sessionId, backHref, backLabel }) => {
 		}
 	};
 
+	// Google Meet opens in its own tab. The tab is opened synchronously inside the click (so popup
+	// blockers allow it), detached from this page, and pointed at the link only once the server has
+	// re-validated access. The Jitsi iframe and live-question panel are not involved.
+	const joinMeet = async () => {
+		const tab = window.open("about:blank", "_blank");
+		if (tab) tab.opener = null;
+		setBusy(true);
+		setNotice(null);
+		try {
+			const r = await axios.post(api(sessionId, "/join"));
+			if (r.data.provider !== "google_meet" || !/^https:\/\/meet\.google\.com\//.test(r.data.meetingUrl || "")) throw new Error("This session does not have a valid Google Meet link.");
+			if (tab) tab.location.replace(r.data.meetingUrl);
+			else setNotice("Your browser blocked the new tab. Allow pop-ups for this site and try again.");
+		} catch (e) {
+			if (tab) tab.close();
+			setNotice(errMessage(e));
+		} finally {
+			setBusy(false);
+			load();
+		}
+	};
+
 	const act = async (action, extra = {}) => {
 		setBusy(true);
 		setNotice(null);
@@ -130,9 +152,12 @@ const SessionRoom = ({ sessionId, backHref, backLabel }) => {
 					</div>
 				</>
 			) : (
-				<JoinPanel session={session} instructor={instructor} canEnter={canEnter} busy={busy} onJoin={join} />
+				<JoinPanel session={session} instructor={instructor} canEnter={canEnter} busy={busy} onJoin={session.provider === "google_meet" ? joinMeet : join} />
 			)}
 
+			{instructor && !room && session.provider === "google_meet" && session.status === "live" && (
+				<p><Button size="sm" disabled={busy} onClick={() => window.confirm("End this session for everyone?") && act("end")}>End session</Button></p>
+			)}
 			{instructor && !room && <InstructorTools session={session} busy={busy} act={act} />}
 			{instructor && <Roster session={session} />}
 			{!instructor && session.status === "completed" && <MyAttendance session={session} />}
@@ -148,6 +173,7 @@ const JoinPanel = ({ session, instructor, canEnter, busy, onJoin }) => {
 	else if (!canEnter) hint = `${instructor ? "You can start" : "You can join"} from ${new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(session.joinOpensAt))}.`;
 	else if (!instructor && session.status === "scheduled") hint = "Your instructor has not started yet. You can enter and wait.";
 	const done = session.status === "cancelled" || session.status === "completed";
+	const meet = session.provider === "google_meet";
 	return (
 		<div className="ss-card ss-session__join">
 			{hint && <p className="ss-muted" role="status">{hint}</p>}
@@ -170,9 +196,24 @@ const InstructorTools = ({ session, busy, act }) => {
 		durationMin: Math.round((new Date(session.endAt) - start) / 60000),
 		timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 	});
-	if (session.status !== "scheduled") return null;
+	const [pv, setPv] = useState({ provider: session.provider || "jitsi", meetingUrl: session.meetingUrl || "" });
+	if (session.status !== "scheduled" && session.status !== "live") return null;
+	const providerForm = (
+		<form
+			className="ss-session__form"
+			onSubmit={(e) => {
+				e.preventDefault();
+				act("set_provider", pv);
+			}}
+		>
+			<ProviderFields provider={pv.provider} meetingUrl={pv.meetingUrl} onChange={(patch) => setPv({ ...pv, ...patch })} idPrefix="sp" />
+			<Button type="submit" size="sm" disabled={busy}>Save video provider</Button>
+		</form>
+	);
+	if (session.status === "live") return <div className="ss-card ss-session__tools">{providerForm}</div>;
 	return (
 		<div className="ss-card ss-session__tools">
+			{providerForm}
 			<div className="ss-session__actions">
 				<Button variant="ghost" size="sm" onClick={() => setOpen(!open)} aria-expanded={open}>Reschedule</Button>
 				<Button variant="ghost" size="sm" disabled={busy} onClick={() => window.confirm("Cancel this session? Booked students will see it as cancelled.") && act("cancel")}>Cancel session</Button>
@@ -201,6 +242,23 @@ export const Field = ({ label, id, children }) => (
 		<label className="form-label" htmlFor={id}>{label}</label>
 		{children}
 	</div>
+);
+
+// Jitsi stays the default; Google Meet is an optional manual link (no Google sign-in involved).
+export const ProviderFields = ({ provider, meetingUrl, onChange, idPrefix }) => (
+	<>
+		<Field label="Video provider" id={`${idPrefix}-provider`}>
+			<select id={`${idPrefix}-provider`} className="form-control" value={provider} onChange={(e) => onChange({ provider: e.target.value })}>
+				<option value="jitsi">Jitsi (built in)</option>
+				<option value="google_meet">Google Meet (paste a link)</option>
+			</select>
+		</Field>
+		{provider === "google_meet" && (
+			<Field label="Google Meet link" id={`${idPrefix}-meet`}>
+				<input id={`${idPrefix}-meet`} type="url" className="form-control" required placeholder="https://meet.google.com/abc-defg-hij" pattern="https://meet\.google\.com/[a-z]{3}-[a-z]{4}-[a-z]{3}" maxLength={200} value={meetingUrl} onChange={(e) => onChange({ meetingUrl: e.target.value })} />
+			</Field>
+		)}
+	</>
 );
 
 const Roster = ({ session }) => (

@@ -12,7 +12,8 @@ const INITIAL_USER = {
 	password: "",
 };
 
-const LoginForm = () => {
+// asParent: returning parents land on /family/ (their Progress page; a safe ?next= still wins).
+const LoginForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -35,7 +36,7 @@ const LoginForm = () => {
 			const url = `${baseUrl}/api/users/signin`;
 			const payload = { ...user };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
+			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
 			toast.success(response.data.message, {
 				style: {
 					border: "1px solid #4BB543",

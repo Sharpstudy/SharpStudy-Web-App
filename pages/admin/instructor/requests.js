@@ -238,12 +238,13 @@ const Index = ({ user }) => {
 					<div className="table-responsive">
 						<table className="table align-middle table-hover fs-14">
 							<caption className="visually-hidden">Instructor applications</caption>
-							<thead><tr><th scope="col">Applicant</th><th scope="col">Phone</th><th scope="col">Subjects</th><th scope="col">Experience</th><th scope="col">Submitted</th><th scope="col">Status</th><th scope="col"><span className="visually-hidden">Action</span></th></tr></thead>
+							<thead><tr><th scope="col">Applicant</th><th scope="col">Phone</th><th scope="col">Qualification</th><th scope="col">Subjects</th><th scope="col">Experience</th><th scope="col">Submitted</th><th scope="col">Status</th><th scope="col"><span className="visually-hidden">Action</span></th></tr></thead>
 							<tbody>
 								{list.applications.map((r) => (
 									<tr key={r.id} className={open === r.id ? "table-active" : ""}>
 										<td><strong>{r.name}</strong><br /><span className="ss-muted">{r.email}</span></td>
 										<td>{r.phone || "–"}</td>
+										<td>{r.qualification || "–"}</td>
 										<td>{r.subjects.join(", ") || "–"}</td>
 										<td>{r.has_teaching_experience ? `${r.teaching_years} yr` : "New teacher"}</td>
 										<td>{fmt(r.submitted_at)}</td>

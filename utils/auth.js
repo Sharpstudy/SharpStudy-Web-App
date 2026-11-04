@@ -2,15 +2,26 @@ import cookie from "js-cookie";
 import Router from "next/router";
 import jwt from 'jsonwebtoken';
 import { clearLearnerSession } from "@/lib/mastery-client/api";
+import { safeNextPath } from "@/lib/books/redirect";
 
-export const handleLogin = (t, routeNext) => {
+// `fallback` is where to go when there is no safe `?next=` (parents: /family/setup/ or /family/manage/).
+export const handleLogin = (t, routeNext, fallback = "/") => {
   clearLearnerSession(); // a profile unlocked under a previous login must not follow this one
   cookie.set("edmy_users_token", t);
-  if (routeNext.query && routeNext.query.next) {
-    Router.push(routeNext.query.next);
+  // `next` is user-editable: only same-site relative paths are followed (no open redirect).
+  const next = routeNext.query && safeNextPath(routeNext.query.next);
+  if (next) {
+    Router.push(next);
   } else {
-    Router.push("/");
+    Router.push(safeNextPath(fallback) || "/");
   }
+};
+
+// Parent accounts: same sign-out, then the parent sign-in page (not the public home page).
+export const handleParentLogout = () => {
+  cookie.remove("edmy_users_token");
+  clearLearnerSession();
+  Router.push("/auth?for=family");
 };
 
 export const handleLogout = () => {
@@ -30,7 +41,8 @@ export const redirectUser = (ctx, location) => {
     ctx.res.writeHead(302, { Location: location });
     ctx.res.end();
   } else {
-    Router.push({ pathname: location, query: { next: ctx.pathname } });
+    // A location that already carries its own query (e.g. "/auth?intent=instructor&next=...") is used as given.
+    Router.push(location.includes("?") ? location : { pathname: location, query: { next: ctx.pathname } });
   }
 };
 

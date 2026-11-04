@@ -34,7 +34,8 @@ const Stars = ({ n }) => (
 	</p>
 );
 
-const Results = ({ result, pending, coords, onAgain }) => {
+// `home` / `wsBase`: this page also runs at /learn/worksheet on a paired child device (no site chrome, no account).
+const Results = ({ result, pending, coords, onAgain, home, wsBase }) => {
 	const acc = Math.round((result.correctFirst / result.total) * 100);
 	const overTarget = result.durationMs / 1000 > result.targetSeconds;
 	const next = result.next;
@@ -74,7 +75,7 @@ const Results = ({ result, pending, coords, onAgain }) => {
 			)}
 			<div className="ml-row ml-row--center">
 				{!pending && next && (
-					<Link href={`/study/worksheet/?subject=${coords.subject}&level=${next.levelId}&set=${next.setId}&ws=${next.worksheetNo}`}>
+					<Link href={`${wsBase}?subject=${coords.subject}&level=${next.levelId}&set=${next.setId}&ws=${next.worksheetNo}`}>
 						<a className="ss-btn">
 							{next.worksheetNo === coords.worksheetNo && next.setId === coords.setId ? "Try again" : "Next worksheet"}
 						</a>
@@ -85,8 +86,8 @@ const Results = ({ result, pending, coords, onAgain }) => {
 						Practise again
 					</button>
 				)}
-				<Link href="/study/">
-					<a className="ss-btn ss-btn--ghost">Back to my ladder</a>
+				<Link href={home}>
+					<a className="ss-btn ss-btn--ghost">{home === "/learn/" ? "Back to my journey" : "Back to my ladder"}</a>
 				</Link>
 			</div>
 		</section>
@@ -96,6 +97,9 @@ const Results = ({ result, pending, coords, onAgain }) => {
 const WorksheetPage = ({ user }) => {
 	const router = useRouter();
 	const q = router.query;
+	const childDevice = router.pathname.startsWith("/learn");
+	const home = childDevice ? "/learn/" : "/study/";
+	const wsBase = childDevice ? "/learn/worksheet/" : "/study/worksheet/";
 	// ?assignment=<id>: started from a worksheet an instructor assigned (the server uses the stored assignment, not these values).
 	const coords = q.subject ? { subject: q.subject, levelId: q.level, setId: q.set, worksheetNo: Number(q.ws), ...(q.assignment ? { assignmentId: String(q.assignment) } : {}) } : null;
 
@@ -131,7 +135,7 @@ const WorksheetPage = ({ user }) => {
 		setFeedback(null);
 		setPendingSync(false);
 		if (!getLearnerToken()) {
-			router.replace("/study/");
+			router.replace(home);
 			return;
 		}
 		const active = getActiveLearner();
@@ -173,7 +177,7 @@ const WorksheetPage = ({ user }) => {
 				if (active) offline.saveInProgress(active.id, s);
 			})
 			.catch((e) => {
-				if (e.status === 401) router.replace("/study/");
+				if (e.status === 401) router.replace(home);
 				else setError(e);
 			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -276,11 +280,11 @@ const WorksheetPage = ({ user }) => {
 
 	const abandon = () => {
 		if (learner) offline.clearInProgress(learner.id);
-		router.push("/study/");
+		router.push(home);
 	};
 	const saveAndLeave = () => {
 		if (state) persist({ ...state, elapsedMs: state.elapsedMs + (Date.now() - resumedAt.current) });
-		router.push("/study/");
+		router.push(home);
 	};
 
 	let body;
@@ -289,13 +293,13 @@ const WorksheetPage = ({ user }) => {
 			<div className="ml-card">
 				<h1 className="ml-h2">{error.code === "locked" ? "This worksheet is locked" : "We could not open this worksheet"}</h1>
 				<p>{error.message}</p>
-				<Link href="/study/">
-					<a className="ss-btn">Back to my ladder</a>
+				<Link href={home}>
+					<a className="ss-btn">{childDevice ? "Back to my journey" : "Back to my ladder"}</a>
 				</Link>
 			</div>
 		);
 	} else if (result) {
-		body = <Results result={result} pending={pendingSync} coords={coords} onAgain={() => router.reload()} />;
+		body = <Results result={result} pending={pendingSync} coords={coords} onAgain={() => router.reload()} home={home} wsBase={wsBase} />;
 	} else if (!state) {
 		body = <p className="ml-loading" role="status">Getting your worksheet ready…</p>;
 	} else {
@@ -376,7 +380,7 @@ const WorksheetPage = ({ user }) => {
 	}
 
 	return (
-		<MasteryShell user={user} className="ml-shell--focus">
+		<MasteryShell user={user} bare={childDevice} className="ml-shell--focus">
 			<Head>
 				<title>Worksheet — SharpStudy</title>
 			</Head>

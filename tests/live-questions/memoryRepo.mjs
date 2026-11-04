@@ -33,10 +33,10 @@ export function createLiveRepo() {
 			return db.seats.filter((s) => s.class_id === classId && s.user_id).map((s) => ({ id: s.user_id, name: s.display_name }));
 		},
 		async isEnrolled(userId, courseId) {
-			return db.enrolments.some((e) => e.userId === userId && e.courseId === courseId);
+			return db.enrolments.some((e) => e.userId === userId && e.courseId === courseId && (e.status || "paid") === "paid");
 		},
 		async listEnrolledUsers(courseId) {
-			const ids = [...new Set(db.enrolments.filter((e) => e.courseId === courseId).map((e) => e.userId))];
+			const ids = [...new Set(db.enrolments.filter((e) => e.courseId === courseId && (e.status || "paid") === "paid").map((e) => e.userId))];
 			return ids.map((id) => ({ id, name: (db.users.find((u) => u.id === id) || {}).name || "" }));
 		},
 		async getQuestion(id) {

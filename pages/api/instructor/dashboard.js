@@ -2,7 +2,7 @@ import { Course, Enrolment, Video, Course_Progress } from "@/database/models";
 import { requireRole } from "@/lib/auth/requireRole";
 
 // Approved instructors (and admins) only; role re-read from the database. Everything is
-// scoped to courses OWNED by the caller (userId comes from the verified token).
+// scoped to courses OWNED by the caller and to PAID enrolments (the same students the directory lists) (userId comes from the verified token).
 export default async function handler(req, res) {
 	if (req.method !== "GET") {
 		res.setHeader("Allow", "GET");
@@ -20,8 +20,8 @@ export default async function handler(req, res) {
 		let videos = 0;
 		let completed = 0;
 		if (ids.length) {
-			enrolments = await Enrolment.count({ where: { courseId: ids } });
-			recent = (await Enrolment.findAll({ where: { courseId: ids }, order: [["created_at", "DESC"]], limit: 6, attributes: ["id", "buyer_name", "buyer_avatar", "courseId", "created_at"] })).map((e) => ({ id: e.id, student: e.buyer_name, avatar: e.buyer_avatar, course: (courses.find((c) => c.id === e.courseId) || {}).title || "", at: e.created_at }));
+			enrolments = await Enrolment.count({ where: { courseId: ids, status: "paid" } });
+			recent = (await Enrolment.findAll({ where: { courseId: ids, status: "paid" }, order: [["created_at", "DESC"]], limit: 6, attributes: ["id", "buyer_name", "buyer_avatar", "courseId", "created_at"] })).map((e) => ({ id: e.id, student: e.buyer_name, avatar: e.buyer_avatar, course: (courses.find((c) => c.id === e.courseId) || {}).title || "", at: e.created_at }));
 			videos = await Video.count({ where: { courseId: ids } });
 			completed = await Course_Progress.count({ where: { courseId: ids, finished: true } });
 		}

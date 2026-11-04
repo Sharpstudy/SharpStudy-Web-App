@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 const userConfirmationEmailSend = async (req, res) => {
 	// Each request sends an e-mail: limit per client address.
 	if (!rateLimit(req, res, "send-confirmation", { windowMs: 60 * 60 * 1000, max: 5 })) return;
-	let { email } = req.body || {};
+	let { email, next } = req.body || {};
 	try {
 		if (!isEmail(email)) {
 			return res.status(422).json({
@@ -33,7 +33,7 @@ const userConfirmationEmailSend = async (req, res) => {
 		});
 
 		if (user) {
-			confirmEmailAddress(user);
+			confirmEmailAddress(user, next);
 
 			res.status(200).json({
 				message: "Please check your email and confirm.",

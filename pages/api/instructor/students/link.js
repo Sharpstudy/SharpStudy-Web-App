@@ -1,5 +1,6 @@
 import { apiHandler, getAccountActor, repo, body, clientIp, rateLimit } from "@/lib/mastery-server/http";
 import { ServiceError } from "@/lib/mastery/service";
+import { familyRepo } from "@/lib/family/http";
 import { requireRole } from "@/lib/auth/requireRole";
 import { createStudentProfile, linkStudentProfile, unlinkStudentProfile } from "@/lib/mastery/studentLinks";
 
@@ -17,7 +18,7 @@ export default apiHandler({
 		const ctx = { ip: clientIp(req) };
 		if (b.action === "create") return res.status(201).json(await createStudentProfile(repo, actor, b, ctx));
 		if (b.action === "link") return res.status(200).json(await linkStudentProfile(repo, actor, b, ctx));
-		if (b.action === "unlink") return res.status(200).json(await unlinkStudentProfile(repo, actor, b));
+		if (b.action === "unlink") return res.status(200).json(await unlinkStudentProfile(familyRepo, actor, b));
 		throw new ServiceError(422, "invalid", "Unknown action");
 	},
 });

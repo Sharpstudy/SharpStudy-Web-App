@@ -61,7 +61,7 @@ const TutorPanel = ({ startToken, questionIndex, attempted, tries, lesson }) => 
 						<>
 							<div className="ml-row ml-row--wrap">
 								<button type="button" className="ss-btn ss-btn--secondary ss-btn--sm" disabled={busy} onClick={() => ask("replay")}>
-									<i className="ri-replay-line" aria-hidden="true"></i> Replay lesson
+									<i className="ri-restart-line" aria-hidden="true"></i> Replay lesson
 								</button>
 								<button type="button" className="ss-btn ss-btn--secondary ss-btn--sm" disabled={busy} onClick={() => ask("explain")}>
 									<i className="ri-lightbulb-line" aria-hidden="true"></i> Explain the method

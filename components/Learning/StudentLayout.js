@@ -10,10 +10,16 @@ const sections = {
 		title: "My learning",
 		tabs: [
 			{ href: "/learning/my-courses/", label: "My courses", icon: "ri-book-read-line" },
+			{ href: "/learning/my-books/", label: "My books", icon: "ri-book-2-line" },
 			{ href: "/learning/live/", label: "Live sessions", icon: "ri-live-line" },
 			{ href: "/learning/wishlist/", label: "Wishlist", icon: "ri-heart-3-line" },
 			{ href: "/learning/my-purchase-history/", label: "Purchases", icon: "ri-bank-card-line" },
 		],
+	},
+	family: {
+		title: "Family",
+		description: "Link your parent or guardian so they can follow your learning.",
+		tabs: [],
 	},
 	account: {
 		title: "Account settings",
@@ -46,7 +52,7 @@ const StudentLayout = ({ user, section = "learning", title, description, childre
 					crumbs={[{ href: "/", label: "Home" }, { label: title || cfg.title }]}
 				/>
 				<div className="ss-container ss-container--wide ss-student">
-					<nav className="ss-tabs" aria-label={cfg.title}>
+					{cfg.tabs.length > 0 && <nav className="ss-tabs" aria-label={cfg.title}>
 						{cfg.tabs.map((t) => {
 							const active = norm(pathname) === norm(t.href);
 							return (
@@ -58,7 +64,7 @@ const StudentLayout = ({ user, section = "learning", title, description, childre
 								</Link>
 							);
 						})}
-					</nav>
+					</nav>}
 					{children}
 				</div>
 			</main>

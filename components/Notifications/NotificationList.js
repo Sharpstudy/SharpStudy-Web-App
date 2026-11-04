@@ -11,13 +11,17 @@ const STATE = {
 const ICON = {
 	live_session_assigned: "ri-calendar-check-line",
 	live_session_rescheduled: "ri-calendar-event-line",
-	live_session_cancelled: "ri-calendar-close-line",
+	live_session_cancelled: "ri-calendar-event-line",
 	live_session_reminder: "ri-alarm-line",
 	student_removal_requested: "ri-user-unfollow-line",
 	student_removal_approved: "ri-user-unfollow-line",
 	student_removal_rejected: "ri-user-unfollow-line",
 	student_link_removed: "ri-user-unfollow-line",
+	telecaller_followup: "ri-customer-service-2-line",
 };
+
+// The action label. Live-session notifications keep their original wording; telecaller notifications link to the follow-up / application.
+const linkLabel = (n) => (n.type === "telecaller_followup" ? "Open follow-up" : String(n.type).startsWith("telecaller_") ? "View application" : n.state === "completed" ? "View session" : "Open session");
 
 // The signed-in user's own notifications (live-session assignments, changes, reminders).
 // Renders nothing when there are none or the request fails; it must never get in the way of the page.
@@ -62,7 +66,7 @@ const NotificationList = ({ limit = 5 }) => {
 						<div>
 							<strong>{n.title}</strong> {STATE[n.state] && <span className={`ss-badge ${STATE[n.state].tone ? `ss-badge--${STATE[n.state].tone}` : ""}`}>{STATE[n.state].label}</span>}
 							<p>{n.body.split("\n").map((line, i) => <span key={i}>{line}<br /></span>)}</p>
-							{n.link && n.type !== "live_session_cancelled" && n.state !== "cancelled" && n.state !== "missing" && <Link href={n.link}><a>{n.state === "completed" ? "View session" : "Open session"}</a></Link>}
+							{n.link && n.type !== "live_session_cancelled" && n.state !== "cancelled" && n.state !== "missing" && <Link href={n.link}><a>{linkLabel(n)}</a></Link>}
 						</div>
 					</li>
 				))}

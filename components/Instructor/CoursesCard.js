@@ -22,7 +22,7 @@ const CoursesCard = ({
 			<Link href={viewHref}>
 				<a className="ss-course-card__media" tabIndex={-1} aria-hidden="true">
 					{/* eslint-disable-next-line @next/next/no-img-element */}
-					<img src={image ? image : "/images/courses/courses1.jpg"} alt="" loading="lazy" />
+					<img src={image ? image : "/images/courses/course-1.jpg"} alt="" loading="lazy" />
 				</a>
 			</Link>
 			<span className={`ss-badge ss-course-card__flag ${is_class ? "ss-badge--accent" : "ss-badge--primary"}`}>

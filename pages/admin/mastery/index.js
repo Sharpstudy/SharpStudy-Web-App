@@ -18,7 +18,7 @@ const TABS = [
 	{ id: "roles", label: "Access rights", icon: "ri-shield-user-line", perm: "roles.manage" },
 	{ id: "audit", label: "Audit log", icon: "ri-file-list-3-line", perm: "audit.view" },
 	{ id: "feedback", label: "Feedback", icon: "ri-feedback-line", perm: "feedback.manage" },
-	{ id: "tutor", label: "Sage tutor", icon: "ri-robot-2-line", perm: "tutor.configure" },
+	{ id: "tutor", label: "Sage tutor", icon: "ri-robot-line", perm: "tutor.configure" },
 	{ id: "reset", label: "Global reset", icon: "ri-error-warning-line", perm: "system.global_reset" },
 ];
 

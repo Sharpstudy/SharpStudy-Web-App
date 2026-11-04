@@ -14,7 +14,9 @@ const INITIAL_USER = {
 	password: "",
 };
 
-const RegisterForm = () => {
+// asParent: the "For Parents & Families" registration. It is an ordinary account; the redirect only differs
+// (/family/, the Progress page, which offers "Link my child" until a child is linked).
+const RegisterForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -35,9 +37,10 @@ const RegisterForm = () => {
 		try {
 			setLoading(true);
 			const url = `${baseUrl}/api/users/signup`;
-			const payload = { ...user };
+			// `next` (same-site only, re-validated on the server) rides along so the e-mail link can return here.
+			const payload = { ...user, next: router.query.next };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
+			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
 			toast.success(response.data.message, {
 				style: {
 					border: "1px solid #4BB543",
@@ -111,7 +114,7 @@ const RegisterForm = () => {
 			<Button
 				loading={loading}
 				disabled={disabled || loading}
-				btnText="Create account"
+				btnText={asParent ? "Create parent account" : "Create account"}
 				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
 		</form>

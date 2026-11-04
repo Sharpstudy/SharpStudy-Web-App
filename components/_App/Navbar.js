@@ -5,8 +5,9 @@ import NProgress from "nprogress";
 import { useSelector } from "react-redux";
 import ProfileDropdown from "./ProfileDropdown";
 import SearchForm from "./SearchForm";
-import { navModel, dashboardHome, isShoppingArea } from "./accountLinks";
+import { navModel, dashboardHome, isShoppingArea, isTelecallerOnly } from "./accountLinks";
 import { handleLogout } from "@/utils/auth";
+import { TELECALLER_HOME } from "@/lib/auth/telecallerNav";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -63,6 +64,33 @@ const Navbar = ({ user }) => {
 		};
 	}, [drawer]);
 
+	// An approved, ACTIVE telecaller gets a minimal header: the logo and the account menu (Telecaller Dashboard, Account Settings, Log out).
+	// No public links, search, cart, menu button or drawer. The flag is the server-computed `telecaller_access` (never e-mail or role);
+	// this is display only, and the telecaller page and APIs re-check access from the database.
+	if (isTelecallerOnly(user)) {
+		return (
+			<>
+				<a href="#main" className="ss-skip-link">
+					Skip to content
+				</a>
+				<header id="navbar" className={`ss-header ss-header--minimal${scrolled ? " is-scrolled" : ""}`}>
+					<div className="ss-container ss-container--wide ss-header__inner">
+						<Link href={TELECALLER_HOME}>
+							<a className="ss-header__brand" aria-label="SharpStudy telecaller dashboard">
+								{/* eslint-disable-next-line @next/next/no-img-element */}
+								<img src="/images/sharpstudy.png" alt="SharpStudy" width="170" height="28" />
+							</a>
+						</Link>
+						<div className="ss-header__actions">
+							<ProfileDropdown {...user} links={account} />
+						</div>
+					</div>
+				</header>
+				<span id="main" tabIndex={-1} />
+			</>
+		);
+	}
+
 	return (
 		<>
 			<a href="#main" className="ss-skip-link">
@@ -101,7 +129,7 @@ const Navbar = ({ user }) => {
 					)}
 
 					<div className="ss-header__actions">
-						{(!dash || isShoppingArea(router.pathname)) && <CartLink />}
+						{(!dash || isShoppingArea(router.pathname)) && !isTelecallerOnly(user) && <CartLink />}
 						{user ? (
 							<ProfileDropdown {...user} links={account} />
 						) : (

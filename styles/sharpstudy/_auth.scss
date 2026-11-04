@@ -91,3 +91,24 @@
 	h1 { font-size: var(--ss-fs-xl); margin: var(--ss-space-3) 0 0; }
 	p { margin: 0 0 var(--ss-space-3); }
 }
+
+// Who is this account for? Parents & Families (royal blue, prominent) vs Students & Instructors (this page).
+.ss-audience {
+	display: grid;
+	gap: 8px;
+	margin-bottom: var(--ss-space-5);
+	a, &__student { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; text-decoration: none; }
+	strong { display: block; font-size: 15px; line-height: 1.2; }
+	small { display: block; font-size: 13px; opacity: 0.85; }
+	&__parent {
+		min-height: 56px;
+		background: #2e47c8;
+		color: #fff;
+		box-shadow: 0 4px 0 #21338c;
+		> span:nth-child(2) { flex: 1; }
+		&:hover, &:focus-visible { background: #3a54d6; color: #fff; }
+		&:focus-visible { outline: 3px solid #ffc83d; outline-offset: 2px; }
+	}
+	&__icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: #ffc83d; color: #181b36; font-size: 22px; flex: none; }
+	&__student { background: #eef0fb; color: #21338c; border: 2px solid #919ee1; flex-direction: column; align-items: flex-start; gap: 2px; }
+}

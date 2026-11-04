@@ -3,7 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Button, EmptyState } from "@/components/ui";
 import { errMessage, fmtWhen, Status, TYPE_LABEL, BUCKETS } from "./format";
-import { Field } from "./SessionRoom";
+import { Field, ProviderFields } from "./SessionRoom";
 
 const blank = () => ({
 	title: "",
@@ -14,6 +14,8 @@ const blank = () => ({
 	date: "",
 	time: "",
 	durationMin: 60,
+	provider: "jitsi",
+	meetingUrl: "",
 	timeZone: typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC",
 });
 
@@ -131,6 +133,7 @@ const CreateForm = ({ courses, onCreated }) => {
 			)}
 			<StudentPicker courseId={f.courseId} type={f.sessionType} selected={students} setSelected={setStudents} />
 			{!one && students.length === 0 && f.courseId && <p className="ss-muted">No students selected: every student who bought this course can reserve a seat until it is full.</p>}
+			<ProviderFields provider={f.provider} meetingUrl={f.meetingUrl} onChange={(patch) => setF({ ...f, ...patch })} idPrefix="ls" />
 			<Field label="Date" id="ls-date"><input id="ls-date" type="date" className="form-control" required value={f.date} onChange={set("date")} /></Field>
 			<Field label="Start time" id="ls-time"><input id="ls-time" type="time" className="form-control" required value={f.time} onChange={set("time")} /></Field>
 			<Field label="Time zone" id="ls-tz"><input id="ls-tz" className="form-control" required value={f.timeZone} onChange={set("timeZone")} /></Field>

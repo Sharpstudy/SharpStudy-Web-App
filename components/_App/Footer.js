@@ -6,11 +6,22 @@ import { useDashboardHeader } from "./accountLinks";
 
 const columns = [
 	{
+		title: "Books",
+		links: [
+			{ href: "/books/", label: "All books" },
+			{ href: "/books/?ageGroup=baby-toddler", label: "Ages 0–3" },
+			{ href: "/books/?ageGroup=young-readers", label: "Ages 7–9" },
+			{ href: "/books/?ageGroup=middle-secondary", label: "Ages 13–15" },
+			{ href: "/books/?ageGroup=adult", label: "Ages 18+" },
+		],
+	},
+	{
 		title: "Learn",
 		links: [
 			{ href: "/courses/", label: "All courses" },
 			{ href: "/blog/blogs/", label: "Blog" },
 			{ href: "/become-an-instructor/", label: "Become an instructor" },
+			{ href: "/become-a-telecaller/", label: "Become a telecaller" },
 		],
 	},
 	{

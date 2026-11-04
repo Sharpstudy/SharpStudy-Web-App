@@ -4,6 +4,7 @@ import Router, { useRouter } from "next/router";
 import baseUrl from "@/utils/baseUrl";
 import Navbar from "@/components/_App/Navbar";
 import { Button } from "@/components/ui";
+import { safeNextPath } from "@/lib/books/redirect";
 
 const ConfirmEmailPage = () => {
 	const router = useRouter();
@@ -19,10 +20,12 @@ const ConfirmEmailPage = () => {
 				const payload = { token, email };
 				await axios.put(url, payload);
 				setStatus("done");
+				// Same-site relative paths only (checked here as well as when the link was built).
+				const destination = safeNextPath(router.query.next) || "/";
 				setTimeout(() => {
-					Router.reload("/");
+					Router.reload(destination);
 				}, 2000);
-				Router.push("/");
+				Router.push(destination);
 			} catch (error) {
 				console.log(error);
 				setStatus("error");

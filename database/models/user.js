@@ -50,7 +50,8 @@ const initUser = (sequelize, Types) => {
 			instructor_status: Types.BOOLEAN,
 			instructor_subject: Types.STRING,
 			instructor_description: Types.STRING,
-			status: Types.BOOLEAN,
+			// Matches the column default (tinyint(1) DEFAULT 1), so a new account is explicitly active.
+			status: { type: Types.BOOLEAN, defaultValue: true },
 			is_profile_public: Types.BOOLEAN,
 		},
 		{

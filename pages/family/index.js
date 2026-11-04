@@ -1,6 +1,7 @@
-// Parent / instructor dashboard. Every figure comes from /api/mastery
-// (persisted attempts and daily activity); the server enforces who may view,
-// place or administer each learner — buttons here only mirror those rights.
+// /family/: parents get the simple read-only ParentDashboard (their own linked children only, from
+// /api/family/overview). Instructors and administrators keep the full learner dashboard below, built on
+// /api/mastery (persisted attempts and daily activity); the server enforces who may view, place or administer
+// each learner — buttons here only mirror those rights, and parents are refused those actions server-side.
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -16,6 +17,9 @@ import NotificationList from "@/components/Notifications/NotificationList";
 import PlacementDialog from "@/components/Mastery/PlacementDialog";
 import { StatTile, ProgressBar, EmptyState, PageHeader } from "@/components/ui";
 import { api, headers } from "@/lib/mastery-client/api";
+import FamilyShell from "@/components/Family/FamilyShell";
+import ParentDashboard from "@/components/Family/ParentDashboard";
+import StudentFamily from "@/components/Family/StudentFamily";
 
 const pct = (x) => (x == null ? "–" : `${Math.round(x * 100)}%`);
 const fmtDur = (ms) => {
@@ -273,7 +277,7 @@ const AccessCard = ({ dash, reload }) => {
 						</button>
 					</form>
 				</div>
-				{note}
+								{note}
 			</div>
 		</Section>
 	);
@@ -593,7 +597,7 @@ const LearnerDashboard = ({ learnerId, onRemoved, canAssign, students }) => {
 	);
 };
 
-const FamilyPage = ({ user }) => {
+const StaffLearnerPage = ({ user }) => {
 	const router = useRouter();
 	// ?learner=<id>: admins/support (learners.manage_all) opening any learner.
 	const requested = typeof router.query.learner === "string" ? router.query.learner : null;
@@ -657,7 +661,7 @@ const FamilyPage = ({ user }) => {
 					<EmptyState
 						icon="ri-parent-line"
 						title="No learners yet"
-						description={canCreate ? "Add a learner profile to start the Mastery Ladder." : "Your account cannot create learner profiles. Ask an administrator for family access."}
+						description={canCreate ? "Add a learner profile to start the Mastery Ladder." : "Learner profiles are set up by your instructor. If you are a parent, link your child with the code your child shows on their own Study page."}
 						action={canCreate ? <button type="button" className="ss-btn" onClick={() => setAdding(true)}>Add learner</button> : undefined}
 					/>
 				)}
@@ -672,5 +676,21 @@ const FamilyPage = ({ user }) => {
 		</MasteryShell>
 	);
 };
+
+// Only instructors and administrators see the learner-management dashboard; everyone else on /family/ is a parent.
+// Three audiences share /family/, told apart on the server (/api/users/update), never by the browser:
+//   instructors and administrators -> the full learner dashboard;
+//   a child account (student login attached to a learner profile) -> the student Family page (their parent link code);
+//   everyone else (parents, including a parent who has not linked a child yet) -> the parent Progress dashboard.
+const FamilyPage = ({ user }) =>
+	user && (user.role === "instructor" || user.role === "admin") ? (
+		<StaffLearnerPage user={user} />
+	) : user && user.is_learner_account ? (
+		<StudentFamily user={user} />
+	) : (
+		<FamilyShell title="Progress">
+			<ParentDashboard />
+		</FamilyShell>
+	);
 
 export default FamilyPage;

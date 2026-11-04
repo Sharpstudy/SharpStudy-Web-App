@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import AdminLayout from "@/components/_App/AdminLayout";
 import { StatTile } from "@/components/ui";
+import TelecallerTiles from "@/components/Admin/TelecallerTiles";
 import baseUrl from "@/utils/baseUrl";
 
 const Index = ({
@@ -26,6 +27,7 @@ const Index = ({
 					<StatTile icon="ri-money-dollar-circle-line" tone="success" value={`$${earningsTotal}`} label="Total sales" />
 					<StatTile icon="ri-video-line" tone="accent" value={videos} label="Course videos" />
 					<StatTile icon="ri-folder-2-line" tone="accent" value={assets} label="Course assets" />
+					<TelecallerTiles />
 				</div>
 
 				<h2 className="ss-subhead">Quick links</h2>
@@ -40,6 +42,12 @@ const Index = ({
 						<a className="ss-card ss-card--interactive ss-quicklink">
 							<i className="ri-user-add-line" aria-hidden="true"></i>
 							<span><strong>Instructor requests</strong><small>Review applications</small></span>
+						</a>
+					</Link>
+					<Link href="/admin/telecallers/applications/">
+						<a className="ss-card ss-card--interactive ss-quicklink">
+							<i className="ri-customer-service-2-line" aria-hidden="true"></i>
+							<span><strong>Telecaller applications</strong><small>Review and approve</small></span>
 						</a>
 					</Link>
 					<Link href="/admin/coupons/create/">

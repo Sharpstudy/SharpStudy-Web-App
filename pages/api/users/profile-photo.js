@@ -1,13 +1,17 @@
 import jwt from "jsonwebtoken";
 import User from "database/models/user";
+import { requireUser } from "@/lib/auth/access";
 
 export default async (req, res) => {
 	if (!("authorization" in req.headers)) {
 		return res.status(401).json({ message: "No autorization token" });
 	}
+	// Verified token AND a currently active account (a deactivated user's old token gets a 401).
+	const actor = await requireUser(req, res);
+	if (!actor) return;
 	switch (req.method) {
 		case "PUT":
-			await userProfilePhoto(req, res);
+			await userProfilePhoto(req, res, actor);
 			break;
 		default:
 			res.status(405).json({
@@ -16,13 +20,10 @@ export default async (req, res) => {
 	}
 };
 
-const userProfilePhoto = async (req, res) => {
+const userProfilePhoto = async (req, res, actor) => {
 	const { profile_photo } = req.body;
 	try {
-		const { userId } = jwt.verify(
-			req.headers.authorization,
-			process.env.JWT_SECRET
-		);
+		const userId = actor.userId;
 
 		await User.update(
 			{

@@ -49,6 +49,11 @@ ML_Learner.init(
 		pin_locked_until: DataTypes.DATE,
 		adult_mode: { type: DataTypes.BOOLEAN, defaultValue: false },
 		adult_mode_set_by: DataTypes.UUID,
+		// Family & child devices (migration 20261023000000). All optional; NULL for older profiles.
+		age_band: DataTypes.STRING(3),
+		picture_hash: DataTypes.STRING(100),
+		picture_failed_attempts: { type: DataTypes.INTEGER, defaultValue: 0 },
+		picture_locked_until: DataTypes.DATE,
 		daily_goal: { type: DataTypes.INTEGER, defaultValue: 1 },
 		time_zone: { type: DataTypes.STRING(64), defaultValue: "UTC" },
 		reminder_time: DataTypes.STRING(5),

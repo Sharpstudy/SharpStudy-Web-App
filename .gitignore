@@ -39,3 +39,5 @@ yarn-error.log*
 # Local Claude worktrees and settings
 /.claude/
 /settings.json
+
+.book-storage/

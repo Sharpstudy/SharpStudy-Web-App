@@ -1,13 +1,13 @@
-import jwt from "jsonwebtoken";
 import { requireUser } from "@/lib/auth/access";
 import { Enrolment, Course, User } from "@/database/models";
 
 export default async function handler(req, res) {
   // 401 for a missing/invalid token (verified, not just present)
-  if (!(await requireUser(req, res))) return;
+  const actor = await requireUser(req, res);
+	if (!actor) return;
   switch (req.method) {
     case "GET":
-      await handleGetRequest(req, res);
+      await handleGetRequest(req, res, actor);
       break;
     default:
       res.status(405).json({
@@ -16,27 +16,9 @@ export default async function handler(req, res) {
   }
 }
 
-const handleGetRequest = async (req, res) => {
+const handleGetRequest = async (req, res, actor) => {
   try {
-    // const { userId } = jwt.verify(
-    // 	req.headers.authorization,
-    // 	process.env.JWT_SECRET
-    // );
-
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-      // Token comes from the UI or Swagger docs
-      token = req.headers.authorization.split(' ')[1];
-
-    } else if (req.headers.authorization) {
-      // Token comes without the "Bearer " prefix
-      token = req.headers.authorization;
-    } else {
-      return res.status(401).json({ message: "Invalid or missing authorization header" });
-    }
-
-    // Verify the token using the extracted token variable
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = actor.userId;
 
     const enrolments = await Enrolment.findAll({
       order: [["created_at", "DESC"]],

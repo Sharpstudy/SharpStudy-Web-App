@@ -2,6 +2,7 @@
 // styles/sharpstudy so pages share one visual language.
 import React from "react";
 import Link from "next/link";
+import { EmptyArt } from "./Illustration";
 
 const cx = (...c) => c.filter(Boolean).join(" ");
 
@@ -123,6 +124,7 @@ export const PageHeader = ({ title, description, crumbs, actions, wide = true })
 
 export const EmptyState = ({ icon = "ri-inbox-line", title, description, action }) => (
 	<div className="ss-empty">
+		<EmptyArt className="ss-empty__art" />
 		<span className="ss-icon-tile ss-icon-tile--lg" aria-hidden="true">
 			<i className={icon}></i>
 		</span>

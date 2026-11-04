@@ -268,7 +268,7 @@ const Detail = ({ row, onClose, onChanged, onAssign }) => {
 									</button>
 								)}
 							</div>
-							{dash.profile && form && (
+														{dash.profile && form && (
 								<form className="ml-form" onSubmit={saveProfile} aria-label="Edit profile">
 									<h3 className="ml-h3">Profile</h3>
 									<ProfileFields form={form} set={set} idPrefix="sd" />
