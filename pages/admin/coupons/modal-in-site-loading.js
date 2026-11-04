@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import AdminLayout from "@/components/_App/AdminLayout";
 import toast from "react-hot-toast";
 import axios from "axios";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 
-const modalInSiteLoading = ({ user }) => {
+const ModalInSiteLoading = ({ user }) => {
 	const [site, setSite] = useState("");
 	const [siteImage, setSiteImage] = useState("");
 	const [modalImage, setModalImage] = useState({ image_url: "" });
@@ -114,17 +112,8 @@ const modalInSiteLoading = ({ user }) => {
 
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
+			<AdminLayout user={user} title="Coupons" description="Site pop-up shown when the site loads.">
 								{/* Nav */}
 								<ul className="nav-style1">
 									<li>
@@ -184,15 +173,9 @@ const modalInSiteLoading = ({ user }) => {
 									className="mt-4"
 									src={siteImage && siteImage}
 								/>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<Footer />
+			</AdminLayout>
 		</>
 	);
 };
 
-export default modalInSiteLoading;
+export default ModalInSiteLoading;

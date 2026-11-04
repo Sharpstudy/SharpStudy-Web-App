@@ -1,81 +1,22 @@
-import jwt from "jsonwebtoken";
-import User from "database/models/user";
-import { instructorRequest } from "../../../email-templates/instructor-request";
+import { handle, body, methodNotAllowed, requireAccount } from "@/lib/instructor-applications/http";
+import { applicationDeps } from "@/lib/instructor-applications/deps";
+import { getMine, saveDraft, submitApplication, reapply } from "@/lib/instructor-applications/service";
+import { rateLimit } from "@/lib/mastery-server/http";
 
-export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
-  }
-  switch (req.method) {
-    case "PUT":
-      await handlePut(req, res);
-      break;
-
-    default:
-      res.status(405).json({
-        message: `Method ${req.method} not allowed`,
-      });
-  }
-}
-const handlePut = async (req, res) => {
-  const { name, email, phone, instructor_subject, instructor_description } = req.body;
-  try {
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-      // Token comes from the UI or Swagger docs
-      token = req.headers.authorization.split(' ')[1];
-
-    } else if (req.headers.authorization) {
-      // Token comes without the "Bearer " prefix
-      token = req.headers.authorization;
-    } else {
-      return res.status(401).json({ message: "Invalid or missing authorization header" });
-    }
-
-    // Verify the token using the extracted token variable
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findOne({
-      where: { id: userId, instructor_request: true },
-    });
-
-    const admins = await User.findAll({
-      where: { role: "admin" },
-    });
-
-    if (user) {
-      res.status(422).json({ message: "Already sent a request." });
-    } else {
-      const instructor = await User.update(
-        {
-          instructor_request: true,
-          instructor_subject,
-          instructor_description,
-          phone,
-        },
-        { where: { id: userId } }
-      );
-
-      admins.forEach((admin) => {
-        instructorRequest(
-          admin.email,
-          name,
-          email,
-          instructor_subject,
-          instructor_description
-        );
-      });
-
-      res.status(200).json({
-        message: "Received a request and we will get back to you soon.",
-        instructor,
-      });
-    }
-  } catch (error) {
-    console.error('JWT verification error:', error);
-    res.status(400).json({
-      error_code: "get_students",
-      message: error.message,
-    });
-  }
-};
+// The applicant side of "Become an Instructor" (the existing endpoint, now backed by a real
+// application record). It only ever touches the signed-in user's OWN application: the user id
+// comes from the verified token and the role from the database, never from the request.
+//   GET  -> my application + form data      PUT  -> save draft
+//   POST -> submit (pending)                POST { action: "reapply" } -> new draft after a rejection
+// Submitting never grants a role; approval is an admin-only action in /api/instructor/requests.
+export default handle(async (req, res) => {
+	if (methodNotAllowed(req, res, ["GET", "PUT", "POST"])) return;
+	const actor = await requireAccount(req, res);
+	if (!actor) return;
+	const deps = applicationDeps();
+	if (req.method === "GET") return res.status(200).json(await getMine(deps, actor));
+	if (req.method === "PUT") return res.status(200).json(await saveDraft(deps, actor, body(req)));
+	if (!rateLimit(req, res, "instructor-app-submit", { windowMs: 60 * 60 * 1000, max: 20 }, actor.userId)) return;
+	if (body(req).action === "reapply") return res.status(200).json(await reapply(deps, actor));
+	res.status(200).json(await submitApplication(deps, actor, body(req)));
+});

@@ -6,6 +6,8 @@ import baseUrl from "@/utils/baseUrl";
 import axios from "axios";
 import CourseOverview from "@/components/Learning/CourseOverview";
 import LiveClassComponent from "@/components/Learning/LiveClassComponent";
+import Script from "next/script";
+import { PageHeader } from "@/components/ui";
 
 const Index = ({ user }) => {
 	const [course, setCourse] = useState({});
@@ -24,26 +26,32 @@ const Index = ({ user }) => {
 	};
 
 	useEffect(() => {
-		fetchVideos();
+		if (slug) fetchVideos();
 	}, [slug]);
 
 	return (
 		<>
 			<Navbar user={user} />
 
-			<div className="ptb-100 video-area">
-				<div className="container">
-					<div className="row justify-content-center">
-						<div className="col-lg-12 col-md-12">
-							<div className="video-content">
-								<LiveClassComponent slug={slug} {...user} />
-								<br />
-								<CourseOverview {...course} />
-							</div>
-						</div>
-					</div>
+			{/* Jitsi API is only needed here (was loaded on every page via Layout) */}
+			<Script src="https://meet.jit.si/external_api.js" strategy="afterInteractive" />
+			<main>
+				<PageHeader
+					title={(course && course.title) || "Live class"}
+					description="Join the live session for this course."
+					crumbs={[
+						{ href: "/learning/my-courses/", label: "My learning" },
+						{ label: "Live class" },
+					]}
+				/>
+				<div className="ss-container ss-container--wide ss-student">
+					<LiveClassComponent slug={slug} {...user} />
+					<section className="ss-class-overview" aria-label="About this course">
+						<h2>About this course</h2>
+						<CourseOverview {...course} />
+					</section>
 				</div>
-			</div>
+			</main>
 
 			<Footer />
 		</>

@@ -1,9 +1,9 @@
+
+import { requireRole } from "@/lib/auth/requireRole";
 import { Course, User, Category, Video } from "database/models";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);

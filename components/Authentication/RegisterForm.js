@@ -5,7 +5,7 @@ import { handleLogin } from "@/utils/auth";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
 
 const INITIAL_USER = {
 	first_name: "",
@@ -14,7 +14,9 @@ const INITIAL_USER = {
 	password: "",
 };
 
-const RegisterForm = () => {
+// asParent: the "For Parents & Families" registration. It is an ordinary account; the redirect only differs
+// (/family/, the Progress page, which offers "Link my child" until a child is linked).
+const RegisterForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -35,9 +37,10 @@ const RegisterForm = () => {
 		try {
 			setLoading(true);
 			const url = `${baseUrl}/api/users/signup`;
-			const payload = { ...user };
+			// `next` (same-site only, re-validated on the server) rides along so the e-mail link can return here.
+			const payload = { ...user, next: router.query.next };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
+			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
 			toast.success(response.data.message, {
 				style: {
 					border: "1px solid #4BB543",
@@ -72,60 +75,49 @@ const RegisterForm = () => {
 	};
 
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="First Name"
+		<form onSubmit={handleSubmit}>
+			<div className="ss-form-row">
+				<Field
+					label="First name"
 					name="first_name"
+					autoComplete="given-name"
 					value={user.first_name}
 					onChange={handleChange}
 				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Last Name"
+				<Field
+					label="Last name"
 					name="last_name"
+					autoComplete="family-name"
 					value={user.last_name}
 					onChange={handleChange}
 				/>
 			</div>
-			<div className="form-group">
-				<input
-					type="email"
-					className="form-control"
-					placeholder="Email"
-					name="email"
-					value={user.email}
-					onChange={handleChange}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
+			<Field
+				label="Email"
+				type="email"
+				name="email"
+				autoComplete="email"
+				inputMode="email"
+				placeholder="you@example.com"
+				value={user.email}
+				onChange={handleChange}
+			/>
+			<Field label="Password">
+				<PasswordInput
 					name="password"
+					autoComplete="new-password"
+					placeholder="Create a password"
 					value={user.password}
 					onChange={handleChange}
 				/>
-			</div>
-
+			</Field>
 			<Button
 				loading={loading}
-				disabled={disabled}
-				btnText="Register Now"
-				btnClass="default-btn"
+				disabled={disabled || loading}
+				btnText={asParent ? "Create parent account" : "Create account"}
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
-		</motion.form>
+		</form>
 	);
 };
 

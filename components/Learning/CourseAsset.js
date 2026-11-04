@@ -1,6 +1,7 @@
 import baseUrl from "@/utils/baseUrl";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { EmptyState } from "@/components/ui";
 
 const CourseAsset = ({ id: courseId }) => {
 	const [assets, setAssets] = useState([]);
@@ -15,39 +16,36 @@ const CourseAsset = ({ id: courseId }) => {
 		fetchAssets();
 	}, [courseId]);
 
+	if (assets.length === 0) {
+		return (
+			<EmptyState
+				icon="ri-folder-download-line"
+				title="No resources yet"
+				description="Downloadable files for this course will appear here when your instructor adds them."
+			/>
+		);
+	}
+
 	return (
-		<div className="courses-details-desc-style-two">
-			<div className="row justify-content-center">
-				{assets.length > 0
-					? assets.map((asset) => (
-							<div className="col-lg-3 col-md-6" key={asset.id}>
-								<div className="card text-center">
-									<i
-										className="bx bx-file mt-2"
-										style={{
-											fontSize: "100px",
-										}}
-									></i>
-									<div className="card-body">
-										<h5 className="card-title">
-											{asset.lecture_name}
-										</h5>
-										<button
-											className="btn btn-success mt-2"
-											onClick={() =>
-												window.open(asset.lecture_file)
-											}
-										>
-											Download{" "}
-											<i className="bx bx-down-arrow-circle"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-					  ))
-					: "Empty"}
-			</div>
-		</div>
+		<ul className="ss-assets">
+			{assets.map((asset) => (
+				<li key={asset.id} className="ss-card ss-asset">
+					<span className="ss-icon-tile" aria-hidden="true">
+						<i className="ri-file-text-line"></i>
+					</span>
+					<span className="ss-asset__name">{asset.lecture_name}</span>
+					<button
+						type="button"
+						className="ss-btn ss-btn--soft ss-btn--sm"
+						onClick={() => window.open(asset.lecture_file)}
+						aria-label={`Download ${asset.lecture_name}`}
+					>
+						<i className="ri-download-2-line" aria-hidden="true"></i>
+						Download
+					</button>
+				</li>
+			))}
+		</ul>
 	);
 };
 

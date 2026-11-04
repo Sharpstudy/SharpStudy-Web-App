@@ -18,7 +18,7 @@ const privacyPolicy = ({ user }) => {
         <div className='container'>
           <div className='main-content-text'>
             <div className='gap-20'></div>
-            <h3>Information We Collect:</h3>
+            <h2 className="ss-legal-h">Information We Collect:</h2>
             <p>
               {" "}
               <strong>Personal Information:</strong> We may collect personal
@@ -38,7 +38,7 @@ const privacyPolicy = ({ user }) => {
               settings.
             </p>
 
-            <h3>How We Use Information:</h3>
+            <h2 className="ss-legal-h">How We Use Information:</h2>
             <p>
               <strong>Personal Information:</strong> We may collect personal
               information such as names, email addresses, and other contact
@@ -56,7 +56,7 @@ const privacyPolicy = ({ user }) => {
               data. Users can manage cookie preferences through their browser
               settings.
             </p>
-            <h3>How We Use Information:</h3>
+            <h2 className="ss-legal-h">How We Use Information:</h2>
 
             <p>
               <strong>Provide Services:</strong> We use personal information to
@@ -77,7 +77,7 @@ const privacyPolicy = ({ user }) => {
               content.
             </p>
 
-            <h3>Data Sharing:</h3>
+            <h2 className="ss-legal-h">Data Sharing:</h2>
             <p>
               <strong>Service Providers:</strong> We may share personal
               information with third-party service providers who assist us in
@@ -93,7 +93,7 @@ const privacyPolicy = ({ user }) => {
 
             <div className='gap-20'></div>
 
-            <h3>Data Security:</h3>
+            <h2 className="ss-legal-h">Data Security:</h2>
             <p>
               We implement appropriate technical and organizational measures to
               safeguard personal information against unauthorized access,
@@ -105,7 +105,7 @@ const privacyPolicy = ({ user }) => {
 
             <div className='gap-20'></div>
 
-            <h3>Children's Privacy:</h3>
+            <h2 className="ss-legal-h">Children&apos;s Privacy:</h2>
             <p>
               Our Site is not directed to individuals under the age of 13, and
               we do not knowingly collect personal information from children. If
@@ -116,7 +116,7 @@ const privacyPolicy = ({ user }) => {
 
             <div className='gap-20'></div>
 
-            <h3>Your Choices:</h3>
+            <h2 className="ss-legal-h">Your Choices:</h2>
             <p>
               Users can manage their communication preferences by unsubscribing
               from marketing emails or contacting us directly. Users can also
@@ -124,7 +124,7 @@ const privacyPolicy = ({ user }) => {
             </p>
             <div className='gap-20'></div>
 
-            <h3>Changes to This Privacy Policy:</h3>
+            <h2 className="ss-legal-h">Changes to This Privacy Policy:</h2>
             <p>
               We reserve the right to update or modify this Privacy Policy at
               any time. Any changes will be effective immediately upon posting
@@ -133,7 +133,7 @@ const privacyPolicy = ({ user }) => {
             </p>
             <div className='gap-20'></div>
 
-            <h3>Contact Us:</h3>
+            <h2 className="ss-legal-h">Contact Us:</h2>
             <p>
               If you have any questions or concerns about this Privacy Policy or
               our privacy practices, please contact us at{" "}

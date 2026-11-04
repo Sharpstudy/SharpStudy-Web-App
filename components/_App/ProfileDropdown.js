@@ -1,176 +1,78 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import Link from "@/utils/ActiveLink";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { handleLogout } from "@/utils/auth";
 
-const ProfileDropdown = ({
-	userId,
-	first_name,
-	email,
-	role,
-	profile_photo,
-}) => {
-	const [isMouse, toggleMouse] = useState(false);
-	const toggleMouseMenu = () => {
-		toggleMouse(!isMouse);
-	};
+// Click / keyboard operated account menu (was hover-only, unusable on touch).
+const ProfileDropdown = ({ first_name, last_name, email, profile_photo, links = [] }) => {
+	const [open, setOpen] = useState(false);
+	const ref = useRef(null);
+	const router = useRouter();
 
-	const isAdmin = role === "admin";
-	const isInstructor = role === "instructor";
+	useEffect(() => {
+		if (!open) return;
+		const onDown = (e) => {
+			if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+		};
+		const onKey = (e) => e.key === "Escape" && setOpen(false);
+		document.addEventListener("mousedown", onDown);
+		document.addEventListener("keydown", onKey);
+		return () => {
+			document.removeEventListener("mousedown", onDown);
+			document.removeEventListener("keydown", onKey);
+		};
+	}, [open]);
 
-	const subMenuAnimate = {
-		enter: {
-			opacity: 1,
-			rotateX: 0,
-			transition: {
-				duration: 0.3,
-			},
-			display: "block",
-		},
-		exit: {
-			opacity: 0,
-			rotateX: -15,
-			transition: {
-				duration: 0.3,
-				// delay: 0.3,
-			},
-			transitionEnd: {
-				display: "none",
-			},
-		},
-	};
+	useEffect(() => {
+		const close = () => setOpen(false);
+		router.events.on("routeChangeStart", close);
+		return () => router.events.off("routeChangeStart", close);
+	}, [router.events]);
+
+	const photo = profile_photo || "/images/admin/admin-9.jpg";
+	const fullName = [first_name, last_name].filter(Boolean).join(" ");
 
 	return (
-		<motion.div
-			className="dropdown profile-dropdown"
-			onMouseEnter={toggleMouseMenu}
-			onMouseLeave={toggleMouseMenu}
-		>
-			<div className="img ptb-15">
-				{profile_photo ? (
-					<img src={profile_photo} alt={first_name} />
-				) : (
-					<img src="/images/admin/admin-9.jpg" alt={first_name} />
-				)}
-			</div>
-			<motion.ul
-				className="dropdown-menu"
-				initial="exit"
-				animate={isMouse ? "enter" : "exit"}
-				variants={subMenuAnimate}
+		<div className="ss-menu" ref={ref}>
+			<button
+				type="button"
+				className="ss-menu__trigger"
+				aria-haspopup="menu"
+				aria-expanded={open}
+				aria-label="Open account menu"
+				onClick={() => setOpen((o) => !o)}
 			>
-				<li>
-					<Link href="/profile/basic-information/">
-						<a className="dropdown-item author-dropdown-item">
-							<div className="d-flex align-items-center">
-								<div className="img">
-									{profile_photo ? (
-										<img
-											src={profile_photo}
-											alt={first_name}
-										/>
-									) : (
-										<img
-											src="/images/admin/admin-9.jpg"
-											alt={first_name}
-										/>
-									)}
-								</div>
+				{/* eslint-disable-next-line @next/next/no-img-element */}
+				<img className="ss-avatar" src={photo} alt="" />
+				<i className="ri-arrow-down-s-line d-none d-xl-inline" aria-hidden="true"></i>
+			</button>
 
-								<span className="ps-3">
-									<span className="fw-semibold fs-16 mb-1 d-block">
-										{first_name}
-									</span>
-									<span className="d-block fs-13 mt-minus-2">
-										{email}
-									</span>
-								</span>
-							</div>
-						</a>
-					</Link>
-				</li>
-				<li>
-					<hr className="dropdown-divider" />
-				</li>
-
-				{isInstructor && (
-					<>
-						<li>
-							<Link href="/instructor/courses">
-								<a className="dropdown-item">
-									<i className="bx bx-book"></i>
-									My Courses
-								</a>
-							</Link>
-						</li>
-						<li>
-							<Link href="/instructor/course/create">
-								<a className="dropdown-item">
-									<i className="bx bx-folder-plus"></i> Create
-									New Course
-								</a>
-							</Link>
-						</li>
-					</>
-				)}
-				{isAdmin && (
-					<li>
-						<Link href="/admin">
-							<a className="dropdown-item">
-								<i className="bx bxs-dashboard"></i> My
-								Dashboard
+			{open && (
+				<div className="ss-menu__panel" role="menu">
+					<div className="ss-menu__head">
+						{/* eslint-disable-next-line @next/next/no-img-element */}
+						<img className="ss-avatar" src={photo} alt="" />
+						<div style={{ minWidth: 0 }}>
+							<div className="ss-menu__name ss-truncate">{fullName || first_name}</div>
+							<div className="ss-menu__email ss-truncate">{email}</div>
+						</div>
+					</div>
+					{links.map((l) => (
+						<Link href={l.href} key={l.href}>
+							<a className="ss-menu__item" role="menuitem">
+								<i className={l.icon} aria-hidden="true"></i>
+								{l.label}
 							</a>
 						</Link>
-					</li>
-				)}
-
-				<li>
-					<Link href="/learning/my-courses/">
-						<a className="dropdown-item">
-							<i className="bx bx-book"></i>
-							My learning
-						</a>
-					</Link>
-				</li>
-				<li>
-					<Link href="/learning/my-purchase-history/">
-						<a className="dropdown-item">
-							<i className="bx bx-credit-card-front"></i>
-							My Purchases
-						</a>
-					</Link>
-				</li>
-				<li>
-					<Link href="/learning/wishlist/">
-						<a className="dropdown-item">
-							<i className="bx bxs-heart"></i>
-							Wishlist
-						</a>
-					</Link>
-				</li>
-
-				<li>
-					<Link href="/profile/basic-information/">
-						<a className="dropdown-item">
-							<i className="bx bxs-user-account"></i> Account
-							settings
-						</a>
-					</Link>
-				</li>
-				<li>
-					<hr className="dropdown-divider" />
-				</li>
-				<li>
-					<button
-						type="submit"
-						onClick={handleLogout}
-						className="dropdown-item"
-					>
-						<i className="bx bx-log-out"></i> Log out
+					))}
+					<div className="ss-menu__sep" role="separator"></div>
+					<button type="button" className="ss-menu__item" role="menuitem" onClick={handleLogout}>
+						<i className="ri-logout-box-r-line" aria-hidden="true"></i>
+						Log out
 					</button>
-				</li>
-			</motion.ul>
-		</motion.div>
+				</div>
+			)}
+		</div>
 	);
 };
 

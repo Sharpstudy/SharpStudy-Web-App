@@ -7,8 +7,9 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
+import { PageHeader } from "@/components/ui";
 
-const slug = ({ user }) => {
+const CertificatePage = ({ user }) => {
 	const [student, setStudent] = useState(
 		user && `${user.first_name} ${user.last_name}`
 	);
@@ -76,68 +77,60 @@ const slug = ({ user }) => {
 		<>
 			<Navbar user={user} />
 
-			<div className="ptb-100 get-certificate">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-4">
-							<div className="form-box">
-								<form>
-									<label className="mb-2">
-										Enter your name
-									</label>
-									<input
-										type="text"
-										className="form-control"
-										placeholder="Enter your name"
-										value={student}
-										onChange={(e) =>
-											setStudent(e.target.value)
-										}
-									/>
-								</form>
+			<main>
+				<PageHeader
+					title="Your certificate"
+					description="Congratulations on completing the course! Check your name, then download your certificate."
+					crumbs={[
+						{ href: "/learning/my-courses/", label: "My learning" },
+						{ label: "Certificate" },
+					]}
+				/>
+				<div className="ss-container ss-container--wide ss-student get-certificate">
+					<div className="ss-cert">
+						<div className="ss-card ss-cert__form">
+							<form onSubmit={(e) => e.preventDefault()}>
+								<label className="form-label" htmlFor="cert-name">
+									Name on certificate
+								</label>
+								<input
+									id="cert-name"
+									type="text"
+									className="form-control"
+									placeholder="Enter your name"
+									value={student}
+									onChange={(e) => setStudent(e.target.value)}
+								/>
+							</form>
+							<div className="ss-cert__actions">
+								<button type="button" className="ss-btn ss-btn--block" onClick={downloadCertificatePdf}>
+									<i className="ri-file-pdf-line" aria-hidden="true"></i> Download PDF
+								</button>
+								<button type="button" className="ss-btn ss-btn--secondary ss-btn--block" onClick={downloadCertificate}>
+									<i className="ri-image-line" aria-hidden="true"></i> Download image (JPG)
+								</button>
 							</div>
 						</div>
 
-						<div className="col-lg-8">
-							<div
-								id="domEl"
-								ref={domEl}
-								className="certificate-img"
-							>
+						<div className="ss-cert__preview">
+							<div id="domEl" ref={domEl} className="certificate-img">
 								<div className="content">
 									<h2>{student}</h2>
 									<p>
-										For completing the{" "}
-										<b>{course && course.title}</b>
+										For completing the <b>{course && course.title}</b>
 									</p>
 								</div>
+								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img src="/images/certificate.png" alt="" />
-							</div>
-
-							<div className="caption">
-								<button
-									className="download-btn"
-									onClick={downloadCertificate}
-									title="JPEG Image"
-								>
-									<i className="bx bxs-file-jpg"></i>
-								</button>{" "}
-								<button
-									className="download-btn"
-									onClick={downloadCertificatePdf}
-									title="PDF"
-								>
-									<i className="bx bxs-file-pdf"></i>
-								</button>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</main>
 
 			<Footer />
 		</>
 	);
 };
 
-export default slug;
+export default CertificatePage;

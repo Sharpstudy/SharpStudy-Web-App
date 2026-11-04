@@ -1,51 +1,22 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-const CourseSkeletonLoader = () => {
-	return (
-		<>
-			<div className="col-lg-3 col-sm-6">
-				<div className="single-courses-box">
-					<div className="courses-image">
-						<Skeleton height="200px" width="290px" />
-					</div>
-					<div className="courses-content">
-						<Skeleton count={3} width="290px" />
-					</div>
+// Fluid placeholder grid matching the course card layout.
+const CourseSkeletonLoader = ({ count = 4 }) => (
+	<div className="ss-grid ss-grid--cards" aria-busy="true" aria-label="Loading courses">
+		{Array.from({ length: count }).map((_, i) => (
+			<div className="ss-course-card" key={i}>
+				<div className="ss-course-card__media">
+					<Skeleton height="100%" style={{ display: "block" }} borderRadius={0} />
+				</div>
+				<div className="ss-course-card__body">
+					<Skeleton height={20} width="80%" />
+					<Skeleton count={2} height={12} />
+					<Skeleton height={32} style={{ marginTop: 12 }} />
 				</div>
 			</div>
-			<div className="col-lg-3 col-sm-6">
-				<div className="single-courses-box">
-					<div className="courses-image">
-						<Skeleton height="200px" width="290px" />
-					</div>
-					<div className="courses-content">
-						<Skeleton count={3} width="290px" />
-					</div>
-				</div>
-			</div>
-			<div className="col-lg-3 col-sm-6">
-				<div className="single-courses-box">
-					<div className="courses-image">
-						<Skeleton height="200px" width="290px" />
-					</div>
-					<div className="courses-content">
-						<Skeleton count={3} width="290px" />
-					</div>
-				</div>
-			</div>
-			<div className="col-lg-3 col-sm-6">
-				<div className="single-courses-box">
-					<div className="courses-image">
-						<Skeleton height="200px" width="290px" />
-					</div>
-					<div className="courses-content">
-						<Skeleton count={3} width="290px" />
-					</div>
-				</div>
-			</div>
-		</>
-	);
-};
+		))}
+	</div>
+);
 
 export default CourseSkeletonLoader;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
+import { EmptyState } from "@/components/ui";
 import Link from "next/link";
 import axios from "axios";
 import { parseCookies } from "nookies";
@@ -99,10 +99,7 @@ const Index = ({ user }) => {
 	};
 	return (
 		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
+			<InstructorLayout user={user}>
 					<PageNavigation
 						courseId={courseId}
 						activeClassname="assets"
@@ -112,31 +109,33 @@ const Index = ({ user }) => {
 						<GeneralLoader />
 					) : (
 						<>
-							<div className="create-course-form">
+							<div className="create-course-form ss-card ss-form-card mb-4">
 								<UploadAssetForm
 									courseId={courseId}
 									onFetchAssets={fetchAssets}
 								/>
 							</div>
-							<div className="row justify-content-center">
-								{assets.length > 0
-									? assets.map((asset) => (
-											<CourseAssets
-												key={asset.id}
-												{...asset}
-												onDelete={() =>
-													confirmDelete(asset.id)
-												}
-											/>
-									  ))
-									: "Empty"}
-							</div>
+							<h2 className="ss-subhead">Uploaded assets</h2>
+							{assets.length > 0 ? (
+								<ul className="ss-assets">
+									{assets.map((asset) => (
+										<CourseAssets
+											key={asset.id}
+											{...asset}
+											onDelete={() => confirmDelete(asset.id)}
+										/>
+									))}
+								</ul>
+							) : (
+								<EmptyState
+									icon="ri-folder-2-line"
+									title="No assets yet"
+									description="Upload worksheets, slides or other files using the form above."
+								/>
+							)}
 						</>
 					)}
-				</div>
-			</div>
-
-			<Footer />
+			</InstructorLayout>
 		</>
 	);
 };

@@ -1,0 +1,350 @@
+// Live questions panel shown next to the Jitsi video in a live class.
+// Desktop: video and panel side by side. Mobile: panel stacks under the video
+// (the video stays mounted, so answering never disconnects the call).
+
+// Desktop: one large meeting on the left, Live Questions on the right.
+// Tablet/mobile: stacked, meeting first.
+.ss-live-room {
+	display: grid;
+	gap: var(--ss-space-4, 16px);
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
+
+	@media (min-width: 992px) {
+		grid-template-columns: minmax(0, 1fr) 360px;
+
+		> .ss-lq {
+			position: sticky;
+			top: 88px;
+		}
+	}
+
+	&__video {
+		min-width: 0;
+	}
+}
+
+// The single Jitsi meeting. Fixed aspect ratio so there is no dead space; the
+// iframe Jitsi creates fills the frame.
+.ss-jitsi {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	min-height: 320px;
+	max-height: 78vh;
+	background: #0b1220;
+	border-radius: 12px;
+	overflow: hidden;
+
+	@media (max-width: 767.98px) {
+		aspect-ratio: 4 / 5; // portrait phones: keep Jitsi's controls usable
+		min-height: 0;
+		max-height: 75vh;
+	}
+
+	&__frame,
+	&__frame iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: 0;
+	}
+
+	&__status {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: grid;
+		place-items: center;
+		margin: 0;
+		padding: 16px;
+		text-align: center;
+		color: #fff;
+	}
+}
+
+.ss-lq {
+	padding: 0;
+	overflow: hidden;
+
+	&__toggle {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		padding: 12px 16px;
+		border: 0;
+		background: var(--ss-surface-2);
+		color: var(--ss-ink);
+		font-weight: 600;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	&__body {
+		padding: 16px;
+		display: grid;
+		gap: 12px;
+		max-height: 70vh;
+		@media (min-width: 992px) {
+			max-height: calc(78vh - 52px); // same height as the meeting
+		}
+		overflow-y: auto;
+	}
+
+	&__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	&__text {
+		margin: 8px 0;
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--ss-ink);
+	}
+
+	&__h {
+		margin: 8px 0 4px;
+		font-size: 0.95rem;
+		color: var(--ss-ink);
+	}
+
+	&__options {
+		list-style: none;
+		margin: 0 0 12px;
+		padding: 0;
+		display: grid;
+		gap: 8px;
+	}
+
+	&__option {
+		width: 100%;
+		min-height: 44px;
+		padding: 10px 14px;
+		text-align: left;
+		border: 2px solid var(--ss-border-strong);
+		border-radius: 10px;
+		background: var(--ss-surface);
+		color: var(--ss-text);
+		cursor: pointer;
+
+		&.is-picked {
+			border-color: var(--ss-primary);
+			background: var(--ss-primary-50);
+			color: var(--ss-primary-ink);
+		}
+		&.is-correct {
+			border-color: var(--ss-success);
+			background: var(--ss-success-50);
+		}
+		&.is-wrong {
+			border-color: var(--ss-danger);
+			background: var(--ss-danger-50);
+		}
+		&:disabled {
+			cursor: default;
+		}
+		&:focus-visible {
+			outline: 3px solid var(--ss-primary-200);
+			outline-offset: 2px;
+		}
+	}
+
+	&__note {
+		margin: 8px 0 0;
+		color: var(--ss-muted);
+		font-size: 0.9rem;
+	}
+
+	&__error {
+		margin: 8px 0 0;
+		padding: 8px 12px;
+		border-radius: 8px;
+		background: var(--ss-danger-50);
+		color: var(--ss-danger);
+		font-size: 0.9rem;
+	}
+
+	&__reveal {
+		margin-top: 8px;
+		padding: 12px;
+		border-radius: 10px;
+		background: var(--ss-success-50);
+		color: var(--ss-ink);
+
+		p {
+			margin: 0 0 4px;
+		}
+	}
+
+	&__bars {
+		list-style: none;
+		margin: 8px 0;
+		padding: 0;
+		display: grid;
+		gap: 6px;
+
+		li {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 90px 28px;
+			align-items: center;
+			gap: 8px;
+			font-size: 0.9rem;
+
+			&.is-correct .ss-lq__bar span {
+				background: var(--ss-success);
+			}
+		}
+	}
+
+	&__bar {
+		height: 10px;
+		border-radius: 999px;
+		background: var(--ss-surface-3);
+		overflow: hidden;
+
+		span {
+			display: block;
+			height: 100%;
+			background: var(--ss-primary);
+			transition: width 0.3s ease;
+		}
+	}
+
+	&__bar-count {
+		text-align: right;
+		font-variant-numeric: tabular-nums;
+	}
+
+	&__form {
+		display: grid;
+		gap: 8px;
+	}
+
+	&__opts {
+		border: 0;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 6px;
+	}
+
+	&__opt-row {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__row {
+		display: grid;
+		gap: 8px;
+	}
+
+	&__check {
+		display: flex;
+		gap: 8px;
+		align-items: flex-start;
+		font-size: 0.9rem;
+	}
+
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	&__people {
+		list-style: none;
+		margin: 6px 0 0;
+		padding: 0;
+		display: grid;
+		gap: 4px;
+		font-size: 0.9rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&__bar span {
+			transition: none;
+		}
+	}
+}
+
+// ---- pictures, true/false, key selection ----
+.ss-lq {
+	&__img {
+		display: block;
+		max-width: 100%;
+		max-height: 220px;
+		margin: 4px auto 8px;
+		object-fit: contain;
+		border-radius: 8px;
+		background: var(--ss-surface-2);
+
+		&--option {
+			max-height: 120px;
+			margin: 0 auto 6px;
+		}
+		&--preview {
+			max-height: 140px;
+			margin: 0 0 6px;
+		}
+	}
+	&__img-missing {
+		display: block;
+		padding: 16px;
+		text-align: center;
+		color: var(--ss-muted);
+		font-size: 0.85rem;
+		background: var(--ss-surface-2);
+		border-radius: 8px;
+	}
+	&__options--pictures {
+		grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+	}
+	&__option {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		align-items: flex-start;
+	}
+	&__opt-row {
+		grid-template-columns: auto minmax(0, 1fr) auto auto;
+		padding: 6px;
+		border-radius: 8px;
+		border: 2px solid transparent;
+
+		&.is-key {
+			border-color: var(--ss-success);
+			background: var(--ss-success-50);
+		}
+	}
+	&__opt-fields {
+		display: grid;
+		gap: 6px;
+		min-width: 0;
+	}
+	&__picker {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		align-items: center;
+	}
+	&__preview {
+		padding: 12px;
+		border: 1px dashed var(--ss-border-strong);
+		border-radius: 10px;
+	}
+	&__fix {
+		display: grid;
+		gap: 6px;
+		margin-top: 6px;
+	}
+	&__bars li.is-wrong .ss-lq__bar span {
+		background: var(--ss-danger);
+	}
+}

@@ -35,3 +35,9 @@ yarn-error.log*
 # vercel
 .vercel
 .env*
+
+# Local Claude worktrees and settings
+/.claude/
+/settings.json
+
+.book-storage/

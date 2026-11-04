@@ -5,14 +5,15 @@ import { handleLogin } from "@/utils/auth";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
 
 const INITIAL_USER = {
 	email: "",
 	password: "",
 };
 
-const LoginForm = () => {
+// asParent: returning parents land on /family/ (their Progress page; a safe ?next= still wins).
+const LoginForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -35,7 +36,7 @@ const LoginForm = () => {
 			const url = `${baseUrl}/api/users/signin`;
 			const payload = { ...user };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
+			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
 			toast.success(response.data.message, {
 				style: {
 					border: "1px solid #4BB543",
@@ -48,11 +49,9 @@ const LoginForm = () => {
 				},
 			});
 		} catch (err) {
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
+			const message =
+					err?.response?.data?.message ||
+					"Could not sign in right now, please try again.";
 			toast.error(message, {
 				style: {
 					border: "1px solid #ff0033",
@@ -70,39 +69,33 @@ const LoginForm = () => {
 	};
 
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Email"
-					name="email"
-					value={user.email}
-					onChange={handleChange}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
+		<form onSubmit={handleSubmit}>
+			<Field
+				label="Email"
+				type="email"
+				name="email"
+				autoComplete="email"
+				inputMode="email"
+				placeholder="you@example.com"
+				value={user.email}
+				onChange={handleChange}
+			/>
+			<Field label="Password">
+				<PasswordInput
 					name="password"
+					autoComplete="current-password"
+					placeholder="Your password"
 					value={user.password}
 					onChange={handleChange}
 				/>
-			</div>
+			</Field>
 			<Button
 				loading={loading}
-				disabled={disabled}
-				btnText="Login Now"
-				btnClass="default-btn"
+				disabled={disabled || loading}
+				btnText="Log in"
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
-		</motion.form>
+		</form>
 	);
 };
 

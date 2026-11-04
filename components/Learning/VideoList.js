@@ -9,16 +9,23 @@ const VideoList = ({
 	onPlay,
 	activeClass,
 }) => {
+	const active = activeClass === id;
 	return (
-		<li
-			className={activeClass === id ? "active" : ""}
-			onClick={() => onPlay(id)}
-		>
-			{short_id}. {title}
-			<span className="d-block text-muted fs-13 mt-1">
-				<i className="bx bx-play-circle"></i>{" "}
-				{secondsToHms(video_length)}
-			</span>
+		<li>
+			<button
+				type="button"
+				className={`ss-lesson${active ? " active" : ""}`}
+				onClick={() => onPlay(id)}
+				aria-current={active ? "true" : undefined}
+			>
+				<span className="ss-lesson__num" aria-hidden="true">
+					{active ? <i className="ri-play-fill"></i> : short_id}
+				</span>
+				<span className="ss-lesson__text">
+					<span className="ss-lesson__name">{title}</span>
+					<span className="ss-lesson__time">{secondsToHms(video_length)}</span>
+				</span>
+			</button>
 		</li>
 	);
 };

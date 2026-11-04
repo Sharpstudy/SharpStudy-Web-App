@@ -3,13 +3,14 @@ import { progress } from "@/utils/helper";
 import baseUrl from "@/utils/baseUrl";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import { ProgressBar } from "@/components/ui";
 
 const ProgressManager = ({ userId, courseId, videos_count, selectedVideo }) => {
 	const [pro, setPro] = useState(0);
 	const {
 		query: { slug },
 	} = useRouter();
-	const router = useRouter();
 
 	useEffect(() => {
 		if (courseId) {
@@ -25,56 +26,29 @@ const ProgressManager = ({ userId, courseId, videos_count, selectedVideo }) => {
 			fetchProgrss();
 		}
 	}, [courseId, selectedVideo]);
+	const pct = progress(pro, videos_count) || 0;
+	const done = pct == 100;
+
 	return (
-		<div className="mb-3">
-			<p className="mb-2">
-				Your progress{" "}
+		<div className="ss-progress-panel">
+			<div className="ss-progress-panel__row">
+				<span>Your progress</span>
 				<strong>
 					{pro} of {videos_count} complete
 				</strong>
-				.{" "}
-				{progress(pro, videos_count) == 100 ? (
-					<span
-						onClick={() =>
-							router.push(`/learning/certificate/${slug}`)
-						}
-						style={{
-							textDecoration: "underline",
-							color: "blue",
-							fontWeight: "800",
-							cursor: "pointer",
-						}}
-					>
-						Get certificate
-					</span>
-				) : (
-					<span
-						style={{
-							textDecoration: "underline",
-							color: "blue",
-							fontWeight: "800",
-							cursor: "pointer",
-						}}
-					>
-						Get certificate after complete
-					</span>
-				)}
-			</p>
-			<div className="progress">
-				<div
-					className="progress-bar bg-1cab94"
-					role="progressbar"
-					aria-label="Example with label"
-					style={{
-						width: `${progress(pro, videos_count)}%`,
-					}}
-					aria-valuenow={`${progress(pro, videos_count)}`}
-					aria-valuemin="0"
-					aria-valuemax="100"
-				>
-					{progress(pro, videos_count)}%
-				</div>
 			</div>
+			<ProgressBar value={pct} label="Course progress" tone={done ? "success" : undefined} />
+			{done ? (
+				<Link href={`/learning/certificate/${slug}`}>
+					<a className="ss-btn ss-btn--success ss-btn--sm ss-btn--block">
+						<i className="ri-award-line" aria-hidden="true"></i> Get certificate
+					</a>
+				</Link>
+			) : (
+				<p className="ss-progress-panel__hint">
+					<i className="ri-award-line" aria-hidden="true"></i> Complete every lesson to unlock your certificate.
+				</p>
+			)}
 		</div>
 	);
 };

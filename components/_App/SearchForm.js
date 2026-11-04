@@ -14,18 +14,19 @@ const SearchForm = ({ formClass, btnClass = null, banner = false }) => {
 		});
 	};
 	return (
-		<form className={formClass} onSubmit={handleSearch}>
+		<form className={formClass} onSubmit={handleSearch} role="search">
 			<input
-				type="text"
+				type="search"
 				className="form-control"
-				placeholder="Search Courses"
+				placeholder="Search courses"
+				aria-label="Search courses"
 				name="search"
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 			/>
-			<button type="submit" className={btnClass}>
+			<button type="submit" className={btnClass} aria-label="Search">
 				{banner === true && <span>Search Now</span>}
-				<i className="ri-search-line"></i>
+				<i className="ri-search-line" aria-hidden="true"></i>
 			</button>
 		</form>
 	);

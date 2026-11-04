@@ -34,6 +34,7 @@ const CourseCreateForm = ({ btnText, is_class }) => {
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
 	const [categories, setCategories] = useState([]);
+	const [categoriesState, setCategoriesState] = useState("loading");
 	const [imagePreview, setImagePreview] = React.useState("");
 	const router = useRouter();
 
@@ -43,18 +44,32 @@ const CourseCreateForm = ({ btnText, is_class }) => {
 	}, [course]);
 
 	useEffect(() => {
+		let active = true;
 		const fetchData = async () => {
-			const payload = {
-				headers: { Authorization: edmy_users_token },
-			};
-			const response = await axios.get(
-				`${baseUrl}/api/categories`,
-				payload
-			);
-			setCategories(response.data.categories);
+			setCategoriesState("loading");
+			try {
+				const response = await axios.get(`${baseUrl}/api/categories`, {
+					headers: { Authorization: edmy_users_token },
+				});
+				if (!active) return;
+				const list = (response.data && response.data.categories) || [];
+				setCategories(list);
+				setCategoriesState(list.length ? "ready" : "empty");
+			} catch (err) {
+				if (!active) return;
+				setCategoriesState("error");
+				toast.error(
+					(err.response && err.response.data && err.response.data.message) ||
+						"Could not load course categories. Please try again."
+				);
+			}
 		};
 
 		fetchData();
+		return () => {
+			active = false;
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleChange = (e) => {
@@ -347,8 +362,17 @@ const CourseCreateForm = ({ btnText, is_class }) => {
 							name="catId"
 							value={course.catId}
 							onChange={handleChange}
+							disabled={categoriesState === "loading"}
 						>
-							<option value="">Select</option>
+							<option value="">
+								{categoriesState === "loading"
+									? "Loading categories…"
+									: categoriesState === "error"
+									? "Categories unavailable"
+									: categoriesState === "empty"
+									? "No categories yet"
+									: "Select"}
+							</option>
 							{categories.length > 0 &&
 								categories.map((cat) => (
 									<option key={cat.id} value={cat.id}>
@@ -356,6 +380,16 @@ const CourseCreateForm = ({ btnText, is_class }) => {
 									</option>
 								))}
 						</select>
+						{categoriesState === "empty" && (
+							<small className="text-muted">
+								No categories exist yet. An administrator can add them under Admin → Categories.
+							</small>
+						)}
+						{categoriesState === "error" && (
+							<small className="text-danger">
+								Could not load categories. Reload the page to try again.
+							</small>
+						)}
 					</div>
 				</div>
 

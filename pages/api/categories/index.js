@@ -1,9 +1,12 @@
+
+import { requireRole } from "@/lib/auth/requireRole";
 import Category from "database/models/category";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	// Listing categories is needed by anyone creating or editing a course
+	// (instructors), so any signed-in user may read it. Deleting stays admin-only.
+	const allowed = req.method === "GET" ? ["admin", "instructor", "student"] : ["admin"];
+	if (!(await requireRole(req, res, allowed))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGet(req, res);
