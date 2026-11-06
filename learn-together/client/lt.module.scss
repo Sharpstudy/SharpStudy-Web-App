@@ -1548,8 +1548,8 @@ details.why {
   grid-template-columns: auto repeat(5, 1fr);
   gap: 4px;
   font-size: 12px;
-  .dayLabel { text-align: center; color: $body-color; padding: 2px; font-weight: 600; }
-  .subjectLabel { color: $body-color; padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .miniCell { background: $soft-bg; border-radius: $radius; padding: 2px 4px; min-height: 24px; text-align: center; color: $body-color; }
-  .miniCellFilled { composes: miniCell; background: #d4e6fa; color: $main-dark; font-weight: 500; }
 }
+.dayLabel { text-align: center; color: $body-color; padding: 2px; font-weight: 600; }
+.subjectLabel { color: $body-color; padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.miniCell { background: $soft-bg; border-radius: $radius; padding: 2px 4px; min-height: 24px; text-align: center; color: $body-color; }
+.miniCellFilled { composes: miniCell; background: #d4e6fa; color: $main-dark; font-weight: 500; }
