@@ -1,4 +1,5 @@
 import React from "react";
+import { ProgressBar } from "@/components/ui";
 
 const quiz = {
   topic: "Javascript",
@@ -103,16 +104,22 @@ const CourseQuiz = () => {
     switch (choiceType) {
       case "default":
         return (
-          <ul>
+          <ul className="ss-quiz__choices">
             {choices.map((answer, index) => (
-              <li
-                onClick={() => onAnswerSelected(answer, index)}
-                key={answer}
-                className={
-                  selectedAnswerIndex === index ? "selected-answer" : null
-                }
-              >
-                {answer}
+              <li key={answer}>
+                <button
+                  type="button"
+                  onClick={() => onAnswerSelected(answer, index)}
+                  aria-pressed={selectedAnswerIndex === index}
+                  className={
+                    selectedAnswerIndex === index ? "selected-answer" : undefined
+                  }
+                >
+                  <span className="ss-quiz__key" aria-hidden="true">
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  {answer}
+                </button>
               </li>
             ))}
           </ul>
@@ -198,19 +205,7 @@ const CourseQuiz = () => {
     <div className="quiz-container">
       {!showResult ? (
         <>
-          <div className="progress">
-            <div
-              className="progress-bar"
-              role="progressbar"
-              style={{
-                width: `${progressPercentage}%`,
-                backgroundColor: "#286bad",
-              }}
-              aria-valuenow={progressPercentage}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
+          <ProgressBar value={progressPercentage} label="Quiz progress" />
 
           <div>
             <div>
@@ -222,10 +217,11 @@ const CourseQuiz = () => {
               </span>
             </div>
             <h2>{question}</h2>
-            <br />
             {renderChoices()}
             <div className="flex-right">
               <button
+                type="button"
+                className="ss-btn"
                 onClick={onClickNext}
                 disabled={selectedAnswerIndex === null}
               >
@@ -235,20 +231,26 @@ const CourseQuiz = () => {
           </div>
         </>
       ) : (
-        <div className="result">
-          <h3>Result</h3>
-          <p>
-            Total Question: <span>{questions.length}</span>
-          </p>
-          <p>
-            Total Score:<span> {result.score}</span>
-          </p>
-          <p>
-            Correct Answers:<span>{result.correctAnswers}</span>
-          </p>
-          <p>
-            Wrong Answers:<span> {result.wrongAnswers}</span>
-          </p>
+        <div className="result" aria-live="polite">
+          <h3>Quiz complete</h3>
+          <dl className="ss-quiz__results">
+            <div>
+              <dt>Questions</dt>
+              <dd>{questions.length}</dd>
+            </div>
+            <div>
+              <dt>Score</dt>
+              <dd>{result.score}</dd>
+            </div>
+            <div className="is-good">
+              <dt>Correct</dt>
+              <dd>{result.correctAnswers}</dd>
+            </div>
+            <div className="is-bad">
+              <dt>Wrong</dt>
+              <dd>{result.wrongAnswers}</dd>
+            </div>
+          </dl>
         </div>
       )}
     </div>

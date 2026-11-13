@@ -1,5 +1,5 @@
 import baseUrl from "@/utils/baseUrl";
-import { secondsToHms } from "@/utils/helper";
+import { secondsToHms, plural } from "@/utils/helper";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import FsLightbox from "fslightbox-react";
@@ -20,43 +20,36 @@ const CourseVideo = ({ courseSlug }) => {
 
 	return (
 		<>
-			<div className="courses-curriculum">
-				<ul>
-					{videos &&
-						videos.map((v) => (
+			{videos && videos.length > 0 && (
+				<section className="ss-curriculum" aria-labelledby="curriculum-title">
+					<h3 id="curriculum-title">
+						Course content <span>{plural(videos.length, "lesson")}</span>
+					</h3>
+					<ol>
+						{videos.map((v) => (
 							<li key={v.id}>
-								<div className="d-flex justify-content-between align-items-center">
-									<span className="courses-name">
-										{v.title}
-									</span>
-									<div className="courses-meta">
-										<span className="duration">
-											{secondsToHms(v.video_length)}
-										</span>
-										{v.is_preview ? (
-											<span
-												className="status"
-												onClick={() => {
-													setPreview(v.video);
-													setToggler(!toggler);
-												}}
-											>
-												preview
-											</span>
-										) : (
-											<span
-												className="status locked"
-												title="Premium"
-											>
-												<i className="flaticon-password"></i>
-											</span>
-										)}
-									</div>
-								</div>
+								<i className={v.is_preview ? "ri-play-circle-line" : "ri-lock-line"} aria-hidden="true"></i>
+								<span className="ss-curriculum__name">{v.title}</span>
+								{v.is_preview ? (
+									<button
+										type="button"
+										className="ss-badge ss-badge--primary ss-curriculum__preview"
+										onClick={() => {
+											setPreview(v.video);
+											setToggler(!toggler);
+										}}
+									>
+										Preview
+									</button>
+								) : (
+									<span className="visually-hidden">Locked</span>
+								)}
+								<span className="ss-curriculum__time">{secondsToHms(v.video_length)}</span>
 							</li>
 						))}
-				</ul>
-			</div>
+					</ol>
+				</section>
+			)}
 
 			{preview && <FsLightbox toggler={toggler} sources={[preview]} />}
 		</>

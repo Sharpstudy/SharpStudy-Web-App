@@ -50,7 +50,8 @@ const initUser = (sequelize, Types) => {
 			instructor_status: Types.BOOLEAN,
 			instructor_subject: Types.STRING,
 			instructor_description: Types.STRING,
-			status: Types.BOOLEAN,
+			// Matches the column default (tinyint(1) DEFAULT 1), so a new account is explicitly active.
+			status: { type: Types.BOOLEAN, defaultValue: true },
 			is_profile_public: Types.BOOLEAN,
 		},
 		{
@@ -59,6 +60,12 @@ const initUser = (sequelize, Types) => {
 			tableName: "users",
 			createdAt: "created_at",
 			updatedAt: "updated_at",
+			// Never select the password hash or reset token by default, so no API
+			// can leak them by returning a whole user row. Code that genuinely
+			// needs the hash (sign-in, re-authentication) uses User.unscoped().
+			defaultScope: {
+				attributes: { exclude: ["password", "reset_password_token"] },
+			},
 		}
 	);
 	return User;

@@ -1,10 +1,11 @@
-import { verifyUser } from "@/utils/auth";
 import { Quiz, Question, Answer_Option, Enrolment, Course } from "database/models";
+import { requireUser } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No authorization token" });
-  }
+  // 401 invalid/missing token, 403 wrong role; identity and role come from the database.
+  const actor = await requireUser(req, res, ["student"]);
+  if (!actor) return;
+  req.actor = actor;
   switch (req.method) {
     case "GET":
       if (req.query.quizId) {
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
 const handleGetRequest = async (req, res) => {
   const { quizId } = req.query;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
     if (user.role !== 'student') {
       return res.status(401).json({ message: "User is not Student" });
@@ -51,6 +52,10 @@ const handleGetRequest = async (req, res) => {
       where: { id: quizId },
     });
 
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
     const userEnrollments = await Enrolment.findAll({ where: { userId: user.userId } })
 
     const enrolledCourseIds = userEnrollments.map(enrollment => enrollment.courseId)
@@ -72,7 +77,7 @@ const handleGetRequest = async (req, res) => {
 const handleGetCourseQuizzesRequest = async (req, res) => {
   const { courseId } = req.query;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
     if (user.role !== 'student') {
       return res.status(401).json({ message: "User is not Student" });
@@ -113,7 +118,7 @@ const handleGetCourseQuizzesRequest = async (req, res) => {
     }
 
     if (!enrolledCourseIds.includes(courseQuizzes.id)) {
-      return res.status(401).json({ message: "You are not enrolled in this course" })
+      return res.status(403).json({ message: "You are not enrolled in this course" })
     }
 
     res.status(200).json({ courseQuizzes });

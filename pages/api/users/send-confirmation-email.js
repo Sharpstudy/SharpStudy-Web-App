@@ -1,5 +1,6 @@
 import isEmail from "validator/lib/isEmail";
 import User from "database/models/user";
+import { rateLimit } from "@/lib/mastery-server/http";
 import { confirmEmailAddress } from "email-templates/account-confirmation";
 
 export default async function handler(req, res) {
@@ -15,7 +16,9 @@ export default async function handler(req, res) {
 }
 
 const userConfirmationEmailSend = async (req, res) => {
-	let { email } = req.body;
+	// Each request sends an e-mail: limit per client address.
+	if (!rateLimit(req, res, "send-confirmation", { windowMs: 60 * 60 * 1000, max: 5 })) return;
+	let { email, next } = req.body || {};
 	try {
 		if (!isEmail(email)) {
 			return res.status(422).json({
@@ -24,12 +27,13 @@ const userConfirmationEmailSend = async (req, res) => {
 		}
 
 		// Check if user with that email if already exists
-		const user = await User.findOne({
+		// unscoped: the confirmation link in the e-mail carries reset_password_token
+		const user = await User.unscoped().findOne({
 			where: { email: email },
 		});
 
 		if (user) {
-			confirmEmailAddress(user);
+			confirmEmailAddress(user, next);
 
 			res.status(200).json({
 				message: "Please check your email and confirm.",

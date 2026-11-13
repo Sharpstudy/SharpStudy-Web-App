@@ -1,10 +1,11 @@
-import { verifyUser } from "@/utils/auth"
 import { Quiz, Question, Answer_Option } from "database/models";
+import { requireUser, requireQuizOwner, requireQuestionOwner, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
-  }
+  // Only instructors/admins manage questions, and only within quizzes they own.
+  const actor = await requireUser(req, res, TEACHER_ROLES);
+  if (!actor) return;
+  req.actor = actor;
   switch (req.method) {
     case "POST":
       await handlePostRequest(req, res);
@@ -33,18 +34,12 @@ const handlePostRequest = async (req, res) => {
   }
 
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to create these questions" });
-    }
-
-    const checkQuiz = await Quiz.findOne({
-      where: { id: questions[0]['quizId'], userId: user.userId }
-    });
-
-    if (!checkQuiz) {
-      return res.status(404).json({ message: "Quiz not found" });
+    // Every target quiz must belong to the caller (or the caller is an admin).
+    const quizIds = [...new Set(questions.map((q) => (q && typeof q.quizId === "string" ? q.quizId.trim() : "")))];
+    for (const quizId of quizIds) {
+      if (!(await requireQuizOwner(res, user, quizId))) return;
     }
 
     const questionsToCreate = questions.map(question => {
@@ -82,14 +77,8 @@ const handlePostRequest = async (req, res) => {
 const handleDeleteRequest = async (req, res) => {
   const { questionId } = req.query;
   try {
-    const user = await verifyUser(req, res);
-    const question = await Question.findOne({
-      where: { id: questionId },
-    });
-
-    if (!question) {
-      return res.status(404).json({ message: "Question not found" });
-    }
+    const question = await requireQuestionOwner(res, req.actor, questionId);
+    if (!question) return;
 
     await question.destroy({
       include: [
@@ -109,7 +98,7 @@ const handleDeleteRequest = async (req, res) => {
 const handleGetRequest = async (req, res) => {
   const { questionId } = req.query;
   try {
-    await verifyUser(req, res);
+    if (!(await requireQuestionOwner(res, req.actor, questionId))) return;
     const question = await Question.findOne({
       include: [
         {
@@ -137,20 +126,16 @@ const handlePutRequest = async (req, res) => {
     quizId
   } = req.body;
   try {
-    const user = await verifyUser(req, res);
-
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to update this question" });
+    const existing = await requireQuestionOwner(res, req.actor, questionId);
+    if (!existing) return;
+    // A question cannot be moved to another quiz through this route.
+    if (quizId !== undefined && quizId !== existing.quizId) {
+      return res.status(400).json({ message: "quizId cannot be changed" });
     }
 
     const [affectedRows] = await Question.update(
-      {
-        question_text,
-        quizId
-      },
-      {
-        where: { id: questionId, quizId },
-      }
+      { question_text },
+      { where: { id: questionId, quizId: existing.quizId } }
     );
 
     if (affectedRows === 0) {

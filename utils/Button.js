@@ -8,7 +8,8 @@ const Button = ({ loading, disabled, btnText, btnClass }) => {
 			type="submit"
 			className={btnClass || "default-btn"}
 			disabled={disabled || false}
-			whileTap={{ scale: 0.4 }}
+			aria-busy={loading ? true : undefined}
+			whileTap={disabled ? undefined : { scale: 0.97 }}
 		>
 			{btnText || "Submit"}
 			{loading ? <LoadingSpinner /> : ""}

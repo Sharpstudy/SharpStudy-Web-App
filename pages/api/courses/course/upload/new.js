@@ -1,28 +1,16 @@
-import jwt from "jsonwebtoken";
 import Video from "database/models/video";
+import { requireUser, requireCourseManager, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
+	if (req.method !== "POST") {
+		return res.status(405).json({ message: `Method ${req.method} not allowed` });
 	}
-	switch (req.method) {
-		case "GET":
-			await handleGet(req, res);
-			break;
-		case "POST":
-			await handlePost(req, res);
-			break;
-		case "DELETE":
-			await handleDelete(req, res);
-			break;
-		default:
-			res.status(405).json({
-				message: `Method ${req.method} not allowed`,
-			});
-	}
+	const actor = await requireUser(req, res, TEACHER_ROLES);
+	if (!actor) return;
+	await handlePost(req, res, actor);
 }
 
-const handlePost = async (req, res) => {
+const handlePost = async (req, res, actor) => {
 	const {
 		group_name,
 		title,
@@ -34,10 +22,8 @@ const handlePost = async (req, res) => {
 		courseId,
 	} = req.body;
 	try {
-		const { userId } = jwt.verify(
-			req.headers.authorization,
-			process.env.JWT_SECRET
-		);
+		// The course must belong to the caller (or the caller is an admin).
+		if (!(await requireCourseManager(res, actor, courseId))) return;
 
 		await Video.create({
 			group_name,
@@ -48,7 +34,7 @@ const handlePost = async (req, res) => {
 			is_preview,
 			short_id,
 			courseId,
-			userId,
+			userId: actor.userId,
 		});
 
 		res.status(200).json({ message: "Video Uploaded Successfully." });

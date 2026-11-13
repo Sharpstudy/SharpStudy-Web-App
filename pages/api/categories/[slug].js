@@ -9,6 +9,8 @@ export default async function handler(req, res) {
 				{
 					model: Course,
 					as: "courses",
+					required: false,
+					where: { approved: true }, // only published courses are listed
 					include: [
 						{
 							model: User,

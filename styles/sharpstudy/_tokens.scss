@@ -1,0 +1,155 @@
+// SharpStudy design tokens.
+// SCSS values are for media queries only; everything else is exposed as CSS
+// custom properties so components (and inline styles) can read them.
+
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+
+@mixin up($bp) {
+	@media (min-width: $bp) {
+		@content;
+	}
+}
+@mixin down($bp) {
+	@media (max-width: $bp - 0.02px) {
+		@content;
+	}
+}
+
+:root {
+	/* Brand */
+	--ss-primary: #2f55d4;
+	--ss-primary-hover: #2443b3;
+	--ss-primary-active: #1d3792;
+	--ss-primary-50: #f0f3fe;
+	--ss-primary-100: #e0e7fd;
+	--ss-primary-200: #c3d0fa;
+	--ss-primary-ink: #1b2f7a;
+	--ss-accent: #f5a524; /* stars, streaks, highlights */
+	--ss-accent-50: #fff7e8;
+	--ss-accent-ink: #8a5300;
+
+	/* Playful palette: soft surfaces for backgrounds + a strong tone for icons and a dark ink for text ON that surface
+	   (every *-ink on its pastel is >= 7:1). Pastels are never used for body text. */
+	--ss-peach: #fff0e8;
+	--ss-peach-strong: #ff8a5b;
+	--ss-peach-ink: #8a3515;
+	--ss-sky: #ddf3ff;
+	--ss-sky-strong: #3ba7e0;
+	--ss-sky-ink: #094a6f;
+	--ss-sun: #fff1a8;
+	--ss-sun-strong: #f5b800;
+	--ss-sun-ink: #5c4600;
+	--ss-mint: #ddf7e5;
+	--ss-mint-strong: #35b26b;
+	--ss-mint-ink: #0e5632;
+	--ss-lav: #eee5ff;
+	--ss-lav-strong: #8b6bea;
+	--ss-lav-ink: #4a2fa3;
+	--ss-page: #fffaf6; /* warm page background for playful areas */
+
+	/* Semantic */
+	--ss-success: #0f7a41;
+	--ss-success-50: #e9f7ef;
+	--ss-warning: #b45309;
+	--ss-warning-50: #fef5e7;
+	--ss-danger: #c62832;
+	--ss-danger-50: #fdecee;
+	--ss-info: #0b7285;
+	--ss-info-50: #e6f6f8;
+
+	/* Neutrals */
+	--ss-ink: #25304a;
+	--ss-text: #3b4660;
+	--ss-muted: #5b6784;
+	--ss-subtle: #98a2b3;
+	--ss-border: #e4e7ec;
+	--ss-border-strong: #d0d5dd;
+	--ss-surface: #ffffff;
+	--ss-surface-2: #f7f8fb;
+	--ss-surface-3: #eef1f6;
+	--ss-overlay: rgba(15, 23, 41, 0.5);
+
+	/* Typography */
+	--ss-font-display: "Fredoka", "Plus Jakarta Sans", system-ui, sans-serif; /* rounded headings in playful areas */
+	--ss-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	--ss-fs-xs: 0.75rem;
+	--ss-fs-sm: 0.875rem;
+	--ss-fs-base: 1rem;
+	--ss-fs-md: 1.0625rem;
+	--ss-fs-lg: 1.25rem;
+	--ss-fs-xl: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem);
+	--ss-fs-2xl: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+	--ss-fs-3xl: clamp(2rem, 1.45rem + 2.3vw, 3rem);
+	--ss-fs-display: clamp(2.25rem, 1.5rem + 3.2vw, 3.75rem);
+	--ss-lh-tight: 1.15;
+	--ss-lh-snug: 1.35;
+	--ss-lh-body: 1.65;
+
+	/* Spacing (4px scale) */
+	--ss-space-1: 4px;
+	--ss-space-2: 8px;
+	--ss-space-3: 12px;
+	--ss-space-4: 16px;
+	--ss-space-5: 20px;
+	--ss-space-6: 24px;
+	--ss-space-8: 32px;
+	--ss-space-10: 40px;
+	--ss-space-12: 48px;
+	--ss-space-16: 64px;
+	--ss-section-y: clamp(56px, 7vw, 104px);
+	--ss-gutter: 16px;
+
+	/* Layout */
+	--ss-container: 1200px;
+	--ss-container-wide: 1320px;
+	--ss-header-h: 68px;
+	--ss-sidebar-w: 264px;
+
+	/* Radii */
+	--ss-radius-sm: 10px;
+	--ss-radius: 14px;
+	--ss-radius-lg: 20px;
+	--ss-radius-xl: 28px;
+	--ss-radius-pill: 999px;
+
+	/* Elevation */
+	--ss-shadow-xs: 0 1px 2px rgba(37, 48, 74, 0.05);
+	--ss-shadow-sm: 0 2px 6px rgba(37, 48, 74, 0.08), 0 1px 2px rgba(37, 48, 74, 0.04);
+	--ss-shadow-md: 0 14px 28px -10px rgba(37, 48, 74, 0.16), 0 2px 6px -2px rgba(37, 48, 74, 0.07);
+	--ss-shadow-lg: 0 26px 52px -18px rgba(37, 48, 74, 0.24);
+
+	/* Interaction */
+	--ss-focus-ring: 0 0 0 3px rgba(47, 85, 212, 0.28);
+	--ss-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--ss-dur: 180ms;
+	--ss-tap: 44px; /* minimum touch target */
+
+	@media (min-width: 768px) {
+		--ss-gutter: 24px;
+		--ss-header-h: 76px;
+	}
+
+	/* Bootstrap 5.2 bridge */
+	--bs-body-font-family: var(--ss-font);
+	--bs-body-color: var(--ss-text);
+	--bs-primary: #2f55d4;
+	--bs-primary-rgb: 47, 85, 212;
+	--bs-link-color: #2f55d4;
+	--bs-link-hover-color: #2443b3;
+	--bs-border-color: #e4e7ec;
+	--bs-border-radius: 12px;
+}
+
+/* Restrained "pro" mode for instructor and admin screens (wrapper class set in components/_App/Layout.js):
+   the same palette and components, tighter corners, plain headings, no pastel page tint. */
+.ss-mode--pro {
+	--ss-radius-sm: 8px;
+	--ss-radius: 10px;
+	--ss-radius-lg: 14px;
+	--ss-radius-xl: 18px;
+	--ss-font-display: var(--ss-font);
+	--ss-page: #f7f8fb;
+}

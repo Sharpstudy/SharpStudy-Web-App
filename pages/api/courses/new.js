@@ -1,17 +1,18 @@
-import jwt from "jsonwebtoken";
 import { slugify } from "@/utils/auth";
 import Course from "database/models/course";
+import { requireRole } from "@/lib/auth/requireRole";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: `Method ${req.method} not allowed` });
   }
+  // 401 for a missing/invalid token, 403 for roles that may not create courses.
+  // The role is re-read from the database, never taken from the browser.
+  const actor = await requireRole(req, res, ["instructor", "admin"]);
+  if (!actor) return;
   switch (req.method) {
     case "POST":
-      await handlePostRequest(req, res);
-      break;
-    case "DELETE":
-      await handleDeleteRequest(req, res);
+      await handlePostRequest(req, res, actor);
       break;
     default:
       res.status(405).json({
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
   }
 }
 
-const handlePostRequest = async (req, res) => {
+const handlePostRequest = async (req, res, actor) => {
   const {
     title,
     short_desc,
@@ -38,25 +39,8 @@ const handlePostRequest = async (req, res) => {
     is_class,
   } = req.body;
   try {
-    // const { userId } = jwt.verify(
-    //   req.headers.authorization,
-    //   process.env.JWT_SECRET
-    // );
-
-    let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-      // Token comes from the UI or Swagger docs
-      token = req.headers.authorization.split(' ')[1];
-
-    } else if (req.headers.authorization) {
-      // Token comes without the "Bearer " prefix
-      token = req.headers.authorization;
-    } else {
-      return res.status(401).json({ message: "Invalid or missing authorization header" });
-    }
-
-    // Verify the token using the extracted token variable
-    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    // The owner is always the authenticated user; any userId in the body is ignored.
+    const userId = actor.userId;
 
     let slug = slugify(title);
     const slugExist = await Course.findOne({

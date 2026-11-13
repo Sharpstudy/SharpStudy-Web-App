@@ -78,7 +78,7 @@ const Banner = () => {
 							<button
 								type="button"
 								className="btn btn-warning btn-lg"
-								onClick={() => router.push(`https://meetings.hubspot.com/mike1162 `)}
+								onClick={() => router.push("/schedule-a-call/")}
 							>
 								Schedule a call
 							</button>

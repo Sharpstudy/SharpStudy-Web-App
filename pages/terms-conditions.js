@@ -23,7 +23,7 @@ const termsConditions = ({ user }) => {
               disagree with any part of these Terms, you may not access the
               Website.
             </p>
-            <h3>1. Use of the Website</h3>
+            <h2 className="ss-legal-h">1. Use of the Website</h2>
             <p>
               1.1 <strong>Eligibility:</strong> By using the Website, you affirm
               that you are at least 18 years of age or have obtained
@@ -39,7 +39,7 @@ const termsConditions = ({ user }) => {
 
             <div className="gap-20"></div>
 
-            <h3>2. Content</h3>
+            <h2 className="ss-legal-h">2. Content</h2>
             <p>
               2.1 <strong>Ownership :</strong> All content on the Website,
               including but not limited to text, graphics, logos, images, audio
@@ -53,7 +53,7 @@ const termsConditions = ({ user }) => {
 
             <div className="gap-20"></div>
 
-            <h3>3. Prohibited Conduct</h3>
+            <h2 className="ss-legal-h">3. Prohibited Conduct</h2>
             <p>
               You agree not to: <br />
               3.1 Use the Website in any way that violates applicable laws or
@@ -68,7 +68,7 @@ const termsConditions = ({ user }) => {
 
             <div className="gap-20"></div>
 
-            <h3>4. Privacy</h3>
+            <h2 className="ss-legal-h">4. Privacy</h2>
             <p>
               Our Privacy Policy governs the collection, use, and disclosure of
               your personal information. By using the Website, you consent to
@@ -77,7 +77,7 @@ const termsConditions = ({ user }) => {
 
             <div className="gap-20"></div>
 
-            <h3>5. Limitation of Liability</h3>
+            <h2 className="ss-legal-h">5. Limitation of Liability</h2>
             <p>
               To the fullest extent permitted by law, we shall not be liable for
               any indirect, incidental, special, consequential, or punitive
@@ -87,24 +87,24 @@ const termsConditions = ({ user }) => {
 
             <div className="gap-20"></div>
 
-            <h3>6. Termination</h3>
+            <h2 className="ss-legal-h">6. Termination</h2>
             <p>
               We reserve the right to terminate or suspend access to the Website
               immediately, without prior notice or liability, for any reason
               whatsoever.
             </p>
-            <h3>7. Changes to Terms</h3>
+            <h2 className="ss-legal-h">7. Changes to Terms</h2>
             <p>
               We reserve the right to modify or replace these Terms at any time.
               Your continued use of the Website after any such changes
               constitute your acceptance of the new Terms.
             </p>
-            <h3>8. Governing Law</h3>
+            <h2 className="ss-legal-h">8. Governing Law</h2>
             <p>
               These Terms shall be governed by and construed in accordance with
               the applicable laws.
             </p>
-            <h3>9. Contact Us</h3>
+            <h2 className="ss-legal-h">9. Contact Us</h2>
             <p>
               If you have any questions about these Terms, please contact us at
               hello@sharpstudy.io.

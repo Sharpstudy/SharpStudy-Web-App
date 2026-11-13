@@ -1,10 +1,12 @@
-import { slugify, verifyUser } from "@/utils/auth";
+import { slugify } from "@/utils/auth";
+import { requireUser, TEACHER_ROLES, requireCourseManager } from "@/lib/auth/access";
 import { Quiz, Question, Answer_Option } from "database/models";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No authorization token" });
-  }
+  // 401 invalid/missing token, 403 wrong role; identity and role come from the database.
+  const actor = await requireUser(req, res, TEACHER_ROLES);
+  if (!actor) return;
+  req.actor = actor;
   switch (req.method) {
     case "POST":
       await handlePostRequest(req, res);
@@ -32,12 +34,13 @@ const handlePostRequest = async (req, res) => {
     courseId
   } = req.body;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
     if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized to create a quiz" });
     }
-    //Todo: check if it is the quiz creator that created the course
+    // The course must belong to the caller (or the caller is an admin).
+    if (!(await requireCourseManager(res, user, courseId))) return;
     let slug = slugify(title);
     const slugExist = await Quiz.findOne({
       where: { slug: slug },
@@ -77,7 +80,7 @@ const handlePostRequest = async (req, res) => {
 const handleDeleteRequest = async (req, res) => {
   const { quizId } = req.query;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
     if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized" });
@@ -92,7 +95,7 @@ const handleDeleteRequest = async (req, res) => {
     }
 
     if (user.userId !== quiz.userId) {
-      return res.status(401).json({ message: "Unauthorized to delete this quiz" });
+      return res.status(403).json({ message: "Unauthorized to delete this quiz" });
     }
 
     await quiz.destroy({
@@ -114,7 +117,7 @@ const handleDeleteRequest = async (req, res) => {
 const handleGetRequest = async (req, res) => {
   const { quizId } = req.query;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
     if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized" });
@@ -154,7 +157,7 @@ const handlePutRequest = async (req, res) => {
     description,
   } = req.body;
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
 
 
     if (user.role === 'student') {

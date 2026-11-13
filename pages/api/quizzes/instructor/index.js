@@ -1,10 +1,11 @@
-import { verifyUser } from "@/utils/auth";
 import { Answer_Option, Quiz, Question } from "database/models";
+import { requireUser, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No authorization token" });
-  }
+  // 401 invalid/missing token, 403 wrong role; identity and role come from the database.
+  const actor = await requireUser(req, res, TEACHER_ROLES);
+  if (!actor) return;
+  req.actor = actor;
   switch (req.method) {
     case "GET":
       await handleGetRequest(req, res);
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
 
 const handleGetRequest = async (req, res) => {
   try {
-    const user = await verifyUser(req, res);
+    const user = req.actor;
     if (user.role === 'student') {
       return res.status(401).json({ message: "User is not authorized" });
     }

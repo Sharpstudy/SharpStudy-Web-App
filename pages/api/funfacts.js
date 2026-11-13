@@ -1,6 +1,9 @@
 import { Course, User, Enrolment, Video, Course_Asset } from "database/models";
+import { requireRole } from "@/lib/auth/requireRole";
 
 export default async function handler(req, res) {
+	// Includes total sales, so it is admin-only (used by the admin dashboard).
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	try {
 		const students = await User.count({
 			where: { role: "student" },
