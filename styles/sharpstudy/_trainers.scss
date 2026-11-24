@@ -1,0 +1,51 @@
+@use "tokens" as *;
+
+// About page: "Meet Our Expert Trainers" (Leap Waves tokens only).
+.ss-trainers {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--ss-space-4);
+	grid-template-columns: repeat(2, minmax(0, 1fr)); // phones: two per row
+	@include up($bp-sm) { gap: var(--ss-space-5); }
+	@include up($bp-md) { grid-template-columns: repeat(3, minmax(0, 1fr)); } // tablets: three per row
+	@include up($bp-lg) { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--ss-space-6); } // laptops and desktops: five per row (two rows)
+}
+.ss-trainer {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	background: #fff;
+	border-radius: var(--ss-radius-lg);
+	overflow: hidden;
+	border-bottom: 6px solid var(--ss-orange);
+	box-shadow: 0 14px 30px -24px rgba(38, 35, 95, 0.45);
+	transition: transform 0.35s var(--ss-spring), box-shadow 0.3s;
+	&:nth-child(4n + 2) { border-bottom-color: var(--ss-sky-btn); }
+	&:nth-child(4n + 3) { border-bottom-color: var(--ss-green); }
+	&:nth-child(4n) { border-bottom-color: var(--ss-pink); }
+	&:hover { transform: translateY(-6px); box-shadow: var(--ss-shadow-md); }
+	&__photo {
+		aspect-ratio: 4 / 5;
+		background: var(--ss-primary-50);
+		overflow: hidden;
+		img, svg { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 0.5s var(--ss-ease); }
+	}
+	&:hover &__photo img { transform: scale(1.04); }
+	&__body {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: var(--ss-space-4);
+		h3 { margin: 0; font-size: var(--ss-fs-base); }
+		p { margin: 4px 0 0; font-size: var(--ss-fs-xs); color: var(--ss-muted); line-height: 1.45; }
+		@include up($bp-md) { padding: var(--ss-space-5); h3 { font-size: var(--ss-fs-lg); } p { font-size: var(--ss-fs-sm); } }
+	}
+	&__area { align-self: flex-start; padding: 2px 10px; border-radius: var(--ss-radius-pill); background: var(--ss-sun); color: var(--ss-primary); font: 800 0.6875rem/1.6 var(--ss-font); letter-spacing: 0.04em; text-transform: uppercase; }
+}
+.ss-trainers__note { margin: var(--ss-space-6) auto 0; max-width: 64ch; text-align: center; font-size: var(--ss-fs-xs); color: var(--ss-muted); }
+
+// Gentle reveal, armed only after load and never with reduced motion.
+.ss-trainers.is-armed .ss-trainer:not(.is-in) { opacity: 0; transform: translateY(18px); }
+.ss-trainers.is-armed .ss-trainer.is-in { opacity: 1; transform: none; transition: opacity 0.6s var(--ss-ease), transform 0.6s var(--ss-spring); transition-delay: calc(var(--i) * 70ms); }

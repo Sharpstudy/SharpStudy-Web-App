@@ -1,0 +1,4 @@
+{
+	"//": "Marks lib/mastery as ES modules so Node (tests) and webpack load these files the same way.",
+	"type": "module"
+}

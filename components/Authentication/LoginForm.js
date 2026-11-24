@@ -1,21 +1,27 @@
 import React from "react";
 import axios from "axios";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { handleLogin } from "@/utils/auth";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
+import GoogleButton from "./GoogleButton";
 
 const INITIAL_USER = {
 	email: "",
 	password: "",
 };
 
-const LoginForm = () => {
+// asParent: returning parents land on /family/ (their Progress page; a safe ?next= still wins).
+const LoginForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
+	const [error, setError] = React.useState("");
+	const [unverified, setUnverified] = React.useState(false);
+	const [resent, setResent] = React.useState(false);
 	const router = useRouter();
 
 	React.useEffect(() => {
@@ -26,83 +32,91 @@ const LoginForm = () => {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setUser((prevState) => ({ ...prevState, [name]: value }));
+		setError("");
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setError("");
+		setUnverified(false);
+		setResent(false);
 		try {
 			setLoading(true);
 			const url = `${baseUrl}/api/users/signin`;
 			const payload = { ...user };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
-			toast.success(response.data.message, {
-				style: {
-					border: "1px solid #4BB543",
-					padding: "16px",
-					color: "#4BB543",
-				},
-				iconTheme: {
-					primary: "#4BB543",
-					secondary: "#FFFAEE",
-				},
-			});
+			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
+			toast.success(response.data.message);
 		} catch (err) {
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
-			toast.error(message, {
-				style: {
-					border: "1px solid #ff0033",
-					padding: "16px",
-					color: "#ff0033",
-				},
-				iconTheme: {
-					primary: "#ff0033",
-					secondary: "#FFFAEE",
-				},
-			});
+			const data = err?.response?.data || {};
+			setUnverified(data.code === "email_unverified");
+			setError(data.message || "Could not sign in right now, please try again.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	const resend = async () => {
+		try {
+			await axios.post(`${baseUrl}/api/users/send-confirmation-email`, { email: user.email, next: router.query.next });
+			setResent(true);
+		} catch (err) {
+			setError(err?.response?.data?.message || "Could not send the email right now.");
+		}
+	};
+
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Email"
+		<>
+			<GoogleButton fallback={asParent ? "/family/" : "/"} />
+			<form onSubmit={handleSubmit} noValidate>
+				<Field
+					label="Email"
+					type="email"
 					name="email"
+					autoComplete="email"
+					inputMode="email"
+					placeholder="you@example.com"
 					value={user.email}
 					onChange={handleChange}
 				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
-					name="password"
-					value={user.password}
-					onChange={handleChange}
+				<Field label="Password">
+					<PasswordInput
+						name="password"
+						autoComplete="current-password"
+						placeholder="Your password"
+						value={user.password}
+						onChange={handleChange}
+					/>
+				</Field>
+				<p className="ss-auth__forgot">
+					<Link href="/forgot-password/">
+						<a>Forgot password?</a>
+					</Link>
+				</p>
+				{error && (
+					<div className="ss-alert ss-alert--danger" role="alert">
+						<span>
+						{error}
+						{unverified && !resent && (
+							<>
+								{" "}
+								<button type="button" className="ss-link-btn" onClick={resend}>
+									Send the confirmation email again
+								</button>
+							</>
+						)}
+						{resent && <> We have sent it again. Please check your inbox.</>}
+						</span>
+					</div>
+				)}
+				<Button
+					loading={loading}
+					disabled={disabled || loading}
+					btnText="Sign in"
+					btnClass="ss-btn ss-btn--lg ss-btn--block"
 				/>
-			</div>
-			<Button
-				loading={loading}
-				disabled={disabled}
-				btnText="Login Now"
-				btnClass="default-btn"
-			/>
-		</motion.form>
+			</form>
+		</>
 	);
 };
 

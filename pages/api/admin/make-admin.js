@@ -1,15 +1,16 @@
+
+import { requireRole } from "@/lib/auth/requireRole";
 import { User } from "database/models";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No authorization token" });
-  }
+  const actor = await requireRole(req, res, ["admin"]);
+  if (!actor) return;
   switch (req.method) {
     case "GET":
       await handleGet(req, res);
       break;
     case "PUT":
-      await handlePut(req, res);
+      await handlePut(req, res, actor);
       break;
     default:
       res.status(405).json({
@@ -36,7 +37,7 @@ const handleGet = async (req, res) => {
   }
 };
 
-const handlePut = async (req, res) => {
+const handlePut = async (req, res, actor) => {
   try {
     const { userId, admin } = req.body;
 
@@ -50,11 +51,15 @@ const handlePut = async (req, res) => {
 
       res.status(200).json({ message: "This user now has admin access" });
     } else {
+      if (userId === actor.userId) {
+        return res.status(422).json({ message: "You cannot remove your own admin access." });
+      }
+      // Only ever demotes an admin: it must not touch instructors or students.
       await User.update(
         {
           role: "student",
         },
-        { where: { id: userId } }
+        { where: { id: userId, role: "admin" } }
       );
       res.status(200).json({ message: "This user no longer has admin access" });
     }

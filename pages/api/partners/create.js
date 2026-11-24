@@ -1,6 +1,9 @@
 import Partner from "database/models/partner";
+import { requireRole } from "@/lib/auth/requireRole";
 
 export default async function handler(req, res) {
+	// Creating/removing partners is an admin action (the public list is GET /api/partners).
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "POST":
 			await createPartner(req, res);
@@ -43,7 +46,7 @@ const handleDelete = async (req, res) => {
 			where: { id: partnerId },
 		});
 
-		partner.destroy();
+		await partner.destroy();
 
 		res.status(200).json({ message: "Partner deleted successfully." });
 	} catch (e) {

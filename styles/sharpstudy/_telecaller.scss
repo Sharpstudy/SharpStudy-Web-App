@@ -1,0 +1,149 @@
+// Telecaller dashboard (and the admin Activity & Call History page). Reuses the .ia-* stat cards / filters / timeline / pager from
+// _instructor.scss; only what those do not cover lives here.
+.tc-tabs {
+	display: flex;
+	gap: 6px;
+	margin: 12px 0;
+	overflow-x: auto;
+	padding-bottom: 4px;
+	button {
+		flex: 0 0 auto;
+		min-height: 40px;
+		padding: 6px 14px;
+		border: 1px solid var(--ss-border);
+		border-radius: 999px;
+		background: var(--ss-surface);
+		color: var(--ss-text);
+		font-size: var(--ss-fs-sm);
+		white-space: nowrap;
+		&[aria-pressed="true"],
+		&[aria-selected="true"] {
+			background: var(--ss-primary);
+			border-color: var(--ss-primary);
+			color: #fff;
+		}
+	}
+}
+.tc-reminders {
+	display: grid;
+	gap: 12px;
+	margin: 16px 0;
+	grid-template-columns: minmax(0, 1fr);
+	@media (min-width: 992px) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+.tc-panel {
+	padding: 14px 16px;
+	background: var(--ss-surface);
+	border: 1px solid var(--ss-border);
+	border-radius: 12px;
+	h3 {
+		margin: 0 0 8px;
+		font-size: 1rem;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	li + li {
+		margin-top: 8px;
+	}
+	&--warn {
+		border-color: var(--ss-warning, #d97706);
+	}
+	&--danger {
+		border-color: var(--ss-danger, #dc2626);
+	}
+}
+.tc-list {
+	display: grid;
+	gap: 12px;
+	margin: 12px 0;
+	grid-template-columns: minmax(0, 1fr);
+	@media (min-width: 992px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+.tc-card {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 14px 16px;
+	background: var(--ss-surface);
+	border: 1px solid var(--ss-border);
+	border-radius: 12px;
+	min-width: 0;
+	&.is-open {
+		border-color: var(--ss-primary);
+		box-shadow: 0 0 0 2px var(--ss-primary-50);
+	}
+	h3 {
+		margin: 0;
+		font-size: 1.05rem;
+		overflow-wrap: anywhere;
+	}
+	.tc-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 14px;
+		font-size: var(--ss-fs-sm);
+		color: var(--ss-muted);
+		overflow-wrap: anywhere;
+	}
+	.tc-badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.tc-actions {
+		margin-top: auto;
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+}
+.tc-detail {
+	margin: 16px 0;
+	padding: 16px;
+	background: var(--ss-surface);
+	border: 1px solid var(--ss-border);
+	border-radius: 12px;
+	.tc-cols {
+		display: grid;
+		gap: 16px;
+		grid-template-columns: minmax(0, 1fr);
+		@media (min-width: 992px) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	form {
+		display: grid;
+		gap: 8px;
+		label {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			font-size: var(--ss-fs-sm);
+		}
+		.tc-row {
+			display: grid;
+			gap: 8px;
+			grid-template-columns: minmax(0, 1fr);
+			@media (min-width: 576px) {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+	}
+	.tc-callitem {
+		padding: 10px 0;
+		border-top: 1px solid var(--ss-border);
+		overflow-wrap: anywhere;
+		white-space: pre-wrap;
+	}
+}
+.tc-error {
+	color: var(--ss-danger, #dc2626);
+	font-size: var(--ss-fs-xs);
+}

@@ -25,43 +25,43 @@ const CheckoutList = ({
 		exit: { scale: 0, opacity: 0 },
 	};
 	return (
-		<motion.li
-			className="single-cart-list d-flex justify-content-between align-items-center"
-			layout
-			{...anitmations}
-		>
-			<div className="single-cart-content d-flex align-items-center">
-				<Link href={`/course/${slug}`}>
-					<a>
-						<img src={image} alt={title} />
-					</a>
-				</Link>
-				<div className="single-cart-contents">
-					<h3>
-						<Link href={`/course/${slug}`}>
-							<a>{title}</a>
-						</Link>
-					</h3>
-					<p>By {instructor}</p>
-					<ul className="lectures">
+		<motion.li className="ss-card ss-cart__item" layout {...anitmations}>
+			<Link href={`/course/${slug}`}>
+				<a className="ss-cart__img" tabIndex={-1} aria-hidden="true">
+					{/* eslint-disable-next-line @next/next/no-img-element */}
+					<img src={image} alt="" />
+				</a>
+			</Link>
+			<div className="ss-cart__body">
+				<h3>
+					<Link href={`/course/${slug}`}>
+						<a>{title}</a>
+					</Link>
+				</h3>
+				<p className="ss-muted">By {instructor}</p>
+				<ul className="ss-purchase__facts">
+					{lessons > 0 && (
 						<li>
-							{lessons} <span>Lectures</span>
+							<i className="ri-play-list-2-line" aria-hidden="true"></i>
+							{lessons} lectures
 						</li>
+					)}
+					{duration && (
 						<li>
-							{duration} <span>Total Length</span>
+							<i className="ri-time-line" aria-hidden="true"></i>
+							{duration}
 						</li>
-					</ul>
-				</div>
+					)}
+				</ul>
 			</div>
-			<div className="prw">
-				<h4>
-					{regular_price > 0 && <del>${regular_price}</del>} ${price}
-				</h4>
-				<div className="wis-rem d-flex align-items-center">
-					<button onClick={() => onRemove(id)} className="remove">
-						Remove
-					</button>
+			<div className="ss-cart__side">
+				<div className="ss-cart__price">
+					<strong>${price}</strong>
+					{regular_price > 0 && <del>${regular_price}</del>}
 				</div>
+				<button type="button" onClick={() => onRemove(id)} className="ss-btn ss-btn--ghost ss-btn--sm" aria-label={`Remove ${title} from cart`}>
+					<i className="ri-delete-bin-line" aria-hidden="true"></i> Remove
+				</button>
 			</div>
 		</motion.li>
 	);

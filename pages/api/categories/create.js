@@ -1,10 +1,11 @@
 import { slugify } from "@/utils/auth";
 import Category from "database/models/category";
+import { requireRole } from "@/lib/auth/requireRole";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "GET":
 			await categoryById(req, res);
@@ -45,7 +46,7 @@ const createCategory = async (req, res) => {
 	try {
 		let slug = slugify(category);
 		const categoryExist = await Category.findOne({
-			where: { slug: slug },
+			where: ciEquals(connection, "slug", slug, Category),
 		});
 
 		if (categoryExist) {
@@ -77,7 +78,7 @@ const updateCategory = async (req, res) => {
 
 		let slug = slugify(category);
 		const categoryExist = await Category.findOne({
-			where: { slug: slug },
+			where: ciEquals(connection, "slug", slug, Category),
 		});
 
 		if (categoryExist) {

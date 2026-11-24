@@ -1,9 +1,11 @@
+
+import { requireRole } from "@/lib/auth/requireRole";
 import Coupon from "database/models/coupon";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	if (!(await requireRole(req, res, ["admin"]))) return;
 	switch (req.method) {
 		case "POST":
 			await handlePostRequest(req, res);
@@ -23,7 +25,7 @@ const handlePostRequest = async (req, res) => {
 
 	try {
 		const couponExist = await Coupon.findOne({
-			where: { code: coupon },
+			where: ciEquals(connection, "code", coupon),
 		});
 
 		if (couponExist) {

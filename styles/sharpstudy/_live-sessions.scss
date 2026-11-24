@@ -1,0 +1,148 @@
+// Scheduled live sessions: list rows, session header, forms. Reuses the ss-card /
+// ss-badge / ss-btn primitives; only layout lives here.
+.ss-session {
+	display: grid;
+	gap: var(--ss-space-4, 16px);
+	min-width: 0;
+
+	&__head {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--ss-space-3, 12px);
+		justify-content: space-between;
+		align-items: flex-start;
+	}
+	&__title {
+		margin: 0 0 4px;
+		font-size: var(--ss-fs-xl, 1.25rem);
+	}
+	&__h {
+		margin: 0 0 var(--ss-space-3, 12px);
+		font-size: var(--ss-fs-lg, 1.05rem);
+	}
+	&__meta,
+	&__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		align-items: center;
+	}
+	&__list {
+		display: grid;
+		gap: var(--ss-space-3, 12px);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--ss-space-3, 12px);
+		justify-content: space-between;
+		align-items: center;
+
+		p {
+			margin: 2px 0 0;
+		}
+	}
+	&__form {
+		display: grid;
+		gap: var(--ss-space-3, 12px);
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		align-items: end;
+
+		> h3,
+		> textarea,
+		> .ss-alert,
+		> p {
+			grid-column: 1 / -1;
+		}
+	}
+	&__join {
+		display: grid;
+		gap: var(--ss-space-3, 12px);
+		justify-items: start;
+	}
+}
+
+// Student picker on the scheduling form
+.ss-session__students {
+	grid-column: 1 / -1;
+	display: grid;
+	gap: 8px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+
+	&-bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		justify-content: space-between;
+		align-items: center;
+		font-size: var(--ss-fs-sm, 0.9rem);
+	}
+}
+.ss-session__student-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 240px;
+	overflow-y: auto;
+	border: 1px solid var(--ss-border-strong);
+	border-radius: 8px;
+
+	li + li {
+		border-top: 1px solid var(--ss-border);
+	}
+	label {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		padding: 10px 12px;
+		cursor: pointer;
+		min-height: 44px;
+	}
+}
+
+// In-app notifications
+.ss-notices {
+	margin-bottom: var(--ss-space-4, 16px);
+
+	&__head {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		justify-content: space-between;
+		align-items: center;
+	}
+	&__list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 10px;
+
+		li {
+			display: flex;
+			gap: 12px;
+			padding: 10px 12px;
+			border-radius: 8px;
+			background: var(--ss-surface-2);
+
+			&.is-unread {
+				background: var(--ss-primary-50);
+			}
+			> i {
+				font-size: 22px;
+				color: var(--ss-primary);
+			}
+			p {
+				margin: 2px 0 4px;
+				color: var(--ss-muted);
+				font-size: 0.9rem;
+			}
+		}
+	}
+}

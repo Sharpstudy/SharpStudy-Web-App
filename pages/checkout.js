@@ -4,20 +4,22 @@ import PageBanner from "@/components/Common/PageBanner";
 import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
 
-const checkout = ({ user }) => {
+const Checkout = ({ user }) => {
 	return (
 		<>
 			<Navbar user={user} />
-			<PageBanner
-				pageTitle="Checkout"
-				homePageUrl="/courses"
-				homePageText="Courses"
-				activePageText="Checkout"
-			/>
-			<CheckoutForm user={user} />
+			<main>
+				<PageBanner
+					pageTitle="Checkout"
+					homePageUrl="/courses"
+					homePageText="Courses"
+					activePageText="Checkout"
+				/>
+				<CheckoutForm user={user} />
+			</main>
 			<Footer />
 		</>
 	);
 };
 
-export default checkout;
+export default Checkout;

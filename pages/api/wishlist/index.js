@@ -1,13 +1,13 @@
-import jwt from "jsonwebtoken";
+import { requireUser } from "@/lib/auth/access";
 import { Course, User, Favourite, Enrolment } from "database/models";
 
 export default async function handler(req, res) {
-	if (!("authorization" in req.headers)) {
-		return res.status(401).json({ message: "No autorization token" });
-	}
+	// 401 for a missing/invalid token (verified, not just present)
+	const actor = await requireUser(req, res);
+	if (!actor) return;
 	switch (req.method) {
 		case "GET":
-			await handleGetRequest(req, res);
+			await handleGetRequest(req, res, actor);
 			break;
 		default:
 			res.status(405).json({
@@ -16,12 +16,9 @@ export default async function handler(req, res) {
 	}
 }
 
-const handleGetRequest = async (req, res) => {
+const handleGetRequest = async (req, res, actor) => {
 	try {
-		const { userId } = jwt.verify(
-			req.headers.authorization,
-			process.env.JWT_SECRET
-		);
+		const userId = actor.userId;
 
 		const courses = await Favourite.findAll({
 			order: [["created_at", "DESC"]],

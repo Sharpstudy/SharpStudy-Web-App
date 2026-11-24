@@ -1,10 +1,11 @@
-import { verifyUser } from "@/utils/auth"
 import { Question, Answer_Option } from "database/models";
+import { requireUser, requireQuestionOwner, requireAnswerOptionOwner, TEACHER_ROLES } from "@/lib/auth/access";
 
 export default async function handler(req, res) {
-  if (!("authorization" in req.headers)) {
-    return res.status(401).json({ message: "No autorization token" });
-  }
+  // Answer keys: instructors/admins only, and only for questions in quizzes they own.
+  const actor = await requireUser(req, res, TEACHER_ROLES);
+  if (!actor) return;
+  req.actor = actor;
   switch (req.method) {
     case "POST":
       await handlePostRequest(req, res);
@@ -33,12 +34,6 @@ const handlePostRequest = async (req, res) => {
   }
 
   try {
-    const user = await verifyUser(req, res);
-
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to create these answer-options" });
-    }
-
     // Ensure all questionId values in the array are the same
     const firstQuestionId = answers[0]['questionId'];
     const allSameQuestionId = answers.every(option => option.questionId === firstQuestionId);
@@ -46,6 +41,8 @@ const handlePostRequest = async (req, res) => {
     if (!allSameQuestionId) {
       return res.status(400).json({ message: "Questions for this answer options must be the same" });
     }
+
+    if (!(await requireQuestionOwner(res, req.actor, firstQuestionId))) return;
 
     const checkAnswerOptions = await Answer_Option.findAll({
       where: { questionId: firstQuestionId }
@@ -104,11 +101,7 @@ const handleDeleteRequest = async (req, res) => {
   const { questionId } = req.query;
 
   try {
-    const user = await verifyUser(req, res);
-
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to delete this question's answer options" });
-    }
+    if (!(await requireQuestionOwner(res, req.actor, questionId))) return;
 
     const questionAnswers = await Answer_Option.findAll({
       where: { questionId },
@@ -134,11 +127,7 @@ const handleDeleteRequest = async (req, res) => {
 const handleGetRequest = async (req, res) => {
   const { questionId } = req.query;
   try {
-    const user = await verifyUser(req, res);
-
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized" });
-    }
+    if (!(await requireQuestionOwner(res, req.actor, questionId))) return;
 
     const questionAnswers = await Answer_Option.findAll({
       where: { questionId },
@@ -160,11 +149,7 @@ const handlePutRequest = async (req, res) => {
     is_correct
   } = req.body;
   try {
-    const user = await verifyUser(req, res);
-
-    if (user.role === 'student') {
-      return res.status(401).json({ message: "User is not authorized to update this answer options" });
-    }
+    if (!(await requireAnswerOptionOwner(res, req.actor, id))) return;
 
     const [affectedRows] = await Answer_Option.update(
       {

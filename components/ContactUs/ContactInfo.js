@@ -1,78 +1,51 @@
 import React from "react";
 
+// Contact details match the site footer. The previous "+009 3867 321/532"
+// numbers were theme placeholders and have been removed (flagged for review).
+const items = [
+	{
+		icon: "ri-phone-line",
+		title: "Call us",
+		lines: [{ href: "tel:16047670944", label: "1-604-767-0944" }],
+	},
+	{
+		icon: "ri-mail-line",
+		title: "Email us",
+		lines: [
+			{ href: "mailto:hello@sharpstudy.io", label: "hello@sharpstudy.io" },
+			{ href: "mailto:mike@evolvelab.co", label: "mike@evolvelab.co" },
+		],
+	},
+	{
+		icon: "ri-map-pin-line",
+		title: "Visit us",
+		lines: [{ label: "151 West Hasting St, Vancouver, B.C. V3C 4L8, Canada" }],
+	},
+];
+
 const ContactInfo = () => {
 	return (
-		<div className="contact-info-area pt-100 pb-70">
-			<div className="container">
-				<div className="row justify-content-center">
-					<div className="col-lg-4 col-md-6">
-						<div className="single-contact-info d-flex align-items-center">
-							<img
-								src="/images/contact-info-1.svg"
-								alt="contact"
-							/>
-
-							<div>
-								<h3>Call Us</h3>
-								<ul>
-									<li>
-										<a href="tel:+009-3867-321">
-											+009 3867 321
-										</a>
-									</li>
-									<li>
-										<a href="tel:+009-3867-532">
-											+009 3867 532
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
+		<ul className="ss-contact-info">
+			{items.map((it) => (
+				<li key={it.title} className="ss-card">
+					<span className="ss-icon-tile" aria-hidden="true">
+						<i className={it.icon}></i>
+					</span>
+					<div>
+						<h2>{it.title}</h2>
+						{it.lines.map((l) =>
+							l.href ? (
+								<a key={l.label} href={l.href}>
+									{l.label}
+								</a>
+							) : (
+								<p key={l.label}>{l.label}</p>
+							)
+						)}
 					</div>
-
-					<div className="col-lg-4 col-md-6">
-						<div className="single-contact-info bg-f3dfc1 d-flex align-items-center">
-							<img
-								src="/images/contact-info-2.svg"
-								alt="contact"
-							/>
-
-							<div>
-								<h3>mail Us</h3>
-								<ul>
-									<li>
-										<a href="mailto:mike@evolvelab.co">
-											mike@evolvelab.co
-										</a>
-									</li>
-									<li>
-										<a href="mailto:hello@sharpstudy.io">
-										hello@sharpstudy.io
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-					<div className="col-lg-4 col-md-6">
-						<div className="single-contact-info d-flex bg-a8e3da align-items-center">
-							<img
-								src="/images/contact-info-3.svg"
-								alt="contact"
-							/>
-
-							<div>
-								<h3>Visit Us</h3>
-								<p>
-									151 West Hasting St, Vancouver , B.C. V3C 4L8, Canada
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+				</li>
+			))}
+		</ul>
 	);
 };
 

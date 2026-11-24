@@ -31,7 +31,7 @@ const Features = () => {
               />
               <h3>Adaptive Learning</h3>
               <p>
-              Tailored learning roadmaps designed to align with each student's unique capabilities and educational background.
+              Tailored learning roadmaps designed to align with each student&apos;s unique capabilities and educational background.
               </p>
             </div>
           </div>

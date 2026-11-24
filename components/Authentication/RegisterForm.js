@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { handleLogin } from "@/utils/auth";
+import GoogleButton from "./GoogleButton";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
-import { motion } from "framer-motion";
+import { Field, PasswordInput } from "@/components/ui/Form";
 
 const INITIAL_USER = {
 	first_name: "",
@@ -14,7 +14,9 @@ const INITIAL_USER = {
 	password: "",
 };
 
-const RegisterForm = () => {
+// asParent: the "For Parents & Families" registration. It is an ordinary account; the redirect only differs
+// (/family/, the Progress page, which offers "Link my child" until a child is linked).
+const RegisterForm = ({ asParent = false }) => {
 	const [user, setUser] = React.useState(INITIAL_USER);
 	const [disabled, setDisabled] = React.useState(true);
 	const [loading, setLoading] = React.useState(false);
@@ -30,102 +32,93 @@ const RegisterForm = () => {
 		setUser((prevState) => ({ ...prevState, [name]: value }));
 	};
 
+	const [sent, setSent] = React.useState(null); // the address the confirmation email went to
+	const [resent, setResent] = React.useState(false);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
 			setLoading(true);
 			const url = `${baseUrl}/api/users/signup`;
-			const payload = { ...user };
+			// `next` (same-site only, re-validated on the server) rides along so the e-mail link can return here.
+			const payload = { ...user, next: router.query.next };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router);
-			toast.success(response.data.message, {
-				style: {
-					border: "1px solid #4BB543",
-					padding: "16px",
-					color: "#4BB543",
-				},
-				iconTheme: {
-					primary: "#4BB543",
-					secondary: "#FFFAEE",
-				},
-			});
+			// No login token comes back: the account is usable once the e-mail address is confirmed.
+			setSent(response.data.email || user.email);
 		} catch (err) {
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
-			toast.error(message, {
-				style: {
-					border: "1px solid #ff0033",
-					padding: "16px",
-					color: "#ff0033",
-				},
-				iconTheme: {
-					primary: "#ff0033",
-					secondary: "#FFFAEE",
-				},
-			});
+			toast.error(err?.response?.data?.message || "Could not create the account right now, please try again.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	const resend = async () => {
+		try {
+			await axios.post(`${baseUrl}/api/users/send-confirmation-email`, { email: sent, next: router.query.next });
+			setResent(true);
+		} catch (err) {
+			toast.error(err?.response?.data?.message || "Could not send the email right now.");
+		}
+	};
+
+	if (sent) {
+		return (
+			<div role="status" className="ss-verify">
+				<h2>Check your email</h2>
+				<p>We sent a confirmation link to <strong>{sent}</strong>. Open it to activate your account, then log in{router.query.next ? " to continue" : ""}.</p>
+				<p className="ss-muted">Nothing in your inbox? Check spam, or</p>
+				<button type="button" className="ss-btn ss-btn--secondary" onClick={resend} disabled={resent}>{resent ? "Sent again" : "Send the email again"}</button>
+			</div>
+		);
+	}
+
 	return (
-		<motion.form
-			onSubmit={handleSubmit}
-			initial={{ scale: 0 }}
-			animate={{ scale: 1 }}
-			exit={{ scale: 0 }}
-		>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="First Name"
+		<>
+		<GoogleButton fallback={asParent ? "/family/" : "/"} />
+		<form onSubmit={handleSubmit}>
+			<div className="ss-form-row">
+				<Field
+					label="First name"
 					name="first_name"
+					autoComplete="given-name"
 					value={user.first_name}
 					onChange={handleChange}
 				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="text"
-					className="form-control"
-					placeholder="Last Name"
+				<Field
+					label="Last name"
 					name="last_name"
+					autoComplete="family-name"
 					value={user.last_name}
 					onChange={handleChange}
 				/>
 			</div>
-			<div className="form-group">
-				<input
-					type="email"
-					className="form-control"
-					placeholder="Email"
-					name="email"
-					value={user.email}
-					onChange={handleChange}
-				/>
-			</div>
-			<div className="form-group">
-				<input
-					type="password"
-					className="form-control"
-					placeholder="Password"
+			<Field
+				label="Email"
+				type="email"
+				name="email"
+				autoComplete="email"
+				inputMode="email"
+				placeholder="you@example.com"
+				value={user.email}
+				onChange={handleChange}
+			/>
+			<Field label="Password">
+				<PasswordInput
 					name="password"
+					autoComplete="new-password"
+					placeholder="At least 8 characters, with a letter and a number"
 					value={user.password}
 					onChange={handleChange}
 				/>
-			</div>
-
+			</Field>
 			<Button
 				loading={loading}
-				disabled={disabled}
-				btnText="Register Now"
-				btnClass="default-btn"
+				disabled={disabled || loading}
+				btnText={asParent ? "Create parent account" : "Create account"}
+				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
-		</motion.form>
+		</form>
+		</>
 	);
 };
 

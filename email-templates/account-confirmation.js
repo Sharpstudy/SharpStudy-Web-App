@@ -1,7 +1,13 @@
 import baseUrl from "@/utils/baseUrl";
 import { transport } from "./config";
 
-export const confirmEmailAddress = async (user) => {
+import { safeNextPath } from "@/lib/books/redirect";
+
+// `next` (optional) is where the confirmation page sends the person afterwards. It is re-validated here and again on
+// the confirmation page: only same-site relative paths are ever put in the link.
+export const confirmEmailAddress = async (user, next) => {
+  const safeNext = safeNextPath(next);
+  const nextParam = safeNext ? `&next=${encodeURIComponent(safeNext)}` : "";
   const data = {
     to: user.email,
     from: "Sharpstudy Online Courses <hello@sharpstudy.io>",
@@ -308,7 +314,7 @@ export const confirmEmailAddress = async (user) => {
                                 <div class="text" style="padding: 0 2.5em; text-align: left;">
                                     <h4>Dear ${user.first_name},</h4>
                                     <p>Thanks for registering on Sharpstudy. Please click the below link to verify your email address and activate your account.</p>
-                                    <p><a href="${baseUrl}/confirm-email?token=${user.reset_password_token}&email=${user.email}" style="text-decoration: underline;">Confirm My Email Address</a></p>
+                                    <p><a href="${baseUrl}/confirm-email?token=${user.reset_password_token}&email=${user.email}${nextParam}" style="text-decoration: underline;">Confirm My Email Address</a></p>
 
                                     <p>
                                         Regards, <br />

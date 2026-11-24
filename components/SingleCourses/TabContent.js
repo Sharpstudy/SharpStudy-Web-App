@@ -15,38 +15,25 @@ const TabContent = ({
 	const [tab, setTab] = useState("overview");
 	return (
 		<>
-			<ul className="course-tab nav nav-tabs justify-content-between">
-				<li className="nav-item">
+			<div className="ss-tabs" role="tablist" aria-label="Course details">
+				{[
+					{ id: "overview", label: "Overview" },
+					{ id: "requirements", label: "Requirements" },
+					{ id: "witcf", label: "Who this course is for" },
+				].map((t) => (
 					<button
-						className={`nav-link ${
-							tab == "overview" ? "active" : ""
-						}`}
-						onClick={() => setTab("overview")}
+						key={t.id}
+						type="button"
+						role="tab"
+						aria-selected={tab == t.id}
+						onClick={() => setTab(t.id)}
 					>
-						Overview
+						{t.label}
 					</button>
-				</li>
-				<li className="nav-item">
-					<button
-						className={`nav-link ${
-							tab == "requirements" ? "active" : ""
-						}`}
-						onClick={() => setTab("requirements")}
-					>
-						Requirements
-					</button>
-				</li>
-				<li className="nav-item">
-					<button
-						className={`nav-link ${tab == "witcf" ? "active" : ""}`}
-						onClick={() => setTab("witcf")}
-					>
-						Who Is This Course For
-					</button>
-				</li>
-			</ul>
+				))}
+			</div>
 
-			<div className="tab-content">
+			<div className="tab-content ss-rich" role="tabpanel">
 				{tab === "overview" && <CourseOverview overview={overview} />}
 				{!is_class && (
 					<>

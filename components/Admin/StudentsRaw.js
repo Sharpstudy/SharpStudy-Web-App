@@ -1,4 +1,6 @@
 import React from "react";
+import ActionMenu from "@/components/ui/ActionMenu";
+import { StatusBadge } from "./useAccountManager";
 
 const StudentsRaw = ({
 	id,
@@ -9,7 +11,9 @@ const StudentsRaw = ({
 	bio,
 	email_confirmed,
 	role,
+	status,
 	onAdmin = null,
+	menuItems = null, // when given, the Status and Actions columns are rendered (Admin > Students only)
 }) => {
 	return (
 		<tr>
@@ -17,6 +21,11 @@ const StudentsRaw = ({
 			<td>{email}</td>
 			<td>{phone ? phone : "N/A"}</td>
 			<td>{email_confirmed ? "Yes" : "No"}</td>
+			{menuItems && (
+				<td>
+					<StatusBadge user={{ status }} />
+				</td>
+			)}
 			<td>
 				<div className="max-300px max-height-60">
 					{bio ? bio : "N/A"}
@@ -31,6 +40,11 @@ const StudentsRaw = ({
 					{role == "admin" ? "Remove from admin" : "Make An Admin"}
 				</button>
 			</td>
+			{menuItems && (
+				<td>
+					<ActionMenu label={`Actions for ${first_name} ${last_name}`} items={menuItems} />
+				</td>
+			)}
 		</tr>
 	);
 };

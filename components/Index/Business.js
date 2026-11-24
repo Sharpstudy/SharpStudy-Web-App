@@ -23,7 +23,7 @@ function Business() {
 									
 								</h2>
 								<p>
-								Elevate your team's performance with our dynamic corporate training workshops. Tailored to enhance skills and boost confidence, our program equips employees to tackle modern technical and business challenges efficiently. 
+								Elevate your team&apos;s performance with our dynamic corporate training workshops. Tailored to enhance skills and boost confidence, our program equips employees to tackle modern technical and business challenges efficiently. 
 								</p>
 
 								<Link href="/become-an-instructor">

@@ -5,8 +5,13 @@ import {
 	Enrolment,
 	Course_Asset,
 } from "database/models";
+import { optionalActor, courseAccess, requireUser } from "@/lib/auth/access";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
+// Course detail: a signed-in account only (the unpublished-course rule below still applies on top of this).
 export default async function handler(req, res) {
+	if (!(await requireUser(req, res))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGetRequest(req, res);
@@ -49,8 +54,16 @@ const handleGetRequest = async (req, res) => {
 					attributes: ["id"],
 				},
 			],
-			where: { slug: slug },
+			where: ciEquals(connection, "slug", slug, Course),
 		});
+
+		// Unapproved (unpublished) courses are visible only to their owner, admins and
+		// already-enrolled students; everyone else gets the same answer as for a missing course.
+		if (course && !course.approved) {
+			const actor = await optionalActor(req);
+			const a = actor ? await courseAccess(actor, course.id) : {};
+			if (!(a.owner || a.admin || a.enrolled)) return res.status(404).json({ message: "Course not found" });
+		}
 
 		res.status(200).json({
 			course,

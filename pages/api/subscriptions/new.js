@@ -1,10 +1,12 @@
 import Subscription from "database/models/subscription";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
 export default async function handler(req, res) {
 	const { email } = req.body;
 	try {
 		const isEmailExist = await Subscription.findOne({
-			where: { email: email },
+			where: ciEquals(connection, "email", email),
 		});
 		// console.log(isEmailExist);
 

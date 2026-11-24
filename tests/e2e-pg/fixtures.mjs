@@ -1,0 +1,16 @@
+import pg from "pg";
+import fs from "node:fs";
+const state = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+const c = new pg.Client({ host: "localhost", port: 5432, database: "sharpstudy_dev", user: "sharpstudy_dev", options: `-c search_path=${state.schema} -c default_transaction_read_only=on` });
+await c.connect();
+const q = async (s) => (await c.query(s)).rows;
+const real = (extra) => `select id, role, email from users where email not like '%@example.test' and status = true ${extra}`;
+const admin = (await q(real("and role = 'admin' limit 1")))[0];
+const instructor = (await q(`select u.id, u.role, u.email from users u where u.email not like '%@example.test' and u.status and u.role = 'instructor' and exists (select 1 from courses c where c."userId" = u.id) order by (select count(*) from courses c where c."userId" = u.id) desc limit 1`))[0];
+const student = (await q(`select u.id, u.role, u.email from users u where u.email not like '%@example.test' and u.status and u.role = 'student' and exists (select 1 from enrolments e where e."userId" = u.id) limit 1`))[0];
+const course = (await q(`select c.id, c.slug, c."userId" as owner from courses c where exists (select 1 from enrolments e where e."courseId" = c.id) order by c.created_at limit 1`))[0];
+const learner = (await q(`select l.id, l.owner_user_id from ml_learners l order by l.created_at limit 1`))[0];
+const fx = { admin, instructor, student, courseId: course.id, courseSlug: course.slug, courseOwner: course.owner, learnerId: learner.id, learnerOwner: learner.owner_user_id, test: state.testUsers, testEmails: state.testEmails };
+fs.writeFileSync(process.argv[3], JSON.stringify(fx, null, 1));
+console.log(`fixtures: admin ${!!admin}, instructor ${!!instructor}, student ${!!student}, course ${course.slug}, learner ${!!learner}`);
+await c.end();

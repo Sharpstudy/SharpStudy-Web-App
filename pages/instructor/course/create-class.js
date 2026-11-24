@@ -1,48 +1,21 @@
 import React from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import Link from "next/link";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
 import CourseCreateForm from "@/components/Instructor/CourseCreateForm";
 
 const Create = ({ user }) => {
   return (
     <>
-      <Navbar user={user} />
-
-      <div className="ptb-100">
-        <div className="container">
-          <h2 className="fw-bold mb-4">Create Class Room</h2>
-
-          <ul className="nav-style1">
-            <li>
-              <Link href="/instructor/courses/">
-                <a>Courses</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/instructor/course/create-quiz/">
-                <a>Create Quiz</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/instructor/course/create/">
-                <a>Create a Course</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/instructor/course/create-class/">
-                <a className="active">Create Class Room</a>
-              </Link>
-            </li>
-          </ul>
-
+      <InstructorLayout
+        user={user}
+        title="Create a class room"
+        description="Set up a live class course that students join over video."
+      >
+        <div className="ss-card ss-form-card">
           <div className="create-course-form">
             <CourseCreateForm btnText="Create Class Room" is_class={true} />
           </div>
         </div>
-      </div>
-
-      <Footer />
+      </InstructorLayout>
     </>
   );
 };

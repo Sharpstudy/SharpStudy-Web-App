@@ -1,66 +1,27 @@
 import React from "react";
+import ActionMenu from "@/components/ui/ActionMenu";
+import { StatusBadge } from "./useAccountManager";
+import { orNA } from "@/lib/admin/instructorList";
 
-const InstructorRow = ({
-	id,
-	first_name,
-	last_name,
-	email,
-	phone,
-	instructor_subject,
-	instructor_description,
-	instructor_request_confirmed,
-	onApprove = null,
-	onDeny = null,
-}) => {
-	return (
-		<tr>
-			<td>{`${first_name} ${last_name}`}</td>
-			<td>{email}</td>
-			<td>{phone}</td>
-			<td>{instructor_subject}</td>
-			<td>
-				<div className="max-300px max-height-60">
-					{instructor_description}
-				</div>
-			</td>
-			<td>
-				{instructor_request_confirmed ? (
-					<button
-						type="button"
-						className="btn btn-success btn-sm fs-12 ms-2"
-					>
-						Approved
-					</button>
-				) : (
-					<button
-						type="button"
-						className="btn btn-warning btn-sm fs-12"
-					>
-						Pending
-					</button>
-				)}
-			</td>
-			{!instructor_request_confirmed && (
-				<td>
-					<button
-						type="button"
-						className="btn btn-success btn-sm fs-12 ms-2"
-						onClick={() => onApprove(id)}
-					>
-						Approve Now
-					</button>
-
-					<button
-						type="button"
-						className="btn btn-danger btn-sm fs-12 ms-2"
-						onClick={() => onDeny(id)}
-					>
-						Decline
-					</button>
-				</td>
-			)}
-		</tr>
-	);
-};
+// One row of Admin > Instructors: an account that currently HAS instructor access.
+// `phone`, `subject` and `about` come from /api/instructor/instructors (see lib/admin/instructorList.js);
+// a genuinely empty value reads "N/A".
+const InstructorRow = ({ first_name, last_name, email, phone, subject, about, status, menuItems = [] }) => (
+	<tr>
+		<td>{`${first_name || ""} ${last_name || ""}`.trim()}</td>
+		<td>{email}</td>
+		<td className="text-nowrap">{orNA(phone)}</td>
+		<td>{orNA(subject)}</td>
+		<td>
+			<div className="max-300px max-height-60">{orNA(about)}</div>
+		</td>
+		<td>
+			<StatusBadge user={{ status }} />
+		</td>
+		<td>
+			<ActionMenu label={`Actions for ${first_name || ""} ${last_name || ""}`.trim()} items={menuItems} />
+		</td>
+	</tr>
+);
 
 export default InstructorRow;

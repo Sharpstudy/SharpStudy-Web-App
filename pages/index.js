@@ -1,115 +1,43 @@
 import React from "react";
-import Link from "next/link";
-import CoursesList from "@/components/Courses/CoursesList";
-import Banner from "@/components/Index/Banner";
 import Navbar from "@/components/_App/Navbar";
-import Categories from "@/components/Index/Categories";
-import Transform from "@/components/Index/Transform";
-import Features from "@/components/Index/Features";
-import Testimonials from "@/components/Index/Testimonials";
-import Partners from "@/components/Index/Partners";
-import Teaching from "@/components/Index/Teaching";
-import Business from "@/components/Index/Business";
 import Footer from "@/components/_App/Footer";
-import baseUrl from "@/utils/baseUrl";
-import { motion } from "framer-motion";
+import { SuccessPreview, GalleryPreview, BlogPreview, CareersCta } from "@/components/Sections/HomePreviews";
+import { ProgramsHero, Stats } from "@/components/Home/HeroStats";
+import { Intro, FeaturedPrograms, Approach, Platform, ProgramsCta } from "@/components/Home/ProgramsHome";
+import { landingRedirect } from "@/lib/auth/landing";
 
-const index = ({ courses, categories, user }) => {
-	const variants = {
-		visible: {
-			opacity: 1,
-			scale: 1,
-			transition: { delay: 0.2, type: "spring", duration: 1 },
-		},
-		hidden: { opacity: 0, scale: 0 },
-	};
+const Home = ({ user }) => {
 	return (
 		<>
 			<Navbar user={user} />
-			<Banner />
-			<div className="courses-area pt-100 pb-70">
-				<div className="container">
-					<motion.div
-						className="section-title"
-						initial="hidden"
-						whileInView="visible"
-						variants={variants}
-					>
-						<span className="top-title">Popular Courses</span>
-						<h2>Expand Your Career Opportunity With Our Courses</h2>
-					</motion.div>
-					<CoursesList courses={courses} user={user} />
-				</div>
-			</div>
-
-			{/* <div className="feature-dcourses-area bg-color-f6fafb pt-100 pb-70">
-				<div className="container">
-					<div className="title-btn d-flex justify-content-between align-items-center">
-						<motion.div
-							className="section-title left-title"
-							initial="hidden"
-							whileInView="visible"
-							variants={variants}
-						>
-							<span className="top-title">Featured Courses</span>
-							<h2>Find Yours From The Featured</h2>
-						</motion.div>
-						<Link href="/courses">
-							<a className="default-btn">View All</a>
-						</Link>
-					</div>
-					<CoursesList courses={courses} user={user} />
-				</div>
-
-				<img
-					src="/images/courses-shape.png"
-					className="courses-shape"
-					alt="Image"
-				/>
-			</div> */}
-
-			{/* <div className="feature-dcourses-area bg-color-f6fafb pb-70">
-				<div className="container">
-					<div className="title-btn d-flex justify-content-between align-items-center wow animate__animated animate__fadeInUp delay-0-2s">
-						<motion.div
-							className="section-title left-title"
-							initial="hidden"
-							whileInView="visible"
-							variants={variants}
-						>
-							<span className="top-title">
-								Most Viewed Courses
-							</span>
-							<h2>Students Are Also Viewing</h2>
-						</motion.div>
-						<Link href="/courses">
-							<a className="default-btn">View All</a>
-						</Link>
-					</div>
-					<CoursesList courses={courses} user={user} />
-				</div>
-			</div> */}
-
-			{/* <Categories categories={categories} /> */}
-			<Transform />
-			<Features />
-			<Testimonials />
-			<Partners />
-			<Teaching />
-			<Business />
+			<main>
+				<ProgramsHero />
+				<Stats />
+				<Intro />
+				<FeaturedPrograms />
+				<Approach />
+				<Platform />
+				<SuccessPreview />
+				<GalleryPreview />
+				<BlogPreview />
+				<CareersCta />
+				<ProgramsCta user={user} />
+			</main>
 			<Footer />
 		</>
 	);
 };
 
 // This gets called on every request
-export async function getServerSideProps() {
-	// Fetch data from external API
-	const res = await fetch(`${baseUrl}/api/home-courses`);
-	const json = await res.json(); const courses = json.courses ?? []; const categories = json.categories ?? []
-
-	// Pass data to the page via props
-	return { props: { courses, categories } };
+export async function getServerSideProps({ req, res: serverResponse }) {
+	// Signed-in students/instructors never see the marketing homepage.
+	const redirect = await landingRedirect(req).catch(() => null);
+	if (redirect) return { redirect };
+	// A visitor without a login cookie gets the same public page as every other visitor, so a CDN may keep it briefly (60 s fresh, then
+	// served stale for up to 5 min while it refreshes). Browsers still revalidate each time. A request that carries the login cookie never
+	// gets this header (it is redirected above or rendered privately), so personal responses are never shared.
+	if (!(req.cookies && req.cookies.edmy_users_token)) serverResponse.setHeader("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=300");
+	return { props: {} };
 }
 
-export default index;
+export default Home;

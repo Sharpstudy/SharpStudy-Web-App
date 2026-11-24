@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
-import AdminSideNav from "@/components/_App/AdminSideNav";
+import AdminLayout from "@/components/_App/AdminLayout";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -9,11 +7,15 @@ import baseUrl from "@/utils/baseUrl";
 import { parseCookies } from "nookies";
 import GeneralLoader from "@/utils/GeneralLoader";
 import InstructorRow from "@/components/Admin/InstructorRow";
+import AccountFilters, { filterAccounts } from "@/components/Admin/AccountFilters";
+import useAccountManager from "@/components/Admin/useAccountManager";
 
 const Index = ({ user }) => {
 	const { edmy_users_token } = parseCookies();
 	const [instructors, setInstructors] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [q, setQ] = useState("");
+	const [statusFilter, setStatusFilter] = useState("");
 
 	const fetchData = async () => {
 		setLoading(true);
@@ -53,19 +55,13 @@ const Index = ({ user }) => {
 		fetchData();
 	}, []);
 
+	const { itemsFor, dialogs } = useAccountManager(fetchData);
+	const visible = filterAccounts(instructors, q, statusFilter);
+
 	return (
 		<>
-			<Navbar user={user} />
 
-			<div className="main-content">
-				<div className="container-fluid">
-					<div className="row">
-						<div className="col-lg-3 col-md-4">
-							<AdminSideNav user={user} />
-						</div>
-
-						<div className="col-lg-9 col-md-8">
-							<div className="main-content-box">
+			<AdminLayout user={user} title="Instructors" description="Everyone who teaches on SharpStudy.">
 								<ul className="nav-style1">
 									<li>
 										<Link href="/admin/instructor/">
@@ -80,6 +76,7 @@ const Index = ({ user }) => {
 										</Link>
 									</li>
 								</ul>
+								<AccountFilters q={q} status={statusFilter} onQ={setQ} onStatus={setStatusFilter} />
 								{loading ? (
 									<GeneralLoader />
 								) : (
@@ -93,17 +90,19 @@ const Index = ({ user }) => {
 													<th scope="col">Subject</th>
 													<th scope="col">Text</th>
 													<th scope="col">Status</th>
+													<th scope="col">Actions</th>
 												</tr>
 											</thead>
 											<tbody>
-												{instructors.length > 0 ? (
-													instructors.map(
+												{visible.length > 0 ? (
+													visible.map(
 														(instructor) => (
 															<InstructorRow
 																key={
 																	instructor.id
 																}
 																{...instructor}
+															menuItems={itemsFor(instructor)}
 															/>
 														)
 													)
@@ -111,9 +110,9 @@ const Index = ({ user }) => {
 													<tr>
 														<td
 															colSpan="7"
-															className="text-center py-3"
+															className="text-center py-4 ss-muted"
 														>
-															Empty!
+															{instructors.length ? "No instructors match your search." : "Nothing here yet."}
 														</td>
 													</tr>
 												)}
@@ -121,13 +120,8 @@ const Index = ({ user }) => {
 										</table>
 									</div>
 								)}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<Footer />
+				{dialogs}
+			</AdminLayout>
 		</>
 	);
 };

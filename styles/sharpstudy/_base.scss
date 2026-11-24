@@ -1,0 +1,116 @@
+// Global base: typography, links, focus, media. Loaded after legacy CSS, so
+// equal-specificity rules here win.
+
+html {
+	-webkit-text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--ss-header-h) + 12px);
+}
+
+body {
+	font-family: var(--ss-font);
+	font-size: var(--ss-fs-base);
+	line-height: var(--ss-lh-body);
+	color: var(--ss-text);
+	background-color: var(--ss-surface);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: var(--ss-font);
+	color: var(--ss-ink);
+	font-weight: 700;
+	letter-spacing: -0.015em;
+	line-height: var(--ss-lh-snug);
+	overflow-wrap: break-word;
+}
+h1, .h1 { font-size: var(--ss-fs-3xl); line-height: var(--ss-lh-tight); letter-spacing: -0.025em; }
+h2, .h2 { font-size: var(--ss-fs-2xl); line-height: 1.2; letter-spacing: -0.02em; }
+h3, .h3 { font-size: var(--ss-fs-lg); }
+h4, .h4 { font-size: 1.125rem; }
+h5, .h5 { font-size: var(--ss-fs-base); }
+h6, .h6 { font-size: var(--ss-fs-sm); }
+
+p {
+	font-size: var(--ss-fs-base);
+	line-height: var(--ss-lh-body);
+	color: var(--ss-text);
+}
+
+a {
+	color: var(--ss-primary);
+	transition: color var(--ss-dur) var(--ss-ease);
+	&:hover {
+		color: var(--ss-primary-hover);
+	}
+}
+
+small, .small { font-size: var(--ss-fs-sm); }
+
+::selection {
+	background: var(--ss-primary-100);
+	color: var(--ss-ink);
+}
+
+// Visible, consistent keyboard focus everywhere (mouse clicks unaffected).
+:focus-visible {
+	outline: 2px solid var(--ss-primary);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+button:focus-visible,
+a:focus-visible {
+	box-shadow: none;
+}
+
+img, video, iframe {
+	max-width: 100%;
+}
+
+// Long words / URLs / emails never push the page wider than the viewport.
+td, th, li, dd, .text-break-safe {
+	overflow-wrap: break-word;
+}
+
+// Respect reduced-motion users globally (framer-motion + CSS transitions).
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+.ss-skip-link {
+	position: absolute;
+	left: 12px;
+	top: -60px;
+	z-index: 2000;
+	padding: 10px 16px;
+	background: var(--ss-ink);
+	color: #fff;
+	border-radius: var(--ss-radius-sm);
+	font-weight: 600;
+	&:focus {
+		top: 12px;
+		color: #fff;
+	}
+}
+
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+	position: absolute !important;
+	width: 1px !important;
+	height: 1px !important;
+	overflow: hidden !important;
+	clip: rect(0, 0, 0, 0) !important;
+}
+
+// Spacing utilities used by legacy markup, made fluid so mobile is not
+// swamped by 100px gaps.
+.ptb-100 { padding-top: var(--ss-section-y); padding-bottom: var(--ss-section-y); }
+.pt-100 { padding-top: var(--ss-section-y); }
+.pb-100 { padding-bottom: var(--ss-section-y); }
+.pb-70 { padding-bottom: calc(var(--ss-section-y) - 30px); }

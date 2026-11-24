@@ -1,4 +1,5 @@
 import User from "database/models/user";
+import { getAccountActor } from "@/lib/mastery-server/http";
 
 export default async function handler(req, res) {
 	switch (req.method) {
@@ -14,6 +15,10 @@ export default async function handler(req, res) {
 }
 
 const handleGet = async (req, res) => {
+	// Only administrators may list every student (role re-read from the database).
+	const actor = await getAccountActor(req);
+	if (!actor) return res.status(401).json({ message: "Sign in required" });
+	if (actor.role !== "admin") return res.status(403).json({ message: "Administrators only" });
 	try {
 		const students = await User.findAll({
 			order: [["created_at", "DESC"]],

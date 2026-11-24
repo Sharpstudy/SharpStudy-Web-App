@@ -1,0 +1,32 @@
+@use "tokens" as *;
+
+// Shared utility rules that used to live with the (retired) bookstore UI. Only selectors still used by other pages are kept:
+// blog (.ss-badge--soft, .ss-filter, .ss-resultline), course sidebar (.ss-linkbtn, .ss-facts), admin / Mastery / family (.ss-table,
+// .ss-statgrid, .ss-stat-mini) and .visually-hidden (used site-wide). The file name is kept so index.scss is unchanged.
+
+.ss-badge--soft { background: var(--ss-primary-50); color: var(--ss-primary-ink); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.ss-linkbtn { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; cursor: pointer; font: inherit; }
+
+.ss-filter {
+	display: flex; flex-direction: column; gap: 6px; min-width: 0;
+	&--wide { grid-column: 1 / -1; }
+	label { font-size: var(--ss-fs-sm); font-weight: 600; color: var(--ss-ink); }
+	input:not([type="checkbox"]):not([type="file"]), select, textarea { min-height: 44px; padding: 8px 12px; border: 1px solid var(--ss-border-strong); border-radius: var(--ss-radius); background: var(--ss-surface); font: inherit; width: 100%; }
+	input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--ss-primary); outline-offset: 1px; }
+}
+.ss-resultline { margin: 0 0 var(--ss-space-4); color: var(--ss-muted); }
+
+.ss-facts {
+	display: grid; gap: 12px 24px; margin: 0; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+	dt { font-size: var(--ss-fs-xs); text-transform: uppercase; letter-spacing: 0.04em; color: var(--ss-muted); }
+	dd { margin: 2px 0 0; font-weight: 600; color: var(--ss-ink); }
+}
+
+.ss-table { width: 100%; border-collapse: collapse; font-size: var(--ss-fs-sm);
+	th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--ss-border); vertical-align: middle; }
+	th { background: var(--ss-surface-2); font-weight: 700; color: var(--ss-ink); white-space: nowrap; }
+}
+
+.ss-statgrid { display: grid; gap: var(--ss-space-3); grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: var(--ss-space-5); @include up($bp-md) { grid-template-columns: repeat(4, minmax(0, 1fr)); } @include up($bp-xl) { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+.ss-stat-mini { padding: 12px 14px; background: var(--ss-surface); border: 1px solid var(--ss-border); border-radius: var(--ss-radius); strong { display: block; font-size: var(--ss-fs-xl); color: var(--ss-ink); } span { font-size: var(--ss-fs-xs); color: var(--ss-muted); text-transform: uppercase; letter-spacing: 0.04em; } }

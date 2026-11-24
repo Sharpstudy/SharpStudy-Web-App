@@ -1,7 +1,14 @@
 import { Op } from "sequelize";
 import { Course, User, Enrolment } from "database/models";
+import connection from "@/database/connection";
+import { likeOp } from "@/lib/db/dialect";
+import { requireUser } from "@/lib/auth/access";
 
+const LIKE = likeOp(connection);
+
+// Course catalogue data: a signed-in account only (401 without a valid login, 403 for a role outside student / instructor / admin).
 export default async function handler(req, res) {
+  if (!(await requireUser(req, res))) return;
   switch (req.method) {
     case "GET":
       await handleGetRequest(req, res);
@@ -26,8 +33,8 @@ export default async function handler(req, res) {
 //     const courses = await Course.findAll({
 //       where: {
 //         [Op.or]: [
-//           { title: { [Op.like]: `%${search}%` } },
-//           { short_desc: { [Op.like]: `%${search}%` } },
+//           { title: { [LIKE]: `%${search}%` } },
+//           { short_desc: { [LIKE]: `%${search}%` } },
 //         ],
 //         approved: true,
 //       },
@@ -53,8 +60,8 @@ export default async function handler(req, res) {
 //     const coursesCount = await Course.count({
 //       where: {
 //         [Op.or]: [
-//           { title: { [Op.like]: `%${search}%` } },
-//           { short_desc: { [Op.like]: `%${search}%` } },
+//           { title: { [LIKE]: `%${search}%` } },
+//           { short_desc: { [LIKE]: `%${search}%` } },
 //         ],
 //         approved: true,
 //       },
@@ -98,8 +105,8 @@ const handleGetRequest = async (req, res) => {
       where: {
         approved: true,
         [Op.or]: [
-          { title: { [Op.like]: `%${searchTerm}%` } },
-          { short_desc: { [Op.like]: `%${searchTerm}%` } },
+          { title: { [LIKE]: `%${searchTerm}%` } },
+          { short_desc: { [LIKE]: `%${searchTerm}%` } },
         ],
       },
       order: short ? [["latest_price", short]] : [["created_at", "DESC"]],

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/_App/Navbar";
-import PageBanner from "@/components/Common/PageBanner";
+import { PageHeader } from "@/components/ui";
+import CourseSkeletonLoader from "@/utils/CourseSkeletonLoader";
 import CoursesList from "@/components/Courses/CoursesList";
 import Footer from "@/components/_App/Footer";
 import SearchForm from "@/components/_App/SearchForm";
@@ -46,48 +47,44 @@ export default function CoursesPage({ user }) {
     <>
       <Navbar user={user} />
 
-      <PageBanner
-        pageTitle="Courses"
-        homePageUrl="/"
-        homePageText="Home"
-        activePageText="Courses"
-      />
+      <main>
+        <PageHeader
+          title={search ? `Results for “${search}”` : "Explore courses"}
+          description="Project-based courses and workshops to build cognitive, technical and business skills."
+          crumbs={[{ href: "/", label: "Home" }, { label: "Courses" }]}
+        />
 
-      <div className="courses-area ptb-100">
-        <div className="container">
-          <div className="section-title wow animate__animated animate__fadeInUp delay-0-2s">
-            <span className="top-title">Courses</span>
-            <h2>Expand Your Career Opportunity With Our Courses</h2>
-          </div>
-
-          <div className="search-result">
-            <div className="row align-items-center">
-              <div className="col-lg-6 col-md-5">
-                <p>
-                  We found <span>{coursesCount}</span> courses available for you
-                </p>
-              </div>
-              <div className="col-lg-6 col-md-7">
-                <ul>
-                  <li>
-                    <SearchForm formClass="src-form" btnClass="src-btn" />
-                  </li>
-                  <FilterDropdown />
-                </ul>
-              </div>
+        <section className="ss-section ss-section--tight">
+          <div className="ss-container ss-container--wide">
+            <div className="ss-toolbar">
+              <p className="ss-toolbar__count" aria-live="polite">
+                {loading ? "Loading courses…" : (
+                  <>
+                    <strong>{coursesCount}</strong> course{coursesCount === 1 ? "" : "s"} available
+                  </>
+                )}
+              </p>
+              <ul className="ss-toolbar__controls">
+                <li className="ss-toolbar__search">
+                  <SearchForm formClass="ss-search" btnClass="ss-search__btn" />
+                </li>
+                <FilterDropdown />
+              </ul>
             </div>
-          </div>
 
-          {courses && <CoursesList courses={courses} user={user} />}
-          {coursesCount > 9 && (
-            <div className="col-lg-12 col-md-12">
-              <div className="pagination-area text-center">
+            {loading ? (
+              <CourseSkeletonLoader count={4} />
+            ) : (
+              courses && <CoursesList courses={courses} user={user} />
+            )}
+            {coursesCount > 9 && (
+              <div className="pagination-area text-center mt-5">
                 <Pagination sizes={[1]} total={pages} />
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </>

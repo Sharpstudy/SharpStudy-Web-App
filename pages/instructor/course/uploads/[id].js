@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert";
-import Navbar from "@/components/_App/Navbar";
-import Footer from "@/components/_App/Footer";
+import InstructorLayout from "@/components/Instructor/InstructorLayout";
+import { Button, EmptyState } from "@/components/ui";
 import PageNavigation from "@/components/Instructor/PageNavigation";
 import axios from "axios";
 import { parseCookies } from "nookies";
@@ -97,10 +97,7 @@ const Index = ({ user }) => {
 	};
 	return (
 		<>
-			<Navbar user={user} />
-
-			<div className="ptb-100">
-				<div className="container">
+			<InstructorLayout user={user}>
 					<PageNavigation
 						courseId={courseId}
 						activeClassname="uploads"
@@ -109,26 +106,26 @@ const Index = ({ user }) => {
 					{loading ? (
 						<GeneralLoader />
 					) : (
-						<div className="create-course-form">
-							<div className="row">
-								{videos.length > 0
-									? videos.map((video) => (
-											<CourseVideos
-												key={video.id}
-												{...video}
-												onDelete={() =>
-													confirmDelete(video.id)
-												}
-											/>
-									  ))
-									: "Empty"}
-							</div>
-						</div>
+						videos.length > 0 ? (
+							<ul className="ss-assets">
+								{videos.map((video) => (
+									<CourseVideos
+										key={video.id}
+										{...video}
+										onDelete={() => confirmDelete(video.id)}
+									/>
+								))}
+							</ul>
+						) : (
+							<EmptyState
+								icon="ri-video-line"
+								title="No videos yet"
+								description="Upload your first lesson video to get this course started."
+								action={<Button href={`/instructor/course/upload/${courseId}`}>Upload video</Button>}
+							/>
+						)
 					)}
-				</div>
-			</div>
-
-			<Footer />
+			</InstructorLayout>
 		</>
 	);
 };

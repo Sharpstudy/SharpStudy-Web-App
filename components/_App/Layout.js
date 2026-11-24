@@ -3,19 +3,28 @@ import Head from "next/head";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import GoTop from "@/components/_App/GoTop";
-import { AnimatePresence } from "framer-motion";
-import Modal from "../Modal";
+import dynamic from "next/dynamic";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { designMode } from "./designMode";
 import baseUrl from "@/utils/baseUrl";
+import { FreeDemoProvider } from "@/components/FreeDemo/FreeDemoProvider";
+
+// Loaded only once the site modal is actually switched on (keeps framer-motion out of the shared bundle).
+const SiteModal = dynamic(() => import("./SiteModal"), { ssr: false });
 
 const Layout = ({ children }) => {
+	const { pathname } = useRouter();
+	const mode = designMode(pathname);
 	const [modalOpen, setModalOpen] = useState();
 	const [modalImage, setModalImage] = useState("");
+	const [modalWanted, setModalWanted] = useState(false); // stays true after the first open so the exit animation can still play
 
 	useEffect(() => {
 		const fetchSetting = async () => {
 			const resp = await axios.get(`${baseUrl}/settings.json`);
 			setModalOpen(resp.data.siteModal);
+			if (resp.data.siteModal) setModalWanted(true);
 			setModalImage(resp.data.siteModalImage);
 			if (resp.data.siteModal) {
 				document.body.style.overflow = "hidden";
@@ -43,14 +52,17 @@ const Layout = ({ children }) => {
 				/>
 			</Head>
 
-			{children}
+			{/* Playful for readers and visitors, restrained for instructor and admin work (tokens in _tokens.scss). */}
+			<div className={`ss-app ss-mode--${mode}`}>
+				<FreeDemoProvider>{children}</FreeDemoProvider>
+			</div>
 			<Script
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         src="https://www.googletagmanager.com/gtag/js?id=G-QQHKTTTD86"
       />
 		<Script
 			id="google-analytics"
-			strategy="afterInteractive"
+			strategy="lazyOnload"
 			dangerouslySetInnerHTML={{
 			__html: `
 							window.dataLayer = window.dataLayer || [];
@@ -63,25 +75,12 @@ const Layout = ({ children }) => {
 			}}
 		/>
 
-			<Script src="https://meet.jit.si/external_api.js" />
 
 			<Toaster />
 
 			<GoTop />
 
-			<AnimatePresence
-				initial={false}
-				onExitComplete={() => null}
-				mode="wait"
-			>
-				{modalOpen && modalImage && (
-					<Modal
-						modalOpen={modalOpen}
-						handleClose={close}
-						image_url={modalImage}
-					/>
-				)}
-			</AnimatePresence>
+			{modalWanted && <SiteModal open={modalOpen} image={modalImage} onClose={close} />}
 		</>
 	);
 };

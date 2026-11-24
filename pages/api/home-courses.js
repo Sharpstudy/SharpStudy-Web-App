@@ -1,7 +1,12 @@
 import Sequelize from "sequelize";
 import { Course, User, Enrolment, Category } from "database/models";
+import connection from "@/database/connection";
+import { randomOrderSql } from "@/lib/db/dialect";
+import { requireUser } from "@/lib/auth/access";
 
+// Course catalogue data: a signed-in account only (401 without a valid login, 403 for a role outside student / instructor / admin).
 export default async function handler(req, res) {
+	if (!(await requireUser(req, res))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGetRequest(req, res);
@@ -16,7 +21,7 @@ export default async function handler(req, res) {
 const handleGetRequest = async (req, res) => {
 	try {
 		const courses = await Course.findAll({
-			order: Sequelize.literal("rand()"),
+			order: Sequelize.literal(randomOrderSql(connection)),
 			limit: 4,
 			include: [
 				{
@@ -34,7 +39,7 @@ const handleGetRequest = async (req, res) => {
 		});
 
 		const categories = await Category.findAll({
-			order: Sequelize.literal("rand()"),
+			order: Sequelize.literal(randomOrderSql(connection)),
 			limit: 12,
 		});
 
