@@ -1,6 +1,8 @@
 import { slugify } from "@/utils/auth";
 import { requireUser, TEACHER_ROLES, requireCourseManager } from "@/lib/auth/access";
 import { Quiz, Question, Answer_Option } from "database/models";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
 export default async function handler(req, res) {
   // 401 invalid/missing token, 403 wrong role; identity and role come from the database.
@@ -43,7 +45,7 @@ const handlePostRequest = async (req, res) => {
     if (!(await requireCourseManager(res, user, courseId))) return;
     let slug = slugify(title);
     const slugExist = await Quiz.findOne({
-      where: { slug: slug },
+      where: ciEquals(connection, "slug", slug, Quiz),
     });
 
     if (slugExist) {

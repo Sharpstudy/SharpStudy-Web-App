@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { formatPhoneDisplay } from "@/lib/freeDemo/phone";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { programTitle } from "@/lib/freeDemo/config";
 import { msg, fieldErrors, fmt, localToIso, FollowupBadge, MeetingBadge, FOLLOW_UP_LABEL, OUTCOME_LABEL, INTEREST_LABEL, PURPOSE_LABEL, eventText } from "./shared";
 
 // One meeting for a telecaller (and, with mode="admin", for Admin > Telecallers > Activity). The customer's request is shown read-only:
@@ -96,11 +98,19 @@ const MeetingDetail = ({ id, api, mode = "telecaller", team = [], onChanged, onC
 				<div>
 					<h3 style={{ fontSize: "1rem" }}>Customer and original request</h3>
 					<dl className="ia-summary ia-summary--stack">
-						<Row k="Phone">{m.phone ? <a href={`tel:${m.phone}`}>{m.phone}</a> : null}</Row>
-						<Row k="Email">{m.email ? <a href={`mailto:${m.email}`}>{m.email}</a> : null}</Row>
+						<Row k="Phone">{m.phone ? <a href={`tel:${m.phone}`}>{formatPhoneDisplay(m.phone)}</a> : null}</Row>
+						{m.kind === "free_demo" && (
+							<>
+								<Row k="Child">{`${m.child_name} (${m.child_grade})`}</Row>
+								<Row k="Program">{programTitle(m.program)}</Row>
+								<Row k="Class type">{m.class_mode === "online" ? "Online" : m.class_mode === "offline" ? "Offline" : "No preference"}</Row>
+								<Row k="Source">{`${m.source || "–"} ${m.source_page || ""}`}</Row>
+							</>
+						)}
+						<Row k="Email">{m.email ? <a href={`mailto:${m.email}`}>{m.email}</a> : "Not provided"}</Row>
 						<Row k="Organisation">{m.organization}</Row>
 						<Row k="Purpose">{PURPOSE_LABEL[m.purpose] || m.purpose}</Row>
-						<Row k="Requested for">{`${fmt(m.requested_at, m.time_zone)} (${m.time_zone})`}</Row>
+						<Row k="Requested for">{m.requested_at ? `${fmt(m.requested_at, m.time_zone)} (${m.time_zone})` : "No preferred time"}</Row>
 						<Row k="Message"><span className="ia-pre" style={{ whiteSpace: "pre-wrap" }}>{m.message}</span></Row>
 						{m.confirmed_start && <Row k="Confirmed for">{fmt(m.confirmed_start, m.time_zone)}</Row>}
 					</dl>

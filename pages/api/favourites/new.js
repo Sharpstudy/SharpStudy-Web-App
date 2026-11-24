@@ -1,5 +1,5 @@
 import { Favourite, Course } from "database/models";
-import { optionalActor, requireUser } from "@/lib/auth/access";
+import { requireUser } from "@/lib/auth/access";
 
 // Wishlist toggle, always for the signed-in user (userId in the request is ignored).
 export default async function handler(req, res) {
@@ -21,8 +21,9 @@ const handleGet = async (req, res) => {
 	const { courseId } = req.query;
 
 	try {
-		const actor = await optionalActor(req);
-		const exist = actor && courseId ? await Favourite.findOne({ where: { userId: actor.userId, courseId } }) : null;
+		const actor = await requireUser(req, res); // 401 without a valid login
+		if (!actor) return;
+		const exist = courseId ? await Favourite.findOne({ where: { userId: actor.userId, courseId } }) : null;
 		res.status(200).send(!!exist);
 	} catch (e) {
 		res.status(400).json({

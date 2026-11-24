@@ -31,7 +31,7 @@ const ROLES = [
 module.exports = {
 	async up(queryInterface) {
 		const now = new Date();
-		const [existingSettings] = await queryInterface.sequelize.query("SELECT `key` FROM ml_settings");
+		const [existingSettings] = await queryInterface.sequelize.query(`SELECT ${queryInterface.quoteIdentifier("key")} FROM ml_settings`);
 		const haveKeys = new Set(existingSettings.map((r) => r.key));
 		const settingRows = Object.entries(SETTINGS)
 			.filter(([k]) => !haveKeys.has(k))

@@ -1,6 +1,8 @@
 import { slugify } from "@/utils/auth";
 import Course from "database/models/course";
 import { requireRole } from "@/lib/auth/requireRole";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -44,7 +46,7 @@ const handlePostRequest = async (req, res, actor) => {
 
     let slug = slugify(title);
     const slugExist = await Course.findOne({
-      where: { slug: slug },
+      where: ciEquals(connection, "slug", slug, Course),
     });
 
     if (slugExist) {

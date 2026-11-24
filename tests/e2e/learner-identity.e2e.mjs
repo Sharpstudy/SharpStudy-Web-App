@@ -24,9 +24,28 @@ if (owners.length < 2) {
 	await db.end();
 	process.exit(0);
 }
-const [ownerA, ownerB] = owners; // two unrelated accounts
+// What an account's picker lists is defined by the application (docs/learner-assignments): the profiles it OWNS, the ones it is a
+// GUARDIAN of, and its OWN profile when it is the linked student (relation "self"). The expected set is computed the same way here.
+const [guards] = await db.query("SELECT learner_id, user_id FROM ml_learner_guardians");
+const [selfLinks] = await db.query("SELECT id, student_user_id FROM ml_learners WHERE student_user_id IS NOT NULL");
+const pickerOf = (acct) =>
+	new Set([
+		...learners.filter((l) => l.owner_user_id === acct).map((l) => l.id),
+		...guards.filter((g) => g.user_id === acct).map((g) => g.learner_id),
+		...selfLinks.filter((x) => x.student_user_id === acct).map((x) => x.id),
+	]);
+// two accounts whose pickers share nothing (so any leak between them would show)
+let pair = null;
+for (const a of owners) for (const b of owners) if (!pair && a !== b && ![...pickerOf(a)].some((id) => pickerOf(b).has(id))) pair = [a, b];
+if (!pair) {
+	console.log("learner-identity e2e: SKIPPED - needs two accounts whose learner pickers are disjoint");
+	await db.end();
+	process.exit(0);
+}
+const [ownerA, ownerB] = pair;
 const ofA = learners.filter((l) => l.owner_user_id === ownerA);
 const ofB = learners.filter((l) => l.owner_user_id === ownerB);
+const sortedIds = (ids) => [...ids].sort().join();
 
 const accountToken = (id) => jwt.sign({ userId: id, role: byId.get(id).role, email: byId.get(id).email }, process.env.JWT_SECRET, { expiresIn: "10m" });
 const learnerToken = (l, acct) => jwt.sign({ typ: "ml_learner", lid: l.id, acct }, process.env.JWT_SECRET, { expiresIn: "10m" });
@@ -53,8 +72,8 @@ try {
 	// the picker for each account lists exactly that account's learners
 	const listA = await get("learners/", { account: ownerA });
 	const listB = await get("learners/", { account: ownerB });
-	check("account A's picker lists only A's learners", listA.status === 200 && listA.json.learners.map((l) => l.id).sort().join() === ofA.map((l) => l.id).sort().join());
-	check("account B's picker lists only B's learners", listB.status === 200 && listB.json.learners.map((l) => l.id).sort().join() === ofB.map((l) => l.id).sort().join());
+	check("account A's picker lists exactly what A owns, guards or is linked to (and nothing of B's)", listA.status === 200 && sortedIds(listA.json.learners.map((l) => l.id)) === sortedIds(pickerOf(ownerA)));
+	check("account B's picker lists exactly what B owns, guards or is linked to (and nothing of A's)", listB.status === 200 && sortedIds(listB.json.learners.map((l) => l.id)) === sortedIds(pickerOf(ownerB)));
 	check("the two pickers share no learner", !listA.json.learners.some((l) => listB.json.learners.some((m) => m.id === l.id)));
 
 	const kidB = ofB[0];

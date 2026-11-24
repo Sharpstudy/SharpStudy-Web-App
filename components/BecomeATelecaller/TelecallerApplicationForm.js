@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Field } from "@/components/ui/Form";
@@ -97,6 +98,7 @@ const Summary = ({ a }) => (
 );
 
 const TelecallerApplicationForm = () => {
+	const router = useRouter();
 	const [data, setData] = useState(null);
 	const [error, setError] = useState("");
 	const [form, setForm] = useState(null);
@@ -138,6 +140,10 @@ const TelecallerApplicationForm = () => {
 		setBusy(kind);
 		try {
 			await fn();
+			// The header / account menu are drawn from the account state that pages/_app.js reads from the database once per page
+			// load. Saving, uploading, submitting or re-applying changes that state (for example draft -> pending), so re-run it now:
+			// otherwise the menu keeps showing the student links until the next full reload.
+			router.replace(router.asPath).catch(() => {});
 		} catch (e) {
 			const f = e.response && e.response.data && e.response.data.fields;
 			if (f) setErrors(f);
@@ -205,7 +211,8 @@ const TelecallerApplicationForm = () => {
 				)}
 				<div className="ia-head"><h2>Telecaller application</h2><StatusBadge status={app.status} /></div>
 				{app.status === "pending" && <p>Thanks! Your application was received and is <strong>pending approval</strong>. Applying does not give any telecaller access: an administrator reviews every application, and we will notify you of the decision.</p>}
-				{active && <p>Your application was <strong>approved</strong> and your telecaller access is active. The telecaller dashboard is not open yet; we will let you know as soon as it is.</p>}
+				{active && <p>Your application was <strong>approved</strong> and your telecaller access is active. <Link href="/telecaller/"><a><strong>Open the telecaller dashboard</strong></a></Link>.</p>}
+				{app.status === "pending" && <p className="ss-muted">While your application is pending, the student areas (My Learning, Mastery Ladder, Family) stay closed on this account. You will be able to use them again if the application is not approved.</p>}
 				{deactivated && <p>Your application was approved, but your telecaller access is currently <strong>deactivated</strong>. Please contact SharpStudy support if you have questions.</p>}
 				{app.status === "approved" && !data.access && <p>Your application was approved. Your telecaller access is being set up.</p>}
 				{rejected && <p>Your application was not approved. Your account keeps its normal access.</p>}

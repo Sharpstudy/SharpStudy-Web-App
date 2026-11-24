@@ -4,6 +4,7 @@ import Navbar from "@/components/_App/Navbar";
 import GeneralLoader from "@/utils/GeneralLoader";
 import CoursesDetailsContent from "@/components/SingleCourses/CoursesDetailsContent";
 import Footer from "@/components/_App/Footer";
+import DemoBand from "@/components/FreeDemo/DemoBand";
 import axios from "axios";
 import baseUrl from "@/utils/baseUrl";
 import toast from "react-hot-toast";
@@ -54,6 +55,7 @@ const CourseDetails = ({ user }) => {
 				) : (
 					<GeneralLoader />
 				)}
+				{course && course.id && <DemoBand source="course_detail_cta" title="Not sure this course is right?" text="Book a free demo class first." />}
 			</main>
 			<Footer />
 		</>

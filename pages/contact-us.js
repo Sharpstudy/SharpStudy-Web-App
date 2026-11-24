@@ -4,6 +4,7 @@ import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
 import ContactInfo from "@/components/ContactUs/ContactInfo";
 import ContactForm from "@/components/ContactUs/ContactForm";
+import DemoBand from "@/components/FreeDemo/DemoBand";
 
 const ContactUs = ({ user }) => {
 	return (
@@ -23,6 +24,7 @@ const ContactUs = ({ user }) => {
 						<ContactForm />
 					</div>
 				</div>
+				<DemoBand source="contact_cta" title="Prefer to see it first?" text="Book a free demo class instead of writing a message." />
 			</main>
 
 			<Footer />

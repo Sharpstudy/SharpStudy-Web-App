@@ -20,35 +20,35 @@ $bp-xl: 1200px;
 
 :root {
 	/* Brand */
-	--ss-primary: #2f55d4;
-	--ss-primary-hover: #2443b3;
-	--ss-primary-active: #1d3792;
-	--ss-primary-50: #f0f3fe;
-	--ss-primary-100: #e0e7fd;
-	--ss-primary-200: #c3d0fa;
-	--ss-primary-ink: #1b2f7a;
-	--ss-accent: #f5a524; /* stars, streaks, highlights */
-	--ss-accent-50: #fff7e8;
+	--ss-primary: #26235f;
+	--ss-primary-hover: #35317f;
+	--ss-primary-active: #1b1947;
+	--ss-primary-50: #f1f0fb;
+	--ss-primary-100: #e2e0f6;
+	--ss-primary-200: #c8c5ec;
+	--ss-primary-ink: #26235f;
+	--ss-accent: #f5a000; /* stars, streaks, highlights */
+	--ss-accent-50: #fdf0c4;
 	--ss-accent-ink: #8a5300;
 
 	/* Playful palette: soft surfaces for backgrounds + a strong tone for icons and a dark ink for text ON that surface
 	   (every *-ink on its pastel is >= 7:1). Pastels are never used for body text. */
-	--ss-peach: #fff0e8;
-	--ss-peach-strong: #ff8a5b;
-	--ss-peach-ink: #8a3515;
-	--ss-sky: #ddf3ff;
-	--ss-sky-strong: #3ba7e0;
+	--ss-peach: #fddde8;
+	--ss-peach-strong: #f9afc8;
+	--ss-peach-ink: #7a2346;
+	--ss-sky: #d7ecfc;
+	--ss-sky-strong: #1faeeb;
 	--ss-sky-ink: #094a6f;
-	--ss-sun: #fff1a8;
-	--ss-sun-strong: #f5b800;
+	--ss-sun: #fbe19a;
+	--ss-sun-strong: #ffb52e;
 	--ss-sun-ink: #5c4600;
-	--ss-mint: #ddf7e5;
-	--ss-mint-strong: #35b26b;
-	--ss-mint-ink: #0e5632;
-	--ss-lav: #eee5ff;
-	--ss-lav-strong: #8b6bea;
-	--ss-lav-ink: #4a2fa3;
-	--ss-page: #fffaf6; /* warm page background for playful areas */
+	--ss-mint: #e1f3d2;
+	--ss-mint-strong: #7cc242;
+	--ss-mint-ink: #1d4a06;
+	--ss-lav: #dce9fd;
+	--ss-lav-strong: #3b8ff3;
+	--ss-lav-ink: #173f8a;
+	--ss-page: #fbf7ee; /* warm page background for playful areas */
 
 	/* Semantic */
 	--ss-success: #0f7a41;
@@ -61,20 +61,20 @@ $bp-xl: 1200px;
 	--ss-info-50: #e6f6f8;
 
 	/* Neutrals */
-	--ss-ink: #25304a;
-	--ss-text: #3b4660;
-	--ss-muted: #5b6784;
-	--ss-subtle: #98a2b3;
-	--ss-border: #e4e7ec;
-	--ss-border-strong: #d0d5dd;
+	--ss-ink: #26235f;
+	--ss-text: #4a4872;
+	--ss-muted: #55537d;
+	--ss-subtle: #8f8db0;
+	--ss-border: #e9e4d6;
+	--ss-border-strong: #d6d0bd;
 	--ss-surface: #ffffff;
-	--ss-surface-2: #f7f8fb;
-	--ss-surface-3: #eef1f6;
+	--ss-surface-2: #fbf7ee;
+	--ss-surface-3: #f3eedf;
 	--ss-overlay: rgba(15, 23, 41, 0.5);
 
 	/* Typography */
-	--ss-font-display: "Fredoka", "Plus Jakarta Sans", system-ui, sans-serif; /* rounded headings in playful areas */
-	--ss-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	--ss-font-display: "Baloo 2", "Nunito", system-ui, sans-serif; /* rounded headings in playful areas */
+	--ss-font: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 	--ss-fs-xs: 0.75rem;
 	--ss-fs-sm: 0.875rem;
 	--ss-fs-base: 1rem;
@@ -109,21 +109,26 @@ $bp-xl: 1200px;
 	--ss-sidebar-w: 264px;
 
 	/* Radii */
-	--ss-radius-sm: 10px;
-	--ss-radius: 14px;
-	--ss-radius-lg: 20px;
-	--ss-radius-xl: 28px;
+	--ss-radius-sm: 14px;
+	--ss-radius: 18px;
+	--ss-radius-lg: 26px;
+	--ss-radius-xl: 34px;
 	--ss-radius-pill: 999px;
 
 	/* Elevation */
 	--ss-shadow-xs: 0 1px 2px rgba(37, 48, 74, 0.05);
 	--ss-shadow-sm: 0 2px 6px rgba(37, 48, 74, 0.08), 0 1px 2px rgba(37, 48, 74, 0.04);
-	--ss-shadow-md: 0 14px 28px -10px rgba(37, 48, 74, 0.16), 0 2px 6px -2px rgba(37, 48, 74, 0.07);
-	--ss-shadow-lg: 0 26px 52px -18px rgba(37, 48, 74, 0.24);
+	--ss-shadow-md: 0 22px 40px -24px rgba(38, 35, 95, 0.5);
+	--ss-shadow-lg: 0 30px 54px -24px rgba(38, 35, 95, 0.55);
 
 	/* Interaction */
-	--ss-focus-ring: 0 0 0 3px rgba(47, 85, 212, 0.28);
+	--ss-focus-ring: 0 0 0 3px rgba(245, 160, 0, 0.45);
 	--ss-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--ss-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ss-orange: #ffb52e;
+	--ss-sky-btn: #1faeeb;
+	--ss-green: #7cc242;
+	--ss-pink: #f9afc8;
 	--ss-dur: 180ms;
 	--ss-tap: 44px; /* minimum touch target */
 
@@ -135,12 +140,12 @@ $bp-xl: 1200px;
 	/* Bootstrap 5.2 bridge */
 	--bs-body-font-family: var(--ss-font);
 	--bs-body-color: var(--ss-text);
-	--bs-primary: #2f55d4;
-	--bs-primary-rgb: 47, 85, 212;
-	--bs-link-color: #2f55d4;
-	--bs-link-hover-color: #2443b3;
-	--bs-border-color: #e4e7ec;
-	--bs-border-radius: 12px;
+	--bs-primary: #26235f;
+	--bs-primary-rgb: 38, 35, 95;
+	--bs-link-color: #26235f;
+	--bs-link-hover-color: #35317f;
+	--bs-border-color: #e9e4d6;
+	--bs-border-radius: 16px;
 }
 
 /* Restrained "pro" mode for instructor and admin screens (wrapper class set in components/_App/Layout.js):
@@ -150,6 +155,5 @@ $bp-xl: 1200px;
 	--ss-radius: 10px;
 	--ss-radius-lg: 14px;
 	--ss-radius-xl: 18px;
-	--ss-font-display: var(--ss-font);
-	--ss-page: #f7f8fb;
+	--ss-page: #fbf7ee;
 }

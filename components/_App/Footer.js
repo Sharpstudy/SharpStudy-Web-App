@@ -3,22 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCurrentUser } from "./UserContext";
 import { useDashboardHeader } from "./accountLinks";
+import { programNavItems } from "../../lib/programs/catalog";
 
 const columns = [
 	{
-		title: "Books",
-		links: [
-			{ href: "/books/", label: "All books" },
-			{ href: "/books/?ageGroup=baby-toddler", label: "Ages 0–3" },
-			{ href: "/books/?ageGroup=young-readers", label: "Ages 7–9" },
-			{ href: "/books/?ageGroup=middle-secondary", label: "Ages 13–15" },
-			{ href: "/books/?ageGroup=adult", label: "Ages 18+" },
-		],
-	},
-	{
 		title: "Learn",
 		links: [
-			{ href: "/courses/", label: "All courses" },
+			...programNavItems(),
 			{ href: "/blog/blogs/", label: "Blog" },
 			{ href: "/become-an-instructor/", label: "Become an instructor" },
 			{ href: "/become-a-telecaller/", label: "Become a telecaller" },
@@ -28,6 +19,9 @@ const columns = [
 		title: "Company",
 		links: [
 			{ href: "/about-us/", label: "About us" },
+			{ href: "/success-stories/", label: "Success stories" },
+			{ href: "/gallery/", label: "Gallery" },
+			{ href: "/careers/", label: "Careers" },
 			{ href: "/contact-us/", label: "Contact" },
 			{ href: "/faq/", label: "FAQ" },
 		],
@@ -40,6 +34,14 @@ const columns = [
 		],
 	},
 ];
+
+// A visitor who is not signed in sees no course link anywhere in the footer; a signed-in account still gets "All courses".
+const withCourses = (cols) =>
+	cols.map((c) => {
+		if (c.title !== "Learn") return c;
+		const at = c.links.findIndex((l) => l.href === "/blog/blogs/"); // right after the programs, as before
+		return { ...c, links: [...c.links.slice(0, at), { href: "/courses/", label: "All courses" }, ...c.links.slice(at)] };
+	});
 
 const Footer = () => {
 	const user = useCurrentUser();
@@ -83,7 +85,7 @@ const Footer = () => {
 						</div>
 					</div>
 
-					{columns.map((col) => (
+					{(user ? withCourses(columns) : columns).map((col) => (
 						<nav key={col.title} aria-label={col.title}>
 							<h2 className="ss-footer__title">{col.title}</h2>
 							<ul>

@@ -553,15 +553,21 @@ test("the book id/slug survives the sign-in redirect, and ?next= cannot leave th
 	const signup = fs.readFileSync(new URL("../../pages/api/users/signup.js", import.meta.url), "utf8");
 	assert.ok(!/role/.test(signup.split("User.create(")[1].split(")")[0]), "signup never sets a role from the request");
 	const register = fs.readFileSync(new URL("../../components/Authentication/RegisterForm.js", import.meta.url), "utf8");
-	assert.match(register, /handleLogin\(/);
+	// registration no longer logs in (no token before the e-mail is confirmed); it forwards the safe ?next= to the confirmation e-mail
+	assert.doesNotMatch(register, /handleLogin\(/);
+	assert.match(register, /next: router\.query\.next/);
+	assert.match(fs.readFileSync(new URL("../../components/Authentication/LoginForm.js", import.meta.url), "utf8"), /handleLogin\(/);
 });
 
-test("the public pages send signed-out buyers to /auth with the checkout path, and the checkout page requires a login", () => {
-	const detail = fs.readFileSync(new URL("../../components/Books/BuyBox.js", import.meta.url), "utf8");
-	assert.match(detail, /authUrlFor\(bookCheckoutPath\(/);
-	const page = fs.readFileSync(new URL("../../pages/books/[slug]/checkout.js", import.meta.url), "utf8");
-	assert.match(page, /authUrlFor\(bookCheckoutPath\(/);
-	assert.match(page, /already_owned|owned/);
+test("the retired bookstore pages are gone and their URLs redirect (books -> /courses/, admin books -> /admin/)", async () => {
+	for (const f of ["pages/books", "pages/learning/my-books", "pages/admin/books", "components/Books"]) assert.ok(!fs.existsSync(new URL("../../" + f, import.meta.url)), f + " was removed with the bookstore UI");
+	const { createRequire } = await import("node:module");
+	const cfg = createRequire(import.meta.url)("../../next.config.js");
+	const rules = await cfg.redirects();
+	const to = (source) => (rules.find((r) => r.source === source) || {}).destination;
+	for (const src of ["/books", "/books/:path*", "/learning/my-books", "/learning/my-books/:path*"]) assert.equal(to(src), "/courses/", src);
+	for (const src of ["/admin/books", "/admin/books/:path*"]) assert.equal(to(src), "/admin/", src);
+	assert.ok(rules.every((r) => r.permanent === false), "temporary redirects");
 });
 
 // ============================================================================ regression: nothing outside books changed

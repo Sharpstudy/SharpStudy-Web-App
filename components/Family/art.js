@@ -98,7 +98,7 @@ export const Avatar = ({ avatar, size = 48, ring = false, className = "" }) => {
 // ----- the nine secret pictures -----
 export const PICTURE_STYLE = {
 	sun: { color: "#d79a00", name: "Sun" },
-	star: { color: "#2e47c8", name: "Star" },
+	star: { color: "#26235f", name: "Star" },
 	heart: { color: "#c4411f", name: "Heart" },
 	moon: { color: "#6d44d6", name: "Moon" },
 	leaf: { color: "#1f7a4c", name: "Leaf" },

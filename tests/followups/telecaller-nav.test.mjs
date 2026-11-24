@@ -30,7 +30,7 @@ test("none of the student, instructor or dashboard links can appear for a teleca
 
 test("ordinary student: unchanged (no telecaller link, full student menu)", () => {
 	const u = { role: "student" };
-	assert.deepEqual(labels(u), ["Mastery Ladder", "Family", "My Learning", "My Books", "Purchases", "Wishlist", "Account Settings"]);
+	assert.deepEqual(labels(u), ["Mastery Ladder", "Family", "My Learning", "Purchases", "Wishlist", "Account Settings"]);
 	assert.ok(!labels(u, "/learning/my-courses/").includes("Telecaller Dashboard"));
 	assert.equal(isTelecallerOnly(u), false);
 	assert.equal(navModel(u, "/learning/my-courses/").dash, true, "the student dashboard header is unchanged");
@@ -48,7 +48,7 @@ test("instructor: unchanged", () => {
 
 test("admin: unchanged, even if an admin somehow holds a telecaller flag", () => {
 	for (const u of [{ role: "admin" }, { role: "admin", telecaller_access: "active" }]) {
-		assert.deepEqual(labels(u), ["Admin Dashboard", "Mastery Ladder", "Family", "My Learning", "My Books", "Purchases", "Wishlist", "Account Settings"]);
+		assert.deepEqual(labels(u), ["Admin Dashboard", "Mastery Ladder", "Family", "My Learning", "Purchases", "Wishlist", "Account Settings"]);
 		assert.equal(navModel(u, "/admin/").dash, false);
 		assert.equal(isTelecallerOnly(u), false);
 	}

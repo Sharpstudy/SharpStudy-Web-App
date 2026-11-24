@@ -1,11 +1,13 @@
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
-import jwt from "jsonwebtoken";
 import isEmail from "validator/lib/isEmail";
 import isLength from "validator/lib/isLength";
 
 import User from "database/models/user";
+import connection from "@/database/connection";
+import { ciEquals, normalizeEmail } from "@/lib/db/dialect";
 import { rateLimit } from "@/lib/mastery-server/http";
+import { passwordProblem } from "@/lib/auth/passwordPolicy";
 
 import { confirmEmailAddress } from "email-templates/account-confirmation";
 
@@ -30,6 +32,7 @@ const userSignup = async (req, res) => {
   [first_name, last_name, email, password] = [first_name, last_name, email, password].map((v) =>
     typeof v === "string" ? v : ""
   );
+  email = normalizeEmail(email);
   try {
     if (!isLength(first_name, { min: 3 })) {
       return res.status(422).json({
@@ -45,15 +48,15 @@ const userSignup = async (req, res) => {
       return res
         .status(422)
         .json({ message: "Email should be a valid email address" });
-    } else if (!isLength(password, { min: 6 })) {
-      return res.status(422).json({
-        message: "Password should be minimum of six characters long",
-      });
+    }
+    const weak = passwordProblem(password, { email });
+    if (weak) {
+      return res.status(422).json({ message: weak });
     }
 
     // Check if user with that email if already exists
     const user = await User.findOne({
-      where: { email: email },
+      where: ciEquals(connection, "email", email),
     });
 
     if (user) {
@@ -74,25 +77,16 @@ const userSignup = async (req, res) => {
       reset_password_send_at: Date.now(),
     });
 
-    confirmEmailAddress(newUser, next);
-    const edmy_users_token = jwt.sign(
-      {
-        userId: newUser.id,
-        first_name: newUser.first_name,
-        last_name: newUser.last_name,
-        email: newUser.email,
-        role: newUser.role,
-        profile_photo: newUser.profile_photo,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
-    );
+    // Sending is awaited (a serverless function can be frozen right after the response). A mail problem never fails the sign-up:
+    // the person can ask for the e-mail again.
+    await confirmEmailAddress(newUser, next);
 
+    // No login token is issued here: the account cannot be used until the e-mail address is confirmed (sign-in refuses it, and so do
+    // the protected APIs). The page shows the check-your-email screen instead.
     res.status(200).json({
-      message: "Registration Successful!",
-      edmy_users_token,
+      message: "Account created. Please check your email to confirm your address.",
+      verification_required: true,
+      email: newUser.email,
     });
   } catch (e) {
     res.status(400).json({

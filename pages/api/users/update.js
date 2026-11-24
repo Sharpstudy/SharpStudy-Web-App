@@ -7,7 +7,8 @@ import { ML_Guardian, ML_Learner } from "@/database/models/mastery";
 import { BookOrder } from "@/database/models/book";
 import Enrolment from "@/database/models/enrolment";
 import { isParentOnly } from "@/lib/family/parentMode";
-import { TelecallerProfile } from "@/database/models/telecaller";
+import { TelecallerProfile, TelecallerApplication } from "@/database/models/telecaller";
+import { telecallerState } from "@/lib/auth/telecallerState";
 
 export default async (req, res) => {
 	if (!("authorization" in req.headers)) {
@@ -43,54 +44,57 @@ const userGetById = async (req, res, actor) => {
 			return res.status(401).json({ message: "This account is disabled." });
 		}
 
-		// Status of the user's own instructor application (drives the navigation only; every
-		// protected page and API re-checks the real role). Tolerates the migration not being applied yet.
-		let instructor_application_status = null;
-		try {
-			const app = user && (await InstructorApplication.findOne({ where: { user_id: userId }, attributes: ["status"] }));
-			instructor_application_status = app ? app.status : null;
-		} catch (err) {
-			instructor_application_status = null;
-		}
+		// Everything below depends only on the user id (and, for the student-only counts, on the role read above), so the look-ups run
+		// concurrently: one round-trip of latency instead of up to seven. Each keeps its own failure tolerance, exactly as before
+		// (a table that is not migrated yet means "no" rather than an error). Results and rules are unchanged.
+		const tolerant = (promise, fallback) => promise.catch(() => fallback);
+		const isStudent = !!user && user.role === "student";
+		const [appRow, studentLinks, parentLinks, paidCourses, paidBooks, tp, tApp] = await Promise.all([
+			// Status of the user's own instructor application (drives the navigation only; every protected page and API re-checks the real role).
+			user ? tolerant(InstructorApplication.findOne({ where: { user_id: userId }, attributes: ["status"] }), null) : null,
+			// A child account: a student whose account is the linked login of a learner profile (same rule as lib/family/links.js childLearner).
+			isStudent ? tolerant(ML_Learner.count({ where: { student_user_id: userId } }), null) : null,
+			isStudent ? tolerant(ML_Guardian.count({ where: { user_id: userId, relation: "parent" } }), null) : null,
+			isStudent ? tolerant(Enrolment.count({ where: { userId, status: "paid" } }), null) : null,
+			isStudent ? tolerant(BookOrder.count({ where: { user_id: userId, status: "paid" } }), null) : null,
+			// Whether this account holds an ACTIVE approved telecaller profile (drives the telecaller gate and nav link only; the telecaller APIs
+			// re-check it on every request). Fetched alongside the rest and ignored below for administrators and child accounts, as before.
+			user && user.role !== "admin" ? tolerant(TelecallerProfile.findByPk(userId, { attributes: ["status", "approved_at"] }), null) : null,
+			// The person's own telecaller application status (drives the account state below; every telecaller API re-checks it).
+			user && user.role !== "admin" ? tolerant(TelecallerApplication.findOne({ where: { user_id: userId }, attributes: ["status"] }), null) : null,
+		]);
+		const instructor_application_status = appRow ? appRow.status : null;
 
-		// Parent-only accounts get the restricted Progress / Family experience (lib/family/parentMode.js). Derived from
-		// the database on every request; any failure (for example a table not migrated yet) means "not a parent".
+		// Parent-only accounts get the restricted Progress / Family experience (lib/family/parentMode.js), derived from the database on every
+		// request; any failure of the counts above means "not a parent" (a null count aborts the derivation, as the old try/catch did).
 		let is_parent = false;
-		// A child account: a student whose account is the linked login of a learner profile. They get the student Family
-		// page (their own parent link code); everyone else keeps the parent Progress dashboard. Same rule the child link
-		// API uses (lib/family/links.js childLearner), computed here from the database, never from the browser.
 		let is_learner_account = false;
-		try {
-			if (user && user.role === "student") {
-				const studentLinks = await ML_Learner.count({ where: { student_user_id: userId } });
-				is_learner_account = studentLinks > 0;
-				is_parent = isParentOnly({
-					role: user.role,
-					active: accountIsActive(user),
-					parentLinks: await ML_Guardian.count({ where: { user_id: userId, relation: "parent" } }),
-					studentLinks,
-					paidCourses: await Enrolment.count({ where: { userId, status: "paid" } }),
-					paidBooks: await BookOrder.count({ where: { user_id: userId, status: "paid" } }),
-				});
-			}
-		} catch (err) {
+		if (isStudent && [studentLinks, parentLinks, paidCourses, paidBooks].every((n) => n !== null)) {
+			is_learner_account = studentLinks > 0;
+			is_parent = isParentOnly({
+				role: user.role,
+				active: accountIsActive(user),
+				parentLinks,
+				studentLinks,
+				paidCourses,
+				paidBooks,
+			});
+		} else {
+			// not a student, or one of the counts failed: not a parent and not a child account
 			is_learner_account = false;
 			is_parent = false;
 		}
 
-		// Whether this account currently holds an ACTIVE approved telecaller profile (drives the telecaller screen gate and nav link only;
-		// the telecaller APIs re-check it on every request). Any failure (for example the table not migrated yet) means "no access".
 		let telecaller_access = null;
-		try {
-			if (user && user.role !== "admin" && !is_learner_account) {
-				const tp = await TelecallerProfile.findByPk(userId, { attributes: ["status", "approved_at"] });
-				telecaller_access = tp && tp.status === "active" && tp.approved_at ? "active" : null;
-			}
-		} catch (err) {
-			telecaller_access = null;
+		if (user && user.role !== "admin" && !is_learner_account) {
+			telecaller_access = tp && tp.status === "active" && tp.approved_at ? "active" : null;
 		}
 
-		res.status(200).json({ user: user ? { ...user.get({ plain: true }), instructor_application_status, is_parent, is_learner_account, telecaller_access } : user });
+		// The full telecaller account state (none / draft / pending / more_info / rejected / active / inactive). Computed here from the database,
+		// never from the browser, and used by the page gate, the landing redirect and the navigation. `telecaller_access` stays as before.
+		const telecaller_state = user ? telecallerState({ role: user.role, isLearner: is_learner_account, applicationStatus: tApp ? tApp.status : null, profileStatus: tp ? tp.status : null, approvedAt: tp ? tp.approved_at : null }) : "none";
+
+		res.status(200).json({ user: user ? { ...user.get({ plain: true }), instructor_application_status, is_parent, is_learner_account, telecaller_access, telecaller_state } : user });
 	} catch (e) {
 		res.status(400).json({
 			error_code: "get_user_by_id",

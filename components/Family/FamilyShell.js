@@ -11,7 +11,7 @@ import { PARENT_HOME } from "@/lib/family/parentMode";
 
 const NAV = [
 	{ href: "/", label: "Home", icon: "home", match: (p) => p === "/" },
-	{ href: "/books/", label: "Explore", icon: "search", match: (p) => p.startsWith("/books") || p.startsWith("/courses") },
+	{ href: "/courses/", label: "Explore", icon: "search", match: (p) => p.startsWith("/courses") },
 	{ href: "/family/", label: "Progress", icon: "chart", match: (p) => p === "/family" || p === "/family/" },
 	{ href: "/family/manage/", label: "Family", icon: "users", match: (p) => p.startsWith("/family/manage") || p.startsWith("/family/setup") },
 ];

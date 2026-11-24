@@ -1,5 +1,7 @@
 import validate from "uuid-validate";
 import User from "database/models/user";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 import { rateLimit } from "@/lib/mastery-server/http";
 
 export default async (req, res) => {
@@ -28,7 +30,7 @@ const userEmailConfirm = async (req, res) => {
 
 		// unscoped: the default scope hides reset_password_token, which is the proof
 		// that the person confirming owns this mailbox (it was only ever e-mailed).
-		const user = typeof email === "string" ? await User.unscoped().findOne({ where: { email } }) : null;
+		const user = typeof email === "string" ? await User.unscoped().findOne({ where: ciEquals(connection, "email", email) }) : null;
 
 		// console.log(user)
 

@@ -9,7 +9,6 @@ import ParentAuth from "@/components/Family/ParentAuth";
 import { useRouter } from "next/router";
 
 const points = [
-	{ icon: "ri-book-open-line", text: "Books for every age, read right in your dashboard" },
 	{ icon: "ri-lightbulb-flash-line", text: "Project-based courses and workshops" },
 	{ icon: "ri-play-circle-line", text: "Video lessons, resources, quizzes and live classes" },
 	{ icon: "ri-line-chart-line", text: "Track your progress and earn certificates" },
@@ -60,8 +59,8 @@ const Auth = () => {
 			<main className="ss-auth">
 				<div className="ss-container ss-auth__grid">
 					<aside className="ss-auth__aside">
-						<h2>Read, learn and grow.</h2>
-						<p>Join SharpStudy to read books and learn at your own pace, on any device.</p>
+						<h2>Learn and grow.</h2>
+						<p>Join SharpStudy to learn at your own pace, on any device.</p>
 						<ul>
 							{points.map((p) => (
 								<li key={p.text}>

@@ -99,9 +99,11 @@ test("users.role is untouched: no telecaller role anywhere in the schema, models
 	for (const f of ["lib/followups/service.js", "lib/followups/repo.js", "lib/followups/http.js"]) assert.doesNotMatch(read(f), /User\.(update|create|destroy)|role\s*===?\s*["']telecaller["']/, f);
 });
 
-test("no schema change in this phase: the newest migration is still the Phase 2 snapshot column, and the follow-up tables come from the existing one", () => {
+test("the telecaller / follow-up migrations are unchanged; the only later migrations are the additive auth-security one and the additive Free Demo columns, and the follow-up tables come from the existing one", () => {
 	const files = readdirSync(new URL("../../database/migrations/", import.meta.url)).filter((f) => f.endsWith(".js")).sort();
-	assert.equal(files.at(-1), "20261029000000-add-form-snapshot-to-telecaller-events.js");
+	assert.ok(files.includes("20261029000000-add-form-snapshot-to-telecaller-events.js"));
+	// the additive auth-security migration, then the additive Free Demo columns on meeting_requests (2026-11-23); nothing else
+	assert.deepEqual(files.filter((f) => f.slice(0, 14) > "20261029000000"), ["20261110000000-add-auth-security-columns.js", "20261123000000-meeting-requests-free-demo.js"], "nothing else was added after the snapshot column");
 	assert.match(read("database/migrations/20261028000000-create-meeting-followups.js"), /meeting_followups[\s\S]*meeting_call_logs[\s\S]*meeting_followup_events/);
 	assert.doesNotMatch(read("database/models/followup.js"), /\.sync\(|createTable|addColumn/);
 });

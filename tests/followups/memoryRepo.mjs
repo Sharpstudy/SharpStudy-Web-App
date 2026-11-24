@@ -2,6 +2,7 @@
 // applyFollowup() has no `await` between its check and its write, so it is atomic exactly like the real compare-and-set transaction:
 // two concurrent callers that read the same version cannot both succeed.
 import { matchesFilter, effectiveStatus } from "../../lib/followups/rules.js";
+import { phoneMatchesSearch } from "../../lib/freeDemo/phoneKey.js";
 
 const clone = (o) => (o === null || o === undefined ? o : structuredClone(o));
 
@@ -17,7 +18,7 @@ export function memoryRepo({ users = [], profiles = [], meetings = [], learners 
 		notifications: [],
 		writesToMeetings: 0, // must stay 0: nothing here may write meeting_requests
 	};
-	const matchQ = (m, q) => !q || [m.name, m.email, m.phone, m.reference, m.organization].some((v) => String(v || "").toLowerCase().includes(q.toLowerCase()));
+	const matchQ = (m, q) => !q || [m.name, m.email, m.phone, m.reference, m.organization].some((v) => String(v || "").toLowerCase().includes(q.toLowerCase())) || phoneMatchesSearch(m.phone, q);
 	const sortDesc = (rows, key) => [...rows].sort((a, b) => (new Date(b[key]) - new Date(a[key])) || (a.id < b.id ? 1 : -1));
 	const info = (r) => {
 		const m = s.meetings.get(r.meeting_request_id);
@@ -50,9 +51,10 @@ export function memoryRepo({ users = [], profiles = [], meetings = [], learners 
 		async getMeeting(id) { const m = s.meetings.get(id); return m ? clone(m) : null; }, // full row, like the DB: the SERVICE view must strip admin fields
 		async findMeetingByReference(ref) { const m = [...s.meetings.values()].find((x) => x.reference === ref); return m ? clone(m) : null; },
 		async getFollowup(id) { const f = s.followups.get(id); return f ? clone(f) : null; },
-		async listRows({ filter, mine, q, page, pageSize }, ctx) {
+		async listRows({ filter, mine, q, page, pageSize, kind }, ctx) {
 			let rows = [...s.meetings.values()]
 				.map((m) => ({ meeting: m, followup: s.followups.get(m.id) || null }))
+				.filter((r) => !kind || (r.meeting.kind || "meeting") === kind)
 				.filter((r) => matchesFilter(r, filter, ctx))
 				.filter((r) => !mine || (r.followup && r.followup.owner_user_id === ctx.userId))
 				.filter((r) => matchQ(r.meeting, q));

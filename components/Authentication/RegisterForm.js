@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { handleLogin } from "@/utils/auth";
+import GoogleButton from "./GoogleButton";
 import baseUrl from "@/utils/baseUrl";
 import { useRouter } from "next/router";
 import Button from "../../utils/Button";
@@ -32,6 +32,9 @@ const RegisterForm = ({ asParent = false }) => {
 		setUser((prevState) => ({ ...prevState, [name]: value }));
 	};
 
+	const [sent, setSent] = React.useState(null); // the address the confirmation email went to
+	const [resent, setResent] = React.useState(false);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		try {
@@ -40,41 +43,38 @@ const RegisterForm = ({ asParent = false }) => {
 			// `next` (same-site only, re-validated on the server) rides along so the e-mail link can return here.
 			const payload = { ...user, next: router.query.next };
 			const response = await axios.post(url, payload);
-			handleLogin(response.data.edmy_users_token, router, asParent ? "/family/" : "/");
-			toast.success(response.data.message, {
-				style: {
-					border: "1px solid #4BB543",
-					padding: "16px",
-					color: "#4BB543",
-				},
-				iconTheme: {
-					primary: "#4BB543",
-					secondary: "#FFFAEE",
-				},
-			});
+			// No login token comes back: the account is usable once the e-mail address is confirmed.
+			setSent(response.data.email || user.email);
 		} catch (err) {
-			let {
-				response: {
-					data: { message },
-				},
-			} = err;
-			toast.error(message, {
-				style: {
-					border: "1px solid #ff0033",
-					padding: "16px",
-					color: "#ff0033",
-				},
-				iconTheme: {
-					primary: "#ff0033",
-					secondary: "#FFFAEE",
-				},
-			});
+			toast.error(err?.response?.data?.message || "Could not create the account right now, please try again.");
 		} finally {
 			setLoading(false);
 		}
 	};
 
+	const resend = async () => {
+		try {
+			await axios.post(`${baseUrl}/api/users/send-confirmation-email`, { email: sent, next: router.query.next });
+			setResent(true);
+		} catch (err) {
+			toast.error(err?.response?.data?.message || "Could not send the email right now.");
+		}
+	};
+
+	if (sent) {
+		return (
+			<div role="status" className="ss-verify">
+				<h2>Check your email</h2>
+				<p>We sent a confirmation link to <strong>{sent}</strong>. Open it to activate your account, then log in{router.query.next ? " to continue" : ""}.</p>
+				<p className="ss-muted">Nothing in your inbox? Check spam, or</p>
+				<button type="button" className="ss-btn ss-btn--secondary" onClick={resend} disabled={resent}>{resent ? "Sent again" : "Send the email again"}</button>
+			</div>
+		);
+	}
+
 	return (
+		<>
+		<GoogleButton fallback={asParent ? "/family/" : "/"} />
 		<form onSubmit={handleSubmit}>
 			<div className="ss-form-row">
 				<Field
@@ -106,7 +106,7 @@ const RegisterForm = ({ asParent = false }) => {
 				<PasswordInput
 					name="password"
 					autoComplete="new-password"
-					placeholder="Create a password"
+					placeholder="At least 8 characters, with a letter and a number"
 					value={user.password}
 					onChange={handleChange}
 				/>
@@ -118,6 +118,7 @@ const RegisterForm = ({ asParent = false }) => {
 				btnClass="ss-btn ss-btn--lg ss-btn--block"
 			/>
 		</form>
+		</>
 	);
 };
 

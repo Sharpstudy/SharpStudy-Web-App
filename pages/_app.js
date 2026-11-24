@@ -33,6 +33,11 @@ import "../styles/sharpstudy/index.scss";
 import Layout from "../components/_App/Layout";
 import { UserProvider } from "../components/_App/UserContext";
 
+// Everything about courses: the catalogue, course pages, categories, the cart / checkout and the whole student learning area. A visitor
+// who is not signed in never gets these pages (they are redirected to the login page, with ?next= so they come back afterwards).
+const COURSE_AREAS = ["/courses", "/course", "/category", "/checkout", "/learning"];
+const inCourseArea = (pathname) => COURSE_AREAS.some((b) => pathname === b || pathname.startsWith(b + "/"));
+
 function MyApp({ Component, pageProps }) {
 	const store = useStore(pageProps.initialReduxState);
 	return (
@@ -72,7 +77,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 			ctx.pathname === "/admin/categories" ||
 			ctx.pathname === "/checkout" ||
 			ctx.pathname === "/learning/wishlist" ||
-			ctx.pathname.startsWith("/learning/my-books") ||
+			inCourseArea(ctx.pathname) ||
 			isGatedPath(ctx.pathname) ||
 			// Mastery Ladder (APIs enforce authorisation; this only redirects to sign-in)
 			ctx.pathname.startsWith("/study") ||
@@ -88,12 +93,15 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 				"/become-an-instructor": "/auth?intent=instructor&next=%2Fbecome-an-instructor%2F",
 				"/become-a-telecaller": "/auth?intent=telecaller&next=%2Fbecome-a-telecaller%2F",
 			};
-			redirectUser(ctx, applyIntent[ctx.pathname] || "/auth");
+			// The login page returns the visitor to where they were going (`next` is only ever followed when it is a same-site path).
+			const back = inCourseArea(ctx.pathname) ? `/auth?next=${encodeURIComponent(ctx.asPath || ctx.pathname)}` : null;
+			redirectUser(ctx, applyIntent[ctx.pathname] || back || "/auth");
 		}
 	} else {
 		// if a user logged in then user can't access those pages
 		const ifLoggedIn =
-			ctx.pathname === "/auth" || ctx.pathname === "/reset-password";
+			// /reset-password is deliberately NOT here: someone who is signed in must still be able to use a reset link.
+			ctx.pathname === "/auth";
 		if (ifLoggedIn) {
 			redirectUser(ctx, "/");
 		}

@@ -80,15 +80,15 @@ test("telecaller identity comes only from the server flag: not from e-mail, name
 
 test("login landing: the server sends an active telecaller to /telecaller/ before anything else, and others as before", () => {
 	const src = read("lib/auth/landing.js");
-	const t = src.indexOf("isActiveTelecaller(user)");
+	const t = src.indexOf("telecallerStateFor(user)");
 	assert.ok(t > 0);
 	assert.ok(t < src.indexOf("hasOpenApplication(user.id)"), "checked before the instructor-application landing");
 	assert.ok(t < src.indexOf("dashboardHome(user.role)"), "checked before My Learning");
-	assert.match(src, /user\.role === "student" && \(await isActiveTelecaller\(user\)\)/);
-	assert.match(src, /destination: TELECALLER_HOME, permanent: false/);
+	// the account STATE decides (active -> dashboard, applicant / deactivated -> application status page), never the role alone
+	assert.match(src, /user\.role === "student"\) \{\s*const to = destinationFor\(await telecallerStateFor\(user\), TELECALLER_HOME\);\s*if \(to\) return \{ destination: to, permanent: false \};/);
 	// the original behaviour is intact for everyone else
 	assert.match(src, /return \{ destination: dashboardHome\(user\.role\), permanent: false \}/);
-	assert.match(src, /if \(!accountIsActive\(user\) \|\| !DASHBOARD_ROLES\.includes\(user\.role\)\) return null;/);
+	assert.match(src, /!accountIsActive\(user\) \|\| !user\.email_confirmed \|\| isTokenRevoked\(claims\.iat, passwordChangedAt\) \|\| !DASHBOARD_ROLES\.includes\(user\.role\)\) return null;/);
 	// the destination is not itself redirected back by the home page or the gate
 	assert.equal(pageAccess(TELECALLER_HOME, TELE), null);
 	assert.doesNotMatch(read("pages/telecaller/index.js"), /learning|redirect/i);
@@ -105,7 +105,7 @@ test("login landing: the server sends an active telecaller to /telecaller/ befor
 
 test("cart: hidden for an active telecaller only; every other account keeps it", () => {
 	const nav = read("components/_App/Navbar.js");
-	assert.match(nav, /\(!dash \|\| isShoppingArea\(router\.pathname\)\) && !isTelecallerOnly\(user\) && <CartLink \/>/);
+	assert.match(nav, /shopping && !isTelecallerOnly\(user\) && <CartLink \/>/);
 	assert.equal((nav.match(/<CartLink \/>/g) || []).length, 1, "the one cart icon, no other copy (e.g. in the mobile drawer)");
 	assert.match(nav, /const CartLink = \(\) =>/, "the cart component itself is untouched");
 	for (const u of [null, { role: "student" }, { role: "student", telecaller_access: "inactive" }, { role: "instructor", telecaller_access: "active" }, { role: "admin" }]) assert.equal(isTelecallerOnly(u), false, JSON.stringify(u));
@@ -137,9 +137,9 @@ test("notifications: still on the student page, now also on the telecaller dashb
 
 test("the student learning area itself is untouched for everyone: tabs, pages and the layout", () => {
 	const layout = read("components/Learning/StudentLayout.js");
-	for (const t of ["My courses", "My books", "Live sessions", "Wishlist", "Purchases"]) assert.ok(layout.includes(`label: "${t}"`), t);
+	for (const t of ["My courses", "Live sessions", "Wishlist", "Purchases"]) assert.ok(layout.includes(`label: "${t}"`), t);
 	assert.doesNotMatch(layout, /telecaller/i);
-	for (const f of ["pages/learning/my-courses/index.js", "pages/learning/my-books/index.js", "pages/learning/live/index.js", "pages/learning/wishlist/index.js", "pages/learning/my-purchase-history.js"]) assert.doesNotMatch(read(f), /telecaller/i, f);
+	for (const f of ["pages/learning/my-courses/index.js", "pages/learning/live/index.js", "pages/learning/wishlist/index.js", "pages/learning/my-purchase-history.js"]) assert.doesNotMatch(read(f), /telecaller/i, f);
 	assert.deepEqual(navModel({ role: "student" }, "/learning/my-courses/").primary.map((l) => l.label), ["My Learning", "Mastery Ladder", "Family", "Browse Courses", "Purchases"]);
 });
 

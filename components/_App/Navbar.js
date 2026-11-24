@@ -8,6 +8,9 @@ import SearchForm from "./SearchForm";
 import { navModel, dashboardHome, isShoppingArea, isTelecallerOnly } from "./accountLinks";
 import { handleLogout } from "@/utils/auth";
 import { TELECALLER_HOME } from "@/lib/auth/telecallerNav";
+import { APPLICATION_PAGE, isTelecallerRestricted } from "@/lib/auth/telecallerState";
+import { BookFreeDemoButton } from "@/components/FreeDemo/FreeDemoProvider";
+import { headerSource, showHeaderDemo } from "@/lib/freeDemo/config";
 
 Router.onRouteChangeStart = () => NProgress.start();
 Router.onRouteChangeComplete = () => NProgress.done();
@@ -17,6 +20,52 @@ const isActive = (pathname, item) => {
 	const target = item.href.replace(/\/$/, "") || "/";
 	const current = pathname.replace(/\/$/, "") || "/";
 	return item.exact ? current === target : current === target || current.startsWith(target + "/");
+};
+
+// "Programs" dropdown. A real button (aria-expanded) that opens on click or keyboard and also on hover/focus-within via CSS; Escape or a
+// click elsewhere closes it. The parent entry itself is a link to the programs overview.
+const NavDropdown = ({ item, pathname }) => {
+	const [open, setOpen] = useState(false);
+	const ref = React.useRef(null);
+	const active = isActive(pathname, item);
+	useEffect(() => {
+		if (!open) return;
+		const onDoc = (e) => ref.current && !ref.current.contains(e.target) && setOpen(false);
+		const onKey = (e) => e.key === "Escape" && setOpen(false);
+		document.addEventListener("mousedown", onDoc);
+		document.addEventListener("keydown", onKey);
+		return () => {
+			document.removeEventListener("mousedown", onDoc);
+			document.removeEventListener("keydown", onKey);
+		};
+	}, [open]);
+	useEffect(() => setOpen(false), [pathname]);
+	return (
+		<li className={`ss-header__dropdown${open ? " is-open" : ""}`} ref={ref}>
+			<button
+				type="button"
+				className={`ss-header__dropbtn${active ? " active" : ""}`}
+				aria-expanded={open}
+				aria-haspopup="true"
+				aria-controls="ss-programs-menu"
+				onClick={() => setOpen((o) => !o)}
+			>
+				{item.label}
+				<i className="ri-arrow-down-s-line" aria-hidden="true"></i>
+			</button>
+			<ul id="ss-programs-menu" className="ss-header__menu" aria-label={item.label}>
+				{item.children.map((c) => (
+					<li key={c.href}>
+						<Link href={c.href}>
+							<a className={isActive(pathname, c) ? "active" : ""} onClick={() => setOpen(false)}>
+								{c.label}
+							</a>
+						</Link>
+					</li>
+				))}
+			</ul>
+		</li>
+	);
 };
 
 const CartLink = () => {
@@ -38,6 +87,11 @@ const Navbar = ({ user }) => {
 	// `user` is verified server-side in _app (token -> database), so this is
 	// correct on first render, on refresh and on direct navigation.
 	const { dash, primary: nav, account } = navModel(user, router.pathname);
+	// Course search and the cart belong to the shopping areas only (catalogue, course details, categories, checkout).
+	// (A visitor who is not signed in is redirected away from the shopping areas before they render; the checks below are a second guard.)
+	const shopping = !!user && isShoppingArea(router.pathname);
+	// "Book Free Demo": only for visitors on public marketing pages (never login, checkout, careers or any dashboard; see lib/freeDemo/config.js).
+	const demo = showHeaderDemo(router.pathname, user);
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 8);
@@ -67,7 +121,10 @@ const Navbar = ({ user }) => {
 	// An approved, ACTIVE telecaller gets a minimal header: the logo and the account menu (Telecaller Dashboard, Account Settings, Log out).
 	// No public links, search, cart, menu button or drawer. The flag is the server-computed `telecaller_access` (never e-mail or role);
 	// this is display only, and the telecaller page and APIs re-check access from the database.
-	if (isTelecallerOnly(user)) {
+	// A pending / more-information applicant or a deactivated telecaller gets the same minimal header (their menu is only the application
+	// status and Account Settings, see navModel): no search, cart, public links or drawer, so no student shortcut is left on desktop or mobile.
+	if (isTelecallerOnly(user) || isTelecallerRestricted(user)) {
+		const home = isTelecallerOnly(user) ? TELECALLER_HOME : APPLICATION_PAGE;
 		return (
 			<>
 				<a href="#main" className="ss-skip-link">
@@ -75,8 +132,8 @@ const Navbar = ({ user }) => {
 				</a>
 				<header id="navbar" className={`ss-header ss-header--minimal${scrolled ? " is-scrolled" : ""}`}>
 					<div className="ss-container ss-container--wide ss-header__inner">
-						<Link href={TELECALLER_HOME}>
-							<a className="ss-header__brand" aria-label="SharpStudy telecaller dashboard">
+						<Link href={home}>
+							<a className="ss-header__brand" aria-label={isTelecallerOnly(user) ? "SharpStudy telecaller dashboard" : "SharpStudy telecaller application"}>
 								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img src="/images/sharpstudy.png" alt="SharpStudy" width="170" height="28" />
 							</a>
@@ -107,38 +164,45 @@ const Navbar = ({ user }) => {
 
 					<nav className="ss-header__nav" aria-label="Main">
 						<ul>
-							{nav.map((item) => (
-								<li key={item.href}>
-									<Link href={item.href}>
-										<a
-											className={isActive(router.pathname, item) ? "active" : ""}
-											aria-current={isActive(router.pathname, item) ? "page" : undefined}
-										>
-											{item.label}
-										</a>
-									</Link>
-								</li>
-							))}
+							{nav.map((item) =>
+								item.children ? (
+									<NavDropdown key={item.href} item={item} pathname={router.pathname} />
+								) : (
+									<li key={item.href}>
+										<Link href={item.href}>
+											<a
+												className={isActive(router.pathname, item) ? "active" : ""}
+												aria-current={isActive(router.pathname, item) ? "page" : undefined}
+											>
+												{item.label}
+											</a>
+										</Link>
+									</li>
+								)
+							)}
 						</ul>
 					</nav>
 
-					{!dash && (
+					{!dash && shopping && (
 						<div className="ss-header__search">
 							<SearchForm formClass="ss-search" btnClass="ss-search__btn" />
 						</div>
 					)}
 
 					<div className="ss-header__actions">
-						{(!dash || isShoppingArea(router.pathname)) && !isTelecallerOnly(user) && <CartLink />}
+						{demo && (
+							<BookFreeDemoButton source={headerSource(router.pathname)} size="sm" className="ss-header__demo">
+								<span className="d-none d-md-inline">Book Free Demo</span>
+								<span className="d-md-none">Free Demo</span>
+							</BookFreeDemoButton>
+						)}
+						{shopping && !isTelecallerOnly(user) && <CartLink />}
 						{user ? (
 							<ProfileDropdown {...user} links={account} />
 						) : (
 							<>
 								<Link href="/auth">
-									<a className="ss-btn ss-btn--ghost ss-btn--sm d-none d-sm-inline-flex">Log in</a>
-								</Link>
-								<Link href="/auth">
-									<a className="ss-btn ss-btn--sm d-none d-sm-inline-flex">Get started</a>
+									<a className="ss-btn ss-btn--sm d-none d-sm-inline-flex">Login</a>
 								</Link>
 							</>
 						)}
@@ -183,22 +247,44 @@ const Navbar = ({ user }) => {
 				</div>
 
 				<div className="ss-drawer__body">
-					{!dash && <SearchForm formClass="ss-search" btnClass="ss-search__btn" />}
+					{demo && (
+						<div className="ss-drawer__demo">
+							<BookFreeDemoButton source={headerSource(router.pathname)} size="lg" className="ss-btn--block">
+								Book Free Demo
+							</BookFreeDemoButton>
+						</div>
+					)}
+					{!dash && shopping && <SearchForm formClass="ss-search" btnClass="ss-search__btn" />}
 
 					<nav aria-label="Mobile">
 						<ul className="ss-drawer__list">
-							{nav.map((item) => (
-								<li key={item.href}>
-									<Link href={item.href}>
-										<a
-											className={isActive(router.pathname, item) ? "active" : ""}
-											aria-current={isActive(router.pathname, item) ? "page" : undefined}
-										>
-											{item.label}
-										</a>
-									</Link>
-								</li>
-							))}
+							{nav.map((item) =>
+								item.children ? (
+									<li key={item.href} className="ss-drawer__group">
+										<span className="ss-drawer__grouplabel">{item.label}</span>
+										<ul>
+											{item.children.map((c) => (
+												<li key={c.href}>
+													<Link href={c.href}>
+														<a className={isActive(router.pathname, c) ? "active" : ""}>{c.label}</a>
+													</Link>
+												</li>
+											))}
+										</ul>
+									</li>
+								) : (
+									<li key={item.href}>
+										<Link href={item.href}>
+											<a
+												className={isActive(router.pathname, item) ? "active" : ""}
+												aria-current={isActive(router.pathname, item) ? "page" : undefined}
+											>
+												{item.label}
+											</a>
+										</Link>
+									</li>
+								)
+							)}
 						</ul>
 					</nav>
 
@@ -227,10 +313,7 @@ const Navbar = ({ user }) => {
 					) : (
 						<div className="d-grid gap-2 mt-4">
 							<Link href="/auth">
-								<a className="ss-btn ss-btn--block">Get started</a>
-							</Link>
-							<Link href="/auth">
-								<a className="ss-btn ss-btn--secondary ss-btn--block">Log in</a>
+								<a className="ss-btn ss-btn--block">Login</a>
 							</Link>
 						</div>
 					)}

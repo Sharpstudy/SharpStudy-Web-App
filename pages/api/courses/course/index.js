@@ -5,9 +5,13 @@ import {
 	Enrolment,
 	Course_Asset,
 } from "database/models";
-import { optionalActor, courseAccess } from "@/lib/auth/access";
+import { optionalActor, courseAccess, requireUser } from "@/lib/auth/access";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 
+// Course detail: a signed-in account only (the unpublished-course rule below still applies on top of this).
 export default async function handler(req, res) {
+	if (!(await requireUser(req, res))) return;
 	switch (req.method) {
 		case "GET":
 			await handleGetRequest(req, res);
@@ -50,7 +54,7 @@ const handleGetRequest = async (req, res) => {
 					attributes: ["id"],
 				},
 			],
-			where: { slug: slug },
+			where: ciEquals(connection, "slug", slug, Course),
 		});
 
 		// Unapproved (unpublished) courses are visible only to their owner, admins and

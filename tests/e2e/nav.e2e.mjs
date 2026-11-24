@@ -28,7 +28,7 @@ async function nav(path, user) {
 	const drawerStart = chrome.indexOf('id="ss-drawer"');
 	const drawer = drawerStart >= 0 ? chrome.slice(drawerStart) : "";
 	const links = (s) => [...s.matchAll(/<a[^>]*href="([^"]+)"[^>]*>(?:<i[^>]*><\/i>)?([^<]*)</g)].map((m) => [m[1].replace(/\/$/, "") || "/", m[2].trim()]);
-	return { status: res.status, chrome, drawer, drawerLinks: links(drawer), footer: /<footer class="ss-footer"/.test(html) };
+	return { status: res.status, chrome, drawer, drawerLinks: links(drawer), footer: /<footer class="ss-footer"/.test(html), html };
 }
 let n = 0;
 const check = (name, cond) => {
@@ -45,6 +45,14 @@ for (const [label, user, path, must, mustNot] of [
 	["instructor", instructor, "/family/", ["My Courses", "Create Course", "Learners"], ["/admin"]],
 ]) {
 	const r = await nav(path, user);
+	if (path === "/family/" && user.role === "student") {
+		// Family screens use their own four-item navigation (components/Family/FamilyShell.js, docs/family): a student opening /family/ gets the
+		// child-link page inside that shell, not the global header. Instructors and administrators keep the global header (rows below).
+		check(`${label} ${path}: rendered inside the family shell`, r.status === 200 && /class="fm-nav"/.test(r.html));
+		check(`${label} ${path}: family navigation has Home, Explore, Progress and Family`, ["Home", "Explore", "Progress", "Family"].every((l) => r.html.includes(`<span>${l}</span>`)));
+		check(`${label} ${path}: no instructor or admin links`, !r.html.includes('href="/instructor/') && !r.html.includes('href="/admin'));
+		continue;
+	}
 	check(`${label} ${path}: rendered`, r.status === 200 && r.drawerLinks.length > 3);
 	check(`${label} ${path}: no duplicate destinations in the drawer (${dups(r.drawerLinks).join(",") || "none"})`, dups(r.drawerLinks).length === 0);
 	for (const m of must) check(`${label} ${path}: has "${m}"`, r.drawer.includes(m));

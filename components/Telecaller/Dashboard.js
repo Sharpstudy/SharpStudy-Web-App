@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { formatPhoneDisplay } from "@/lib/freeDemo/phone";
 import { useRouter } from "next/router";
 import axios from "axios";
 import MeetingDetail, { telecallerApi } from "./MeetingDetail";
 import NotificationList from "@/components/Notifications/NotificationList";
+import { programTitle } from "@/lib/freeDemo/config";
 import { msg, fmt, viewerZone, FollowupBadge, MeetingBadge, FILTER_LABEL, OUTCOME_LABEL, PURPOSE_LABEL, Empty } from "./shared";
 
 // Telecaller dashboard. Every number comes from /api/telecaller/summary (exact database counts); the list from /api/telecaller/meetings.
@@ -45,6 +47,7 @@ const Dashboard = () => {
 	const [team, setTeam] = useState([]);
 	const [error, setError] = useState("");
 	const [filter, setFilter] = useState("all");
+	const [kind, setKind] = useState(""); // "" = every request, "free_demo" = Free Demo Requests, "meeting" = Schedule a call requests
 	const [mine, setMine] = useState(false);
 	const [q, setQ] = useState("");
 	const [page, setPage] = useState(1);
@@ -53,7 +56,8 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		if (router.isReady && router.query.open) setOpen(String(router.query.open));
-	}, [router.isReady, router.query.open]);
+		if (router.isReady && ["free_demo", "meeting"].includes(router.query.kind)) setKind(router.query.kind);
+	}, [router.isReady, router.query.open, router.query.kind]);
 
 	const loadSummary = useCallback(async () => {
 		try {
@@ -65,13 +69,13 @@ const Dashboard = () => {
 	}, [tz]);
 	const loadList = useCallback(async () => {
 		try {
-			setList((await axios.get("/api/telecaller/meetings", { params: { filter, mine: mine ? 1 : undefined, q, page, tz } })).data);
+			setList((await axios.get("/api/telecaller/meetings", { params: { filter, mine: mine ? 1 : undefined, q, page, tz, kind: kind || undefined } })).data);
 			setError("");
 		} catch (e) {
 			if (e.response && [401, 403].includes(e.response.status)) setDenied(msg(e));
 			else setError(msg(e));
 		}
-	}, [filter, mine, q, page, tz]);
+	}, [filter, mine, q, page, tz, kind]);
 	const refresh = useCallback(() => {
 		loadSummary();
 		loadList();
@@ -114,6 +118,11 @@ const Dashboard = () => {
 				</div>
 			)}
 
+			<div className="tc-tabs" role="group" aria-label="Request type">
+				{[["", "All requests"], ["free_demo", "Free Demo Requests"], ["meeting", "Meeting requests"]].map(([k, label]) => (
+					<button key={k || "all"} type="button" aria-pressed={kind === k} onClick={() => { setKind(k); setPage(1); }}>{label}</button>
+				))}
+			</div>
 			<div className="tc-tabs" role="group" aria-label="Filter meetings">
 				{FILTERS.map((f) => <button key={f} type="button" aria-pressed={filter === f} onClick={() => pick(f)}>{FILTER_LABEL[f]}</button>)}
 			</div>
@@ -127,7 +136,7 @@ const Dashboard = () => {
 
 			{error && <div className="ss-alert ss-alert--danger" role="alert">{error} <button type="button" className="ss-link-btn" onClick={refresh}>Try again</button></div>}
 			{!list && !error && <p className="ss-muted" role="status">Loading…</p>}
-			{list && list.meetings.length === 0 && <Empty title="No meetings found" text={q || mine || filter !== "all" ? "Try a different filter or search." : "Meeting requests from the Talk to our team form appear here."} />}
+			{list && list.meetings.length === 0 && <Empty title={kind === "free_demo" ? "No free demo requests found" : "No meetings found"} text={q || mine || filter !== "all" || kind ? "Try a different filter or search." : "Meeting requests from the Talk to our team form appear here."} />}
 			{list && list.meetings.length > 0 && (
 				<>
 					<div className="tc-list">
@@ -139,12 +148,16 @@ const Dashboard = () => {
 								</div>
 								<h3>{r.meeting.name}</h3>
 								<div className="tc-meta">
-									<span><i className="ri-phone-line" aria-hidden="true"></i> {r.meeting.phone}</span>
-									<span><i className="ri-mail-line" aria-hidden="true"></i> {r.meeting.email}</span>
+									<span><i className="ri-phone-line" aria-hidden="true"></i> {formatPhoneDisplay(r.meeting.phone)}</span>
+									{r.meeting.email && <span><i className="ri-mail-line" aria-hidden="true"></i> {r.meeting.email}</span>}
 								</div>
 								<div className="tc-meta">
-									<span>{PURPOSE_LABEL[r.meeting.purpose] || r.meeting.purpose}</span>
-									<span>Requested {fmt(r.meeting.requested_at, r.meeting.time_zone)}</span>
+									{r.meeting.kind === "free_demo" ? (
+										<span>Free demo · {programTitle(r.meeting.program)} · {r.meeting.child_name} ({r.meeting.child_grade})</span>
+									) : (
+										<span>{PURPOSE_LABEL[r.meeting.purpose] || r.meeting.purpose}</span>
+									)}
+									<span>{r.meeting.requested_at ? `Requested ${fmt(r.meeting.requested_at, r.meeting.time_zone)}` : "No preferred time"}</span>
 									<span>{r.meeting.reference}</span>
 								</div>
 								<div className="tc-meta">

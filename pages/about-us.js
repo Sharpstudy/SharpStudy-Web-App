@@ -6,6 +6,9 @@ import { HowItWorks, Benefits, Audiences, FinalCta } from "@/components/Home/Sec
 import { Testimonials, Partners } from "@/components/Home/Trust";
 import { HeroScene } from "@/components/ui/Illustration";
 import { Button } from "@/components/ui";
+import DemoBand from "@/components/FreeDemo/DemoBand";
+import Leadership from "@/components/AboutUs/Leadership";
+import Trainers from "@/components/AboutUs/Trainers";
 
 // The previous hero ("We Are Edmy! ... millions of students on Edmy") was
 // leftover theme copy naming another brand; it is replaced by SharpStudy's
@@ -30,10 +33,9 @@ const AboutUs = ({ user }) => {
 							<p className="ss-lead">
 								SharpStudy Learning Inc. is a project-based cognitive skills development platform that uses advanced pedagogy for practical and enhanced learning.
 							</p>
-							<p>Today that means project-based courses and live classes, a Mastery Ladder for practice, and a bookstore where readers of every age can find something to enjoy.</p>
+							<p>Today that means project-based courses and live classes, a Mastery Ladder for practice, and Sage, an AI tutor that helps learners of every age.</p>
 							<div className="d-flex flex-wrap gap-2">
-								<Button href="/books/" icon="ri-book-open-line">Explore Books</Button>
-								<Button href="/courses/" variant="secondary" icon="ri-slideshow-2-line">Browse courses</Button>
+								<Button href="/programs/" icon="ri-slideshow-2-line">Explore programs</Button>
 								<Button href="/contact-us/" variant="ghost">Contact us</Button>
 							</div>
 						</div>
@@ -42,9 +44,12 @@ const AboutUs = ({ user }) => {
 				</section>
 				<Benefits />
 				<HowItWorks />
+				<Leadership />
+				<Trainers />
 				<Testimonials />
 				<Partners />
 				<Audiences />
+				<DemoBand source="about_cta" title="See SharpStudy in action" text="Book a free demo class and meet the way we teach." />
 				<FinalCta user={user} />
 			</main>
 			<Footer />

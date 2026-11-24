@@ -47,7 +47,7 @@ test("colour contrast: text on every pastel surface and the main actions meet WC
 	assert.ok(contrast(hex("primary"), hex("page")) >= 4.5, "links on the page");
 	assert.ok(contrast(hex("lav-ink"), hex("lav")) >= 7, "filter chips");
 	// the palette requested for the redesign is present as surfaces
-	for (const [name, want] of [["peach", "#fff0e8"], ["sky", "#ddf3ff"], ["sun", "#fff1a8"], ["mint", "#ddf7e5"], ["lav", "#eee5ff"], ["ink", "#25304a"]]) assert.equal(hex(name).toLowerCase(), want);
+	for (const [name, want] of [["peach", "#fddde8"], ["sky", "#d7ecfc"], ["sun", "#fbe19a"], ["mint", "#e1f3d2"], ["lav", "#dce9fd"], ["ink", "#26235f"]]) assert.equal(hex(name).toLowerCase(), want);
 });
 
 // ------------------------------------------------------------------ navigation
@@ -77,7 +77,7 @@ test("every visible navigation link (header, account menu, footer, hero, home se
 		for (const l of accountLinks(role, "pending")) hrefs.add(l.href);
 		if (role !== "admin") for (const l of dashboardNav(role)) hrefs.add(l.href);
 	}
-	for (const f of ["components/_App/Footer.js", "components/Home/Hero.js", "components/Books/HomeBooks.js", "components/Home/Sections.js", "pages/404.js", "pages/500.js", "pages/about-us.js", "pages/index.js"]) {
+	for (const f of ["components/_App/Footer.js", "components/Home/Hero.js", "components/Home/Sections.js", "pages/404.js", "pages/500.js", "pages/about-us.js", "pages/index.js"]) {
 		const src = read(f);
 		for (const m of src.matchAll(/(?:href|destination)=["'{`]*\s*["'`]?(\/[A-Za-z0-9\-_/\[\]?=&.,%]*)/g)) {
 			// a link built from a variable (for example `/category/${slug}`) is checked as a route pattern instead
@@ -91,9 +91,9 @@ test("every visible navigation link (header, account menu, footer, hero, home se
 	assert.ok(hrefs.size > 20, "the check covered the real navigation");
 	assert.ok(routeExists("/category/anything") && routeExists("/course/anything") && routeExists("/blog/1"), "dynamic routes resolve");
 	// public navigation contains the requested destinations
-	assert.deepEqual(primaryNav.map((l) => l.label), ["Home", "Courses", "Books", "Blog", "About", "Contact"]);
+	assert.deepEqual(primaryNav.map((l) => l.label), ["Home", "About", "Programs", "Gallery", "Blog", "Careers"]);
 	// no placeholder links in the redesigned public pages
-	for (const f of ["components/_App/Footer.js", "components/Home/Hero.js", "components/Books/HomeBooks.js", "pages/blog/blogs.js", "pages/blog/[id].js", "pages/about-us.js"]) assert.ok(!/href=["']#["']/.test(read(f)), `${f} has no href="#"`);
+	for (const f of ["components/_App/Footer.js", "components/Home/Hero.js", "pages/blog/blogs.js", "pages/blog/[id].js", "pages/about-us.js"]) assert.ok(!/href=["']#["']/.test(read(f)), `${f} has no href="#"`);
 });
 
 test("design modes: instructor and admin are restrained, everything a reader or visitor sees is playful", () => {
@@ -130,22 +130,18 @@ test("accessibility rules are present: focus, reduced motion, skip link, labelle
 	assert.match(base, /prefers-reduced-motion: reduce/);
 	assert.match(read("styles/sharpstudy/_play.scss"), /prefers-reduced-motion: reduce[\s\S]*animation: none/);
 	assert.match(read("components/_App/Navbar.js"), /Skip to content/);
-	assert.match(read("components/Home/Hero.js"), /<label htmlFor="hero-book-search" className="visually-hidden">/);
+	assert.match(read("components/Home/Hero.js"), /<label htmlFor="hero-course-search" className="visually-hidden">/);
 	const dialog = read("components/ui/ConfirmDialog.js");
 	for (const needle of ["role=\"alertdialog\"", "aria-modal=\"true\"", "aria-labelledby", "Escape", "Tab"]) assert.ok(dialog.includes(needle), needle);
 	// illustrations are decorative
 	assert.equal([...read("components/ui/Illustration.js").matchAll(/<svg /g)].length, [...read("components/ui/Illustration.js").matchAll(/aria-hidden="true" focusable="false"/g)].length);
-	// every destructive admin action goes through the dialog (no window.confirm)
-	for (const f of ["pages/admin/books/index.js", "pages/admin/books/[id].js"]) assert.ok(!/window\.confirm/.test(read(f)), f);
-	// the reader exposes its progress to assistive technology
-	assert.match(read("components/Books/PdfReader.js"), /role="progressbar"/);
 });
 
 test("no external scripts were added by the redesign; fonts come from the same provider as before", () => {
 	const doc = read("pages/_document.js");
 	assert.ok(!/<script/.test(doc));
 	assert.match(doc, /fonts\.googleapis\.com\/css2\?family=Fredoka/);
-	for (const f of ["components/Home/Hero.js", "components/Books/HomeBooks.js", "components/ui/Illustration.js", "pages/404.js"]) assert.ok(!/<script|src=["']https?:/.test(read(f)), f);
+	for (const f of ["components/Home/Hero.js", "components/ui/Illustration.js", "pages/404.js"]) assert.ok(!/<script|src=["']https?:/.test(read(f)), f);
 });
 
 // ------------------------------------------------------------------ honest data on the home page and /books
@@ -209,20 +205,19 @@ test("administrators can preview an unpublished cover; the public cannot", async
 // ------------------------------------------------------------------ pages keep their behaviour
 
 test("existing behaviour is preserved by the redesign: routes, APIs and security hooks are still wired", () => {
-	// books routes and server-side access
-	for (const f of ["pages/books/index.js", "pages/books/[slug]/index.js", "pages/books/[slug]/checkout.js", "pages/learning/my-books/index.js", "pages/learning/my-books/read/[slug].js", "pages/admin/books/index.js", "pages/admin/books/[id].js"]) assert.ok(fs.existsSync(f), f);
-	assert.match(read("pages/books/[slug]/checkout.js"), /authUrlFor\(bookCheckoutPath\(params\.slug\)\)/);
-	assert.match(read("pages/learning/my-books/read/[slug].js"), /ownership\.owned/);
-	assert.match(read("components/Books/PayButton.js"), /\/api\/books\/checkout/);
-	assert.match(read("components/Books/PdfReader.js"), /\/api\/books\/\$\{book\.id\}\/access/);
-	assert.match(read("components/Books/PdfReader.js"), /progress/);
+	// the retired bookstore pages stay gone (their URLs are redirected in next.config.js; see books.test.mjs)
+	for (const f of ["pages/books", "pages/learning/my-books", "pages/admin/books", "components/Books"]) assert.ok(!fs.existsSync(f), f);
+	// the book API routes are retained until the backend removal stage
+	assert.ok(fs.existsSync("pages/api/books/checkout.js") && fs.existsSync("pages/api/admin/books/index.js"));
 	// the contact form still posts to the same endpoint
 	assert.match(read("components/ContactUs/ContactForm.js"), /\/api\/contact/);
 	// blog data and routes are unchanged
 	assert.match(read("pages/blog/blogs.js"), /from "@\/utils\/sampleData"/);
 	// auth redirect hardening and the login/registration forms are unchanged
 	assert.match(read("utils/auth.js"), /safeNextPath/);
-	for (const f of ["components/Authentication/LoginForm.js", "components/Authentication/RegisterForm.js"]) assert.match(read(f), /handleLogin/);
+	// (sign-in logs in; registration deliberately does not: it asks the person to confirm their e-mail first)
+	for (const f of ["components/Authentication/LoginForm.js", "components/Authentication/GoogleButton.js"]) assert.match(read(f), /handleLogin/);
+	assert.match(read("components/Authentication/RegisterForm.js"), /api\/users\/signup/);
 	// course catalogue and checkout code were not touched by the redesign
 	assert.match(read("pages/courses/index.js"), /\/api\/all-courses/);
 	assert.match(read("lib/payments/checkout.js"), /runCheckout/);

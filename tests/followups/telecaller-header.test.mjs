@@ -8,7 +8,7 @@ const read = (p) => readFileSync(new URL(`../../${p}`, import.meta.url), "utf8")
 const nav = read("components/_App/Navbar.js");
 
 // The two render branches of the Navbar component.
-const start = nav.indexOf("if (isTelecallerOnly(user)) {");
+const start = nav.indexOf("if (isTelecallerOnly(user) || isTelecallerRestricted(user)) {"); // the active telecaller AND the pending / more-info / deactivated applicant share this minimal header
 const mainReturn = nav.indexOf("\treturn (\n\t\t<>\n\t\t\t<a href=\"#main\"", start) >= 0 ? nav.indexOf("\treturn (\n\t\t<>\n\t\t\t<a href=\"#main\"", start) : nav.indexOf("\treturn (\r\n\t\t<>\r\n\t\t\t<a href=\"#main\"", start);
 const minimal = nav.slice(start, mainReturn);
 const normal = nav.slice(mainReturn);
@@ -23,7 +23,8 @@ test("both branches exist, and hooks run before the early return (no conditional
 test("telecaller header: ONLY the logo and the profile dropdown", () => {
 	assert.match(minimal, /<img src="\/images\/sharpstudy\.png" alt="SharpStudy"/);
 	assert.match(minimal, /<ProfileDropdown \{\.\.\.user\} links=\{account\} \/>/);
-	assert.match(minimal, /<Link href=\{TELECALLER_HOME\}>/, "the logo goes to the telecaller dashboard");
+	assert.match(minimal, /const home = isTelecallerOnly\(user\) \? TELECALLER_HOME : APPLICATION_PAGE;/, "the logo goes to the dashboard (active) or the application status page (restricted applicant)");
+	assert.match(minimal, /<Link href=\{home\}>/);
 	for (const gone of ["ss-header__nav", "nav.map", "SearchForm", "ss-header__search", "CartLink", "ss-header__toggle", "ss-drawer", "Open menu", "Log in", "Get started", "Courses", "Books", "Blog", "About", "Contact", "isShoppingArea"]) assert.ok(!minimal.includes(gone), `minimal header must not contain: ${gone}`);
 	assert.ok(minimal.includes("ss-header__actions"), "the menu sits in the right-aligned actions slot, so there is no empty gap");
 	assert.ok(minimal.includes('id="main"'), "the skip-link target is kept");
@@ -42,14 +43,14 @@ test("the menu holds only Telecaller Dashboard and Account Settings; the dropdow
 });
 
 test("every other visitor keeps the full header: public nav, search, cart, menu button and drawer", () => {
-	for (const piece of ['className="ss-header__nav"', "nav.map((item)", "<SearchForm", "ss-header__search", "<CartLink />", "ss-header__toggle", 'id="ss-drawer"', "Log in", "Get started", "Mobile / tablet drawer", "dashboardHome(user.role)"]) assert.ok(normal.includes(piece), `normal header must still contain: ${piece}`);
-	assert.match(normal, /\(!dash \|\| isShoppingArea\(router\.pathname\)\) && !isTelecallerOnly\(user\) && <CartLink \/>/);
+	for (const piece of ['className="ss-header__nav"', "nav.map((item)", "<SearchForm", "ss-header__search", "<CartLink />", "ss-header__toggle", 'id="ss-drawer"', "Login", "Mobile / tablet drawer", "dashboardHome(user.role)"]) assert.ok(normal.includes(piece), `normal header must still contain: ${piece}`);
+	assert.match(normal, /shopping && !isTelecallerOnly\(user\) && <CartLink \/>/);
 	const labels = (u, p) => navModel(u, p).primary.map((l) => l.label);
-	assert.deepEqual(labels(null, "/"), ["Home", "Courses", "Books", "Blog", "About", "Contact"]);
-	assert.deepEqual(labels({ role: "student" }, "/"), ["Home", "Courses", "Books", "Blog", "About", "Contact"]);
+	assert.deepEqual(labels(null, "/"), ["Home", "About", "Programs", "Gallery", "Blog", "Careers"]);
+	assert.deepEqual(labels({ role: "student" }, "/"), ["Home", "About", "Programs", "Gallery", "Blog", "Careers"]);
 	assert.deepEqual(labels({ role: "student" }, "/learning/my-courses/"), ["My Learning", "Mastery Ladder", "Family", "Browse Courses", "Purchases"]);
 	assert.deepEqual(labels({ role: "instructor" }, "/instructor/dashboard/"), ["Dashboard", "My Courses", "Create Course", "Mastery Ladder", "Learners", "Browse Courses"]);
-	assert.deepEqual(labels({ role: "admin" }, "/"), ["Home", "Courses", "Books", "Blog", "About", "Contact"]);
+	assert.deepEqual(labels({ role: "admin" }, "/"), ["Home", "About", "Programs", "Gallery", "Blog", "Careers"]);
 	assert.ok(navModel({ role: "admin" }, "/admin/").account.some((l) => l.label === "Admin Dashboard"));
 });
 

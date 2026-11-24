@@ -1,5 +1,7 @@
 # SharpStudy bookstore
 
+> **Status: bookstore frontend retired.** The public book catalogue, book checkout, "My Books" reader and the admin Books screens have been removed from the application; `/books/*`, `/learning/my-books/*` and `/admin/books/*` now redirect (to `/courses/` and `/admin/`). The backend described below (`/api/books/*`, `/api/admin/books/*`, `lib/books/*`, the `books`, `book_orders` and `book_progress` tables and the private book storage) is **temporarily retained, unused by any page**, until a separate removal is approved. Do not build new features on it. Course purchases, carts and payments are unaffected.
+
 ## Setup checklist (per environment; nothing runs automatically)
 1. **Migration** (additive: creates `books`, `book_orders`, `book_progress` only): `npm run migrate`. Rollback: `npm run migrate:rollback`.
 2. **Private file storage** (required on Vercel). Create a PRIVATE bucket on any S3-compatible provider (AWS S3, Cloudflare R2, Backblaze B2, MinIO) and set:

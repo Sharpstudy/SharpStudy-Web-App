@@ -48,7 +48,8 @@ const addCourse = (id, s, owner) =>
 await addCourse(courseId, slug, teacher.id);
 await addCourse(otherCourse, otherSlug, teacher.id);
 for (const [u, c] of [[s1, courseId], [s2, courseId], [outsider, otherCourse]]) {
-	await db.query("INSERT INTO enrolments (id, userId, courseId, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())", [randomUUID(), u.id, c]);
+	// class membership needs a PAID enrolment (docs/live-sessions/02-implementation-and-jitsi.md): a row without a status would be refused
+	await db.query("INSERT INTO enrolments (id, userId, courseId, status, created_at, updated_at) VALUES (?, ?, ?, 'paid', NOW(), NOW())", [randomUUID(), u.id, c]);
 }
 
 let passed = 0;

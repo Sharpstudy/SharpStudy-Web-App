@@ -8,6 +8,8 @@
 // (token -> database). Nothing here reads the role from the URL or the browser.
 
 import { isTelecallerOnly } from "../../lib/auth/telecallerNav.js";
+import { isTelecallerRestricted } from "../../lib/auth/telecallerState.js";
+import { programNavItems } from "../../lib/programs/catalog.js";
 
 const LINKS = {
 	dashboard: { href: "/instructor/dashboard/", label: "Dashboard", icon: "ri-dashboard-3-line" },
@@ -18,13 +20,12 @@ const LINKS = {
 	createCourse: { href: "/instructor/course/create/", label: "Create Course", icon: "ri-add-box-line" },
 	admin: { href: "/admin/", label: "Admin Dashboard", icon: "ri-dashboard-line" },
 	telecaller: { href: "/telecaller/", label: "Telecaller Dashboard", icon: "ri-customer-service-2-line" },
+	telecallerApplication: { href: "/become-a-telecaller/", label: "Telecaller Application", icon: "ri-file-list-3-line" },
 	mastery: { href: "/study/", label: "Mastery Ladder", icon: "ri-bar-chart-line" },
 	family: { href: "/family/", label: "Family", icon: "ri-parent-line" },
 	learners: { href: "/family/", label: "Learners", icon: "ri-parent-line" }, // /family/ as an instructor sees it
 	learning: { href: "/learning/my-courses/", label: "My Learning", icon: "ri-book-read-line" },
 	browse: { href: "/courses/", label: "Browse Courses", icon: "ri-search-line" },
-	myBooks: { href: "/learning/my-books/", label: "My Books", icon: "ri-book-2-line" },
-	books: { href: "/books/", label: "Browse Books", icon: "ri-book-open-line" },
 	purchases: { href: "/learning/my-purchase-history/", label: "Purchases", icon: "ri-bank-card-line" },
 	wishlist: { href: "/learning/wishlist/", label: "Wishlist", icon: "ri-heart-3-line" },
 	settings: { href: "/profile/basic-information/", label: "Account Settings", icon: "ri-user-settings-line" },
@@ -32,9 +33,9 @@ const LINKS = {
 
 // Everything an account can reach, in menu order, per role.
 const ACCOUNT_ORDER = {
-	student: ["mastery", "family", "learning", "myBooks", "books", "purchases", "wishlist", "settings"],
-	instructor: ["dashboard", "myCourses", "createCourse", "students", "teachingProfile", "mastery", "learners", "learning", "myBooks", "books", "purchases", "wishlist", "settings"],
-	admin: ["admin", "mastery", "family", "learning", "myBooks", "books", "purchases", "wishlist", "settings"],
+	student: ["mastery", "family", "learning", "purchases", "wishlist", "settings"],
+	instructor: ["dashboard", "myCourses", "createCourse", "students", "teachingProfile", "mastery", "learners", "learning", "purchases", "wishlist", "settings"],
+	admin: ["admin", "mastery", "family", "learning", "purchases", "wishlist", "settings"],
 };
 
 // Primary navigation of the dashboard header (students and instructors only).
@@ -43,15 +44,15 @@ const DASHBOARD_PRIMARY = {
 	instructor: ["dashboard", "myCourses", "createCourse", "mastery", "learners", "browse"],
 };
 
-// Public marketing navigation.
-export const primaryNav = [
-	{ href: "/", label: "Home", exact: true },
-	{ href: "/courses/", label: "Courses" },
-	{ href: "/books/", label: "Books" },
-	{ href: "/blog/blogs/", label: "Blog" },
-	{ href: "/about-us/", label: "About" },
-	{ href: "/contact-us/", label: "Contact" },
-];
+// Public marketing navigation: Home, About, a Programs dropdown, Gallery, Blog, Careers and (in the header) Login. Courses and Cart are not
+// part of this primary navigation (the footer still links Courses); the course and cart routes themselves are unchanged.
+export const programsNav = { href: "/programs/", label: "Programs", children: programNavItems() };
+const publicTail = [{ href: "/gallery/", label: "Gallery" }, { href: "/blog/blogs/", label: "Blog" }, { href: "/careers/", label: "Careers" }];
+export const primaryNav = [{ href: "/", label: "Home", exact: true }, { href: "/about-us/", label: "About" }, programsNav, ...publicTail];
+
+// The same public navigation plus "Courses", shown only inside the shopping areas (catalogue, course details, categories, checkout) so
+// a visitor browsing or buying a course can still move around the catalogue.
+export const shoppingNav = [{ href: "/", label: "Home", exact: true }, { href: "/courses/", label: "Courses" }, { href: "/about-us/", label: "About" }, programsNav, ...publicTail];
 
 // Signed-in students and instructors get the dashboard header (and no public
 // footer) in these areas instead of the public chrome. Admins keep their own
@@ -62,7 +63,7 @@ export const primaryNav = [
 //     without the marketing navigation.
 // Public marketing pages (blog, about, contact, faq, legal) keep public chrome.
 const DASHBOARD_PREFIXES = ["/study", "/family", "/print", "/learning", "/instructor", "/profile"];
-const SHOPPING_PREFIXES = ["/courses", "/course", "/category", "/checkout", "/books"];
+const SHOPPING_PREFIXES = ["/courses", "/course", "/category", "/checkout"];
 export const DASHBOARD_ROLES = ["student", "instructor"];
 
 const inPrefixes = (pathname, list) => list.some((p) => pathname === p || pathname.startsWith(p + "/"));
@@ -103,8 +104,11 @@ export { isTelecallerOnly };
 export function navModel(user, pathname) {
 	// A telecaller sees the telecaller menu only: no public or student navigation at all (the header is just the logo and this menu).
 	if (isTelecallerOnly(user)) return { dash: false, primary: [], account: pick(["telecaller", "settings"]) };
+	// A pending / more-information applicant or a deactivated telecaller sees no student navigation: only their application status
+	// and account settings (the student areas are also closed by the page gate).
+	if (isTelecallerRestricted(user)) return { dash: false, primary: [], account: pick(["telecallerApplication", "settings"]) };
 	const dash = showDashboardHeader(user, pathname);
-	const primary = dash ? dashboardNav(user.role) : primaryNav;
+	const primary = dash ? dashboardNav(user.role) : isShoppingArea(pathname) ? shoppingNav : primaryNav;
 	const taken = new Set(primary.map((l) => norm(l.href)));
 	const account = user ? accountLinks(user.role, user.instructor_application_status, user.telecaller_access).filter((l) => !taken.has(norm(l.href))) : [];
 	// Two entries can still point at one URL (e.g. Family / Learners): keep the first.

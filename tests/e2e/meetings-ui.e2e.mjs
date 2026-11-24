@@ -212,7 +212,8 @@ try {
 	// ---------- home page ----------
 	await send("Network.clearBrowserCookies");
 	await send("Page.navigate", { url: `${BASE}/` });
-	check("home: Schedule a call opens the new page (not HubSpot)", await waitFor(`[...document.querySelectorAll('a')].some(a => /schedule a call/i.test(a.innerText) && a.getAttribute('href') === '/schedule-a-call/' && !a.target)`, 60000));
+	// The home page redesign renamed the call-to-action ("Talk to our team"); what matters is that it opens the new page in the same tab and that no HubSpot link is left.
+	check("home: the call-to-action opens the new page (/schedule-a-call/), and no HubSpot link remains", await waitFor(`[...document.querySelectorAll('a')].some(a => a.getAttribute('href') === '/schedule-a-call/' && !a.target && a.innerText.trim().length > 0) && ![...document.querySelectorAll('a')].some(a => /hubspot/i.test(a.href))`, 60000));
 	console.log(`meetings-ui e2e: ${n} checks passed`);
 } finally {
 	try {

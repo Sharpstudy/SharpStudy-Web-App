@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { formatPhoneDisplay } from "@/lib/freeDemo/phone";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import axios from "axios";
 import toast from "react-hot-toast";
 import AdminLayout from "@/components/_App/AdminLayout";
 import { EmptyState } from "@/components/ui";
+import { PROGRAM_OPTIONS, SOURCES, programTitle } from "@/lib/freeDemo/config";
 import { PURPOSES } from "@/components/Meetings/MeetingRequestForm";
 
 const STATUS_LABEL = { pending: "Pending", approved: "Approved", rejected: "Rejected", reschedule_requested: "Reschedule requested", cancelled: "Cancelled" };
 const PURPOSE_LABEL = Object.fromEntries(PURPOSES.map((p) => [p.value, p.label]));
+const MODE_LABEL = { online: "Online", offline: "Offline" };
 const fmt = (d, tz) => {
 	if (!d) return "–";
 	try {
@@ -33,7 +36,7 @@ const Detail = ({ id, onChanged, onClose }) => {
 			setData(d);
 			setError("");
 			const r = d.request;
-			setForm({ notes: r.adminNotes || "", meetingUrl: r.meetingUrl || "", date: r.requestedDate, time: r.requestedTime });
+			setForm({ notes: r.adminNotes || "", meetingUrl: r.meetingUrl || "", date: r.requestedDate || "", time: r.requestedTime || "" });
 		} catch (e) {
 			setError(msg(e));
 		}
@@ -109,19 +112,28 @@ const Detail = ({ id, onChanged, onClose }) => {
 
 			<div className="ss-meeting-admin__body">
 				<dl className="ss-meeting-admin__facts">
-					<div><dt>Email</dt><dd><a href={`mailto:${r.email}`}>{r.email}</a></dd></div>
-					<div><dt>Phone</dt><dd>{r.phone}</dd></div>
-					<div><dt>Organization</dt><dd>{r.organization || "–"}</dd></div>
+					{r.kind === "free_demo" && (
+						<>
+							<div><dt>Child</dt><dd>{r.childName} <span className="ss-meeting-admin__tz">{r.childGrade}</span></dd></div>
+							<div><dt>Program</dt><dd>{programTitle(r.program)}</dd></div>
+							<div><dt>Class type</dt><dd>{MODE_LABEL[r.classMode] || "No preference"}</dd></div>
+							<div><dt>Source</dt><dd>{r.source || "–"}<span className="ss-meeting-admin__tz">{r.sourcePage || ""}</span></dd></div>
+						</>
+					)}
+					<div><dt>{r.kind === "free_demo" ? "Parent email" : "Email"}</dt><dd>{r.email ? <a href={`mailto:${r.email}`}>{r.email}</a> : "Not provided"}</dd></div>
+					<div><dt>Phone</dt><dd>{formatPhoneDisplay(r.phone)}</dd></div>
+					{r.kind !== "free_demo" && <div><dt>Organization</dt><dd>{r.organization || "–"}</dd></div>}
 					<div><dt>Purpose</dt><dd>{PURPOSE_LABEL[r.purpose] || r.purpose}</dd></div>
-					<div><dt>Requested</dt><dd>{r.requestedDate} {r.requestedTime}<span className="ss-meeting-admin__tz">{r.timeZone}</span><span className="ss-meeting-admin__tz">{fmt(r.requestedAt, "UTC")}</span></dd></div>
+					<div><dt>Requested</dt><dd>{r.requestedAt ? <>{r.requestedDate} {r.requestedTime}<span className="ss-meeting-admin__tz">{r.timeZone}</span><span className="ss-meeting-admin__tz">{fmt(r.requestedAt, "UTC")}</span></> : "No preferred time"}</dd></div>
 					<div><dt>Confirmed</dt><dd>{r.confirmedStart ? fmt(r.confirmedStart, r.timeZone) : "Not confirmed"}</dd></div>
 					{r.proposedStart && <div><dt>Proposed</dt><dd>{fmt(r.proposedStart, r.timeZone)}</dd></div>}
 					<div><dt>Submitted</dt><dd>{fmt(r.createdAt, "UTC")}</dd></div>
 				</dl>
+				{r.kind === "free_demo" && <p className="ss-meeting-admin__help">Assignment, call notes and follow-ups for this request are handled in the calls dashboard; search for {r.reference} there.</p>}
 
 				{r.message && (
 					<div>
-						<h3 className="ss-meeting-admin__h">Visitor message</h3>
+						<h3 className="ss-meeting-admin__h">{r.kind === "free_demo" ? "Message from the parent" : "Visitor message"}</h3>
 						<p className="ss-meeting-admin__msg">{r.message}</p>
 					</div>
 				)}
@@ -165,18 +177,18 @@ const Detail = ({ id, onChanged, onClose }) => {
 					</div>
 					<div className="ss-meeting-admin__actions" aria-busy={busy}>
 						{open && (
-							<button type="button" className="ss-btn" disabled={busy} onClick={() => act("approve", `Approve ${r.reference} and email ${r.email} the confirmation?`)}>Approve</button>
+							<button type="button" className="ss-btn" disabled={busy} onClick={() => act("approve", `Approve ${r.reference}${r.email ? ` and email ${r.email} the confirmation` : ""}?`)}>Approve</button>
 						)}
 						{open && (
-							<button type="button" className="ss-btn ss-btn--secondary" disabled={busy} onClick={() => act("reschedule", `Propose ${form.date} ${form.time} (${r.timeZone}) to ${r.email}?`)}>Request reschedule</button>
+							<button type="button" className="ss-btn ss-btn--secondary" disabled={busy} onClick={() => act("reschedule", `Propose ${form.date} ${form.time} (${r.timeZone}) to ${r.email || r.name}?`)}>Request reschedule</button>
 						)}
 						{open && (
-							<button type="button" className="ss-btn ss-btn--danger" disabled={busy} onClick={() => act("reject", `Reject ${r.reference}? ${r.email} will be notified.`)}>Reject</button>
+							<button type="button" className="ss-btn ss-btn--danger" disabled={busy} onClick={() => act("reject", `Reject ${r.reference}?${r.email ? ` ${r.email} will be notified.` : ""}`)}>Reject</button>
 						)}
 						{r.status === "approved" && (
 							<>
-								<button type="button" className="ss-btn ss-btn--secondary" disabled={busy} onClick={() => act("reschedule", `Move ${r.reference} to ${form.date} ${form.time} (${r.timeZone}) and ask ${r.email} to accept?`)}>Request reschedule</button>
-								<button type="button" className="ss-btn ss-btn--danger" disabled={busy} onClick={() => act("cancel", `Cancel the confirmed meeting ${r.reference}? ${r.email} will be notified.`)}>Cancel meeting</button>
+								<button type="button" className="ss-btn ss-btn--secondary" disabled={busy} onClick={() => act("reschedule", `Move ${r.reference} to ${form.date} ${form.time} (${r.timeZone}) and ask ${r.email || r.name} to accept?`)}>Request reschedule</button>
+								<button type="button" className="ss-btn ss-btn--danger" disabled={busy} onClick={() => act("cancel", `Cancel the confirmed meeting ${r.reference}?${r.email ? ` ${r.email} will be notified.` : ""}`)}>Cancel meeting</button>
 							</>
 						)}
 						{r.status === "reschedule_requested" && (
@@ -261,8 +273,12 @@ const STATS = [
 	{ key: "reschedule_requested", label: "Reschedule requested", icon: "ri-calendar-event-line" },
 ];
 
-const Meetings = ({ user }) => {
+export const RequestsAdmin = ({ user, kind = "", notice = null }) => {
+	const demo = kind === "free_demo";
 	const router = useRouter();
+	const [program, setProgram] = useState("");
+	const [source, setSource] = useState("");
+	const [stats, setStats] = useState(null);
 	const [list, setList] = useState(null);
 	const [error, setError] = useState("");
 	const [status, setStatus] = useState("");
@@ -281,13 +297,14 @@ const Meetings = ({ user }) => {
 
 	const load = useCallback(async () => {
 		try {
-			const { data } = await axios.get("/api/admin/meetings", { params: { status, q: query, page, pageSize: 10 } });
+			const { data } = await axios.get("/api/admin/meetings", { params: { status, q: query, page, pageSize: 10, kind: kind || undefined, program: program || undefined, source: source || undefined } });
 			setList(data);
+			if (demo) setStats((await axios.get("/api/admin/meetings", { params: { stats: "1" } })).data);
 			setError("");
 		} catch (e) {
 			setError(msg(e));
 		}
-	}, [status, query, page]);
+	}, [status, query, page, kind, demo, program, source]);
 	useEffect(() => {
 		load();
 	}, [load]);
@@ -297,10 +314,33 @@ const Meetings = ({ user }) => {
 
 	const c = (list && list.counts) || {};
 	return (
-		<AdminLayout user={user} title="Meeting Requests" description="Review and manage booking requests from the Schedule a call form. Nothing is confirmed until you approve it.">
+		<AdminLayout user={user} title={demo ? "Free Demo Requests" : "Meeting Requests"} description={demo ? "Free demo class requests from the website buttons and popup. Nothing is confirmed until you approve it." : "Review and manage booking requests from the Schedule a call form. Nothing is confirmed until you approve it."}>
 			<Head>
-				<title>Meeting requests — SharpStudy admin</title>
+				<title>{demo ? "Free demo requests" : "Meeting requests"} — SharpStudy admin</title>
 			</Head>
+			{notice}
+			{demo && stats && (
+				<section className="ss-meeting-admin__tiles" aria-label="Free demo statistics">
+					{[["Total requests", stats.total, "ri-inbox-line"], ["Last 7 days", stats.last7Days, "ri-time-line"], ["Not yet assigned", stats.unassigned, "ri-user-unfollow-line"]].map(([label, value, icon]) => (
+						<div key={label} className="ss-meeting-admin__stat">
+							<span className="ss-meeting-admin__staticon" aria-hidden="true"><i className={icon}></i></span>
+							<div><div className="ss-meeting-admin__statvalue">{value}</div><div className="ss-meeting-admin__statlabel">{label}</div></div>
+						</div>
+					))}
+					<div className="ss-meeting-admin__stat">
+						<div>
+							<div className="ss-meeting-admin__statlabel">By program</div>
+							<ul className="ss-meeting-admin__breakdown">{Object.entries(stats.byProgram || {}).map(([k, v]) => <li key={k}>{programTitle(k)}: <strong>{v}</strong></li>)}{!Object.keys(stats.byProgram || {}).length && <li>No requests yet</li>}</ul>
+						</div>
+					</div>
+					<div className="ss-meeting-admin__stat">
+						<div>
+							<div className="ss-meeting-admin__statlabel">By source</div>
+							<ul className="ss-meeting-admin__breakdown">{Object.entries(stats.bySource || {}).map(([k, v]) => <li key={k}>{k}: <strong>{v}</strong></li>)}{!Object.keys(stats.bySource || {}).length && <li>No requests yet</li>}</ul>
+						</div>
+					</div>
+				</section>
+			)}
 			<div className="ss-meeting-admin__tiles">
 				{STATS.map((s) => (
 					<div key={s.key} className={`ss-meeting-admin__stat ss-meeting-admin__stat--${s.key}`}>
@@ -320,26 +360,40 @@ const Meetings = ({ user }) => {
 			<div className="ss-meeting-admin__filters">
 				<div className="ss-meeting-admin__search">
 					<i className="ri-search-line" aria-hidden="true"></i>
-					<input type="search" className="form-control" placeholder="Search name, email, reference or organization" aria-label="Search meeting requests" value={q} onChange={(e) => setQ(e.target.value)} />
+					<input type="search" className="form-control" placeholder={demo ? "Search parent, child, phone, email or reference" : "Search name, email, reference or organization"} aria-label={demo ? "Search free demo requests" : "Search meeting requests"} value={q} onChange={(e) => setQ(e.target.value)} />
 				</div>
 				<select className="form-select" aria-label="Filter by status" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
 					<option value="">All statuses</option>
 					{Object.entries(STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
 				</select>
+				{demo && (
+					<>
+						<select className="form-select" aria-label="Filter by program" value={program} onChange={(e) => { setProgram(e.target.value); setPage(1); }}>
+							<option value="">All programs</option>
+							{PROGRAM_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+						</select>
+						<select className="form-select" aria-label="Filter by source" value={source} onChange={(e) => { setSource(e.target.value); setPage(1); }}>
+							<option value="">All sources</option>
+							{SOURCES.map((x) => <option key={x} value={x}>{x}</option>)}
+						</select>
+					</>
+				)}
 			</div>
 
 			{error && <p className="ss-meeting__banner" role="alert">{error}</p>}
 			{selected && <Detail key={selected} id={selected} onChanged={load} onClose={() => setSelected(null)} />}
 
-			{list && list.requests.length === 0 && <EmptyState icon="ri-calendar-line" title="No meeting requests" description={status || query ? "Nothing matches these filters." : "Requests from the Schedule a call form appear here."} />}
+			{list && list.requests.length === 0 && <EmptyState icon="ri-calendar-line" title={demo ? "No free demo requests" : "No meeting requests"} description={status || query || program || source ? "Nothing matches these filters." : demo ? "Requests from the Book Free Demo buttons and popup appear here." : "Requests from the Schedule a call form appear here."} />}
 			{list && list.requests.length > 0 && (
 				<div className="ss-table-wrap ss-meeting-admin__table">
 					<table className="ss-table">
 						<thead>
 							<tr>
 								<th className="col-ref">Reference</th>
-								<th className="col-visitor">Visitor</th>
-								<th className="col-purpose">Purpose</th>
+								<th className="col-visitor">{demo ? "Parent" : "Visitor"}</th>
+								{demo ? <th className="col-purpose">Child</th> : <th className="col-purpose">Purpose</th>}
+								{demo && <th className="col-purpose">Program</th>}
+								{demo && <th className="col-purpose">Source</th>}
 								<th className="col-when">Requested</th>
 								<th className="col-status">Status</th>
 								<th className="col-action"><span className="visually-hidden">Open</span></th>
@@ -349,9 +403,11 @@ const Meetings = ({ user }) => {
 							{list.requests.map((r) => (
 								<tr key={r.id} className={selected === r.id ? "is-selected" : ""}>
 									<td className="col-ref"><span className="ss-meeting-admin__ref">{r.reference}</span></td>
-									<td className="col-visitor"><strong>{r.name}</strong><span className="ss-meeting-admin__cellsub">{r.email}</span></td>
-									<td className="col-purpose">{PURPOSE_LABEL[r.purpose] || r.purpose}</td>
-									<td className="col-when"><span className="ss-meeting-admin__nowrap">{r.requestedDate} {r.requestedTime}</span><span className="ss-meeting-admin__cellsub">{r.timeZone}</span></td>
+									<td className="col-visitor"><strong>{r.name}</strong><span className="ss-meeting-admin__cellsub">{demo ? formatPhoneDisplay(r.phone) : r.email}</span></td>
+									{demo ? <td className="col-purpose"><strong>{r.childName}</strong><span className="ss-meeting-admin__cellsub">{r.childGrade}</span></td> : <td className="col-purpose">{PURPOSE_LABEL[r.purpose] || r.purpose}</td>}
+									{demo && <td className="col-purpose">{programTitle(r.program)}</td>}
+									{demo && <td className="col-purpose"><span className="ss-meeting-admin__cellsub">{r.source || "–"}</span></td>}
+									<td className="col-when">{r.requestedAt ? <><span className="ss-meeting-admin__nowrap">{r.requestedDate} {r.requestedTime}</span><span className="ss-meeting-admin__cellsub">{r.timeZone}</span></> : <span className="ss-meeting-admin__cellsub">No preferred time</span>}</td>
 									<td className="col-status">
 										<StatusBadge status={r.status} />
 										{(r.adminEmailStatus === "failed" || r.visitorEmailStatus === "failed") && <span className="ss-badge ss-badge--danger ss-meeting-admin__mailfail" title={r.lastEmailError || "Email failed"}>Email failed</span>}
@@ -373,5 +429,8 @@ const Meetings = ({ user }) => {
 		</AdminLayout>
 	);
 };
+
+// The Meeting Requests page: every request kind, exactly as before.
+const Meetings = (props) => <RequestsAdmin {...props} />;
 
 export default Meetings;

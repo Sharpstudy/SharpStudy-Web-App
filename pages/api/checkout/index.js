@@ -1,5 +1,7 @@
 import { Enrolment, Instructor_Earning, Course, User } from "database/models";
 import Coupon from "database/models/coupon";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
 import { requireUser } from "@/lib/auth/access";
 import { getStripe } from "@/lib/payments/stripe";
 import { runCheckout, CheckoutError } from "@/lib/payments/checkout";
@@ -8,7 +10,7 @@ const repo = {
 	getUser: (id) => User.findOne({ where: { id }, attributes: ["id", "first_name", "email", "profile_photo"] }).then((u) => u && u.get({ plain: true })),
 	getCourse: (id) => Course.findOne({ where: { id } }).then((c) => c && c.get({ plain: true })),
 	isEnrolled: async (userId, courseId) => !!(await Enrolment.findOne({ where: { userId, courseId }, attributes: ["id"] })),
-	getCoupon: (code) => Coupon.findOne({ where: { code } }).then((c) => c && c.get({ plain: true })),
+	getCoupon: (code) => Coupon.findOne({ where: ciEquals(connection, "code", code) }).then((c) => c && c.get({ plain: true })),
 	createEnrolment: (row) => Enrolment.create(row),
 	createEarning: (row) => Instructor_Earning.create(row),
 };

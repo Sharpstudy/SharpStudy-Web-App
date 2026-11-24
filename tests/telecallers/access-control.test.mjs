@@ -110,14 +110,14 @@ test("the instructor and student navigation are unchanged; the admin sidebar gai
 	// Phase 3 adds ONE gated entry: the telecaller dashboard link, shown only when the server found an ACTIVE telecaller profile.
 	const links = read("components/_App/accountLinks.js");
 	assert.match(links, /telecallerAccess === "active" && role !== "admin"/);
-	assert.deepEqual([...links.matchAll(/^.*telecaller.*$/gim)].map((m) => m[0].trim()).filter((l) => !l.startsWith("//") && !/^telecaller: \{ href/.test(l) && !/telecallerAccess/.test(l) && !/user\.telecaller_access\)\.filter/.test(l) && !/isTelecallerOnly/.test(l)), [], "no other telecaller reference in the navigation");
+	assert.deepEqual([...links.matchAll(/^.*telecaller.*$/gim)].map((m) => m[0].trim()).filter((l) => !l.startsWith("//") && !/^telecaller: \{ href/.test(l) && !/telecallerAccess/.test(l) && !/user\.telecaller_access\)\.filter/.test(l) && !/isTelecallerOnly/.test(l) && !/isTelecallerRestricted/.test(l) && !/^telecallerApplication: { href/.test(l)), [], "no other telecaller reference in the navigation");
 	assert.doesNotMatch(read("components/Learning/StudentLayout.js"), /telecaller/i);
 	// the page gate: /admin stays admin-only; the only telecaller rule is the /telecaller screen (admin or ACTIVE telecaller)
 	const gate = read("lib/auth/pageAccess.js");
 	assert.match(gate, /under\(p, "\/admin"\)\) return user && user\.role === "admin" \? null : "\/"/);
-	assert.match(gate, /under\(p, "\/telecaller"\)\) return user && \(user\.role === "admin" \|\| user\.telecaller_access === "active"\)/);
+	assert.match(gate, /under\(p, "\/telecaller"\)\) \{\s*if \(user && \(user\.role === "admin" \|\| user\.telecaller_access === "active"\)\) return null;/);
 	const nav = read("components/_App/AdminSideNav.js");
-	for (const label of ["Dashboard", "Courses", "Books", "Instructors", "Students", "Partners", "Testimonials", "Categories", "Coupons", "Meeting requests", "Mastery Ladder"]) assert.match(nav, new RegExp(`label: "${label}"`), label);
+	for (const label of ["Dashboard", "Courses", "Instructors", "Students", "Partners", "Testimonials", "Categories", "Coupons", "Meeting requests", "Mastery Ladder"]) assert.match(nav, new RegExp(`label: "${label}"`), label);
 	assert.match(nav, /label: "Telecallers"/);
 	for (const [href, label] of [["/admin/telecallers/applications/", "Applications"], ["/admin/telecallers/approved/", "Approved Telecallers"], ["/admin/telecallers/rejected/", "Rejected Applications"], ["/admin/telecallers/activity/", "Activity & Call History"]]) {
 		assert.match(nav, new RegExp(`href: "${href}", label: "${label}"`), label);

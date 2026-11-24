@@ -136,7 +136,7 @@ const ROOT = new URL("../../", import.meta.url);
 const read = (p) => fs.readFileSync(new URL(p, ROOT), "utf8");
 
 test("sign-in, actor resolution, profile and every service use accountIsActive", () => {
-	assert.match(read("pages/api/users/signin.js"), /if \(!accountIsActive\(user\)\)/);
+	assert.match(read("lib/auth/signinGuard.js"), /if \(!accountIsActive\(user\)\)/);
 	assert.match(read("lib/mastery-server/http.js"), /if \(!accountIsActive\(user\)\) return null;/);
 	assert.match(read("lib/auth/requireRole.js"), /getAccountActor\(req\)/);
 	assert.match(read("pages/api/users/update.js"), /accountIsActive\(user\)/);

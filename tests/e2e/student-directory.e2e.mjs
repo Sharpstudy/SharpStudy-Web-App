@@ -20,8 +20,21 @@ if (!/localhost|127\.0\.0\.1/.test(BASE)) throw new Error("E2E only runs against
 const db = await mysql.createConnection({ host: process.env.DB_HOSTNAME, port: process.env.DB_PORT, user: process.env.DB_USERNAME, password: process.env.DB_PASSWORD, database: process.env.DB_NAME_DEVELOPMENT, timezone: "Z" }); // the app stores UTC
 const [users] = await db.query("SELECT id, role, email FROM users WHERE status = 1 OR status IS NULL ORDER BY created_at");
 const instructors = users.filter((u) => u.role === "instructor");
-const students = users.filter((u) => u.role === "student");
-assert.ok(instructors.length >= 2 && students.length >= 4, "need two instructors and four students in the dev DB");
+// Students: ONLY dedicated test accounts (e2e.<name>@example.test, first name "E2E"), and only ones that carry no learner profile in any form
+// (owned, guardian-linked or student-linked). Real students are never used: their profiles and progress are real data, so the "nobody is
+// shown with invented progress" assertions cannot hold for them and the test must not enrol them anywhere.
+const [profileLinks] = await db.query(
+	"SELECT owner_user_id AS uid FROM ml_learners UNION SELECT user_id FROM ml_learner_guardians UNION SELECT student_user_id FROM ml_learners WHERE student_user_id IS NOT NULL"
+);
+const linked = new Set(profileLinks.map((r) => r.uid));
+const [testAccounts] = await db.query("SELECT id FROM users WHERE first_name = 'E2E' AND email LIKE 'e2e.%@example.test'");
+const isTestAccount = new Set(testAccounts.map((r) => r.id));
+const students = users.filter((u) => u.role === "student" && isTestAccount.has(u.id) && !linked.has(u.id));
+if (instructors.length < 2 || students.length < 4) {
+	console.log(`student-directory e2e: SKIPPED - needs two instructors and four dedicated test students without learner profiles (found ${instructors.length} instructors, ${students.length} test students)`);
+	await db.end();
+	process.exit(0);
+}
 const [teacher, other] = instructors;
 const [s1, s2, s3, s4] = students;
 const tok = (u) => jwt.sign({ userId: u.id, role: u.role, email: u.email }, process.env.JWT_SECRET, { expiresIn: "15m" });

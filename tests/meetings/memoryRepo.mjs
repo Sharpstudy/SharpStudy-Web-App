@@ -1,4 +1,5 @@
 // In-memory repository with the same semantics as lib/meetings/repo.js.
+import { samePhone, phoneMatchesSearch } from "../../lib/freeDemo/phoneKey.js";
 import { randomUUID } from "node:crypto";
 
 // opts.overlapDelayMs widens the gap between "check for overlap" and "write approved" to expose races;
@@ -28,6 +29,12 @@ export function createMeetingRepo(opts = {}) {
 		async countByEmailSince(email, since) {
 			return db.requests.filter((r) => r.email === email && r.created_at >= since).length;
 		},
+		async findOpenDemoTwin(phone, childName, program) {
+			return clone(db.requests.find((r) => r.kind === "free_demo" && samePhone(r.phone, phone) && r.program === program && r.status === "pending" && String(r.child_name).toLowerCase() === String(childName).toLowerCase()));
+		},
+		async countByPhoneSince(phone, since) {
+			return db.requests.filter((r) => r.kind === "free_demo" && samePhone(r.phone, phone) && r.created_at >= since).length;
+		},
 		async findByReference(ref) {
 			return clone(db.requests.find((r) => r.reference === ref));
 		},
@@ -40,15 +47,20 @@ export function createMeetingRepo(opts = {}) {
 		async listEvents(id) {
 			return db.events.filter((e) => e.meeting_request_id === id).map(clone);
 		},
-		async list({ q, status, page, pageSize }) {
-			let rows = db.requests.filter((r) => (!status || r.status === status) && (!q || [r.name, r.email, r.reference, r.organization || ""].some((v) => v.toLowerCase().includes(q.toLowerCase()))));
+		async list({ q, status, page, pageSize, kind, program, source }) {
+			let rows = db.requests.filter((r) => (!kind || (r.kind || "meeting") === kind) && (!program || r.program === program) && (!source || r.source === source) && (!status || r.status === status) && (!q || [r.name, r.email, r.reference, r.organization, r.phone, r.child_name].some((v) => String(v || "").toLowerCase().includes(q.toLowerCase())) || phoneMatchesSearch(r.phone, q)));
 			rows = rows.sort((a, b) => b.created_at - a.created_at);
 			return { rows: rows.slice((page - 1) * pageSize, page * pageSize).map(clone), total: rows.length };
 		},
-		async countsByStatus() {
+		async countsByStatus(kind) {
 			const out = {};
-			for (const r of db.requests) out[r.status] = (out[r.status] || 0) + 1;
+			for (const r of db.requests) if (!kind || (r.kind || "meeting") === kind) out[r.status] = (out[r.status] || 0) + 1;
 			return out;
+		},
+		async demoStats() {
+			const demo = db.requests.filter((r) => r.kind === "free_demo");
+			const group = (k) => demo.reduce((o, r) => ((o[r[k] || "unknown"] = (o[r[k] || "unknown"] || 0) + 1), o), {});
+			return { total: demo.length, last7Days: demo.filter((r) => r.created_at >= new Date(Date.now() - 7 * 86400000)).length, unassigned: demo.filter((r) => !["rejected", "cancelled"].includes(r.status)).length, byStatus: group("status"), byProgram: group("program"), bySource: group("source") };
 		},
 		async updateIfCurrent(id, version, from, patch) {
 			const r = db.requests.find((x) => x.id === id);

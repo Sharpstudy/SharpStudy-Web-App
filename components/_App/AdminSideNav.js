@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 const items = [
 	{ href: "/admin/", match: "/admin", exact: true, label: "Dashboard", icon: "ri-dashboard-line" },
 	{ href: "/admin/courses/", match: "/admin/courses", label: "Courses", icon: "ri-book-2-line" },
-	{ href: "/admin/books/", match: "/admin/books", label: "Books", icon: "ri-book-open-line" },
 	{ href: "/admin/instructor/", match: "/admin/instructor", label: "Instructors", icon: "ri-slideshow-2-line" },
 	// An expandable group: the sub-links show while the admin is anywhere inside /admin/telecallers.
 	{
@@ -26,6 +25,7 @@ const items = [
 	{ href: "/admin/categories/", match: "/admin/categories", label: "Categories", icon: "ri-folder-2-line" },
 	{ href: "/admin/coupons/", match: "/admin/coupons", label: "Coupons", icon: "ri-coupon-3-line" },
 	{ href: "/admin/meetings/", match: "/admin/meetings", label: "Meeting requests", icon: "ri-calendar-check-line" },
+	{ href: "/admin/free-demo/", match: "/admin/free-demo", label: "Free Demo Requests", icon: "ri-calendar-event-line" },
 	{ href: "/admin/mastery/", match: "/admin/mastery", label: "Mastery Ladder", icon: "ri-bar-chart-line" },
 ];
 

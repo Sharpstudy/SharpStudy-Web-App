@@ -1,7 +1,18 @@
 const path = require("path");
+
+// MySQL is the default path. A PostgreSQL environment (--env postgres_development / postgres_production) uses its own
+// migrations folder; the MySQL migration history is never touched.
+const argv = process.argv;
+let envName = process.env.NODE_ENV || "development";
+for (let i = 0; i < argv.length; i++) {
+	if (argv[i] === "--env" && argv[i + 1]) envName = argv[i + 1];
+	else if (argv[i].startsWith("--env=")) envName = argv[i].slice("--env=".length);
+}
+const postgres = envName.startsWith("postgres");
+
 module.exports = {
 	config: path.resolve("database/config", "config.mjs"),
 	"models-path": path.resolve("database", "models"),
 	"seeders-path": path.resolve("database", "seeders"),
-	"migrations-path": path.resolve("database", "migrations"),
+	"migrations-path": path.resolve("database", postgres ? "migrations-pg" : "migrations"),
 };

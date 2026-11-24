@@ -1,10 +1,15 @@
 import { Category, Course, User, Enrolment } from "database/models";
+import connection from "@/database/connection";
+import { ciEquals } from "@/lib/db/dialect";
+import { requireUser } from "@/lib/auth/access";
 
+// Course catalogue data: a signed-in account only (401 without a valid login, 403 for a role outside student / instructor / admin).
 export default async function handler(req, res) {
+	if (!(await requireUser(req, res))) return;
 	const { slug } = req.query;
 	try {
 		const courses = await Category.findOne({
-			where: { slug: slug },
+			where: ciEquals(connection, "slug", slug, Category),
 			include: [
 				{
 					model: Course,

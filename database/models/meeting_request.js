@@ -20,15 +20,15 @@ MeetingRequest.init(
 		manage_token_hash: { type: DataTypes.CHAR(64), allowNull: false },
 		submission_key: DataTypes.STRING(64),
 		name: { type: DataTypes.STRING(120), allowNull: false },
-		email: { type: DataTypes.STRING(200), allowNull: false },
+		email: DataTypes.STRING(200), // optional for a free-demo request
 		phone: { type: DataTypes.STRING(40), allowNull: false },
 		organization: DataTypes.STRING(160),
 		purpose: { type: DataTypes.ENUM("product_demo", "course_inquiry", "partnership", "technical_support", "other"), allowNull: false },
 		message: DataTypes.TEXT,
-		requested_date: { type: DataTypes.DATEONLY, allowNull: false },
-		requested_time: { type: DataTypes.CHAR(5), allowNull: false },
+		requested_date: DataTypes.DATEONLY, // requested_date / requested_time / requested_at: optional for a free-demo request
+		requested_time: DataTypes.CHAR(5),
 		time_zone: { type: DataTypes.STRING(64), allowNull: false },
-		requested_at: { type: DataTypes.DATE, allowNull: false },
+		requested_at: DataTypes.DATE,
 		status: { type: DataTypes.ENUM("pending", "approved", "rejected", "reschedule_requested", "cancelled"), defaultValue: "pending" },
 		duration_minutes: { type: DataTypes.INTEGER, defaultValue: 30 },
 		confirmed_start: DataTypes.DATE,
@@ -42,6 +42,14 @@ MeetingRequest.init(
 		admin_email_status: { type: DataTypes.ENUM("pending", "sent", "failed", "skipped"), defaultValue: "pending" },
 		visitor_email_status: { type: DataTypes.ENUM("pending", "sent", "failed", "skipped"), defaultValue: "pending" },
 		last_email_error: DataTypes.STRING(300),
+		// Free Demo Class requests (migration 20261123...-meeting-requests-free-demo): kind is "meeting" (default) or "free_demo".
+		kind: { type: DataTypes.STRING(16), allowNull: false, defaultValue: "meeting" },
+		child_name: DataTypes.STRING(120),
+		child_grade: DataTypes.STRING(40),
+		program: DataTypes.STRING(40),
+		source: DataTypes.STRING(40),
+		source_page: DataTypes.STRING(160),
+		class_mode: DataTypes.STRING(16),
 	},
 	opts("MeetingRequest", "meeting_requests")
 );

@@ -4,24 +4,24 @@
 // rail at 700px and a sidebar at 1100px, the child screens switch layout at 760px.
 
 .fm-root {
-	--fm-blue: #2e47c8;
-	--fm-blue-dark: #21338c;
-	--fm-blue-soft: #eef0fb;
-	--fm-blue-line: #919ee1;
+	--fm-blue: #26235f;
+	--fm-blue-dark: #1b1947;
+	--fm-blue-soft: #f1f0fb;
+	--fm-blue-line: #a9a6d6;
 	--fm-cream: #fff5dc;
 	--fm-cream-line: #ead9ae;
 	--fm-sky: #8ec5fe;
-	--fm-yellow: #ffc83d;
+	--fm-yellow: #ffb52e;
 	--fm-yellow-dark: #d6a211;
 	--fm-mint: #7ed6b0;
 	--fm-salmon: #fdb6a1;
 	--fm-lav: #cbb7fe;
 	--fm-pink: #fdd1e6;
-	--fm-ink: #181b36;
+	--fm-ink: #26235f;
 	--fm-text: #4b4f6e;
 	--fm-muted: #62668a;
 	--fm-line: #d6daea;
-	--fm-bg: #f5f6fa;
+	--fm-bg: #fbf7ee;
 	--fm-card: #fff;
 	--fm-danger: #b3261e;
 	--fm-danger-line: #efb4ae;
@@ -682,7 +682,7 @@
 			width: 70%;
 			height: 70%;
 			border-radius: 12px;
-			background: linear-gradient(90deg, #eef0fb, #f7f8fd, #eef0fb);
+			background: linear-gradient(90deg, #f1f0fb, #f7f8fd, #f1f0fb);
 			background-size: 200% 100%;
 			animation: fm-shimmer 1.2s linear infinite;
 		}
@@ -1408,7 +1408,7 @@
 		.fm-auth__chip {
 			padding: 5px 12px;
 			border-radius: 999px;
-			background: #21338c;
+			background: #1b1947;
 			font-size: 14px;
 			font-weight: 700;
 		}
@@ -1441,7 +1441,7 @@
 					width: 36px;
 					height: 36px;
 					border-radius: 50%;
-					background: #21338c;
+					background: #1b1947;
 					font-weight: 800;
 				}
 			}

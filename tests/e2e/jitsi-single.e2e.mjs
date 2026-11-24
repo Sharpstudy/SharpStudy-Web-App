@@ -30,7 +30,7 @@ const [[cat]] = await db.query("SELECT id FROM categories LIMIT 1");
 const tag = `zz-e2e-jitsi-${Date.now()}`;
 const courseId = randomUUID();
 await db.query("INSERT INTO courses (id, title, slug, userId, catId, approved, is_class, latest_price, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 1, 1, 0, NOW(), NOW())", [courseId, tag, tag, teacher.id, cat.id]);
-await db.query("INSERT INTO enrolments (id, userId, courseId, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())", [randomUUID(), student.id, courseId]);
+await db.query("INSERT INTO enrolments (id, userId, courseId, status, created_at, updated_at) VALUES (?, ?, ?, 'paid', NOW(), NOW())", [randomUUID(), student.id, courseId]);
 const token = (u) => jwt.sign({ userId: u.id, role: u.role, email: u.email, first_name: "Test" }, process.env.JWT_SECRET, { expiresIn: "10m" });
 
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), "ss-chrome-"));

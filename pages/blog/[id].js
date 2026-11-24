@@ -1,12 +1,15 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Head from "next/head";
 import { DiscussionEmbed } from "disqus-react";
 import Navbar from "@/components/_App/Navbar";
 import Footer from "@/components/_App/Footer";
 import PageBanner from "@/components/Common/PageBanner";
 import { EmptyState, Button } from "@/components/ui";
+import DemoBand from "@/components/FreeDemo/DemoBand";
 import { blogData } from "@/utils/sampleData";
+import { relatedPosts } from "@/lib/blog/helpers";
 
 // Article layout. Content still comes from utils/sampleData.js; the Disqus comments embed is unchanged.
 const SingleBlog = ({ user }) => {
@@ -26,9 +29,16 @@ const SingleBlog = ({ user }) => {
     );
   }
 
-  const more = blogData.filter((b) => b.id !== blog.id).slice(0, 3);
+  // Related: same category first, then the newest others.
+  const more = relatedPosts(blogData, blog, 3);
   return (
     <>
+      <Head>
+        <title>{`${blog.title} | SharpStudy Blog`}</title>
+        <meta name="description" content={blog.description.slice(0, 160)} />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={blog.description.slice(0, 160)} />
+      </Head>
       <Navbar user={user} />
       <main>
         <PageBanner pageTitle={blog.title} homePageUrl="/blog/blogs/" homePageText="Blog" activePageText={blog.title} />
@@ -39,7 +49,7 @@ const SingleBlog = ({ user }) => {
               <img className="ss-article__cover" src={blog.image} alt="" onError={(e) => { e.currentTarget.style.display = "none"; }} />
               <div className="ss-article__meta">
                 <span className="ss-badge ss-badge--soft">{blog.category}</span>
-                <span className="ss-muted">{blog.date}</span>
+                <span className="ss-muted">{blog.author ? `${blog.author} · ` : ""}{blog.date}</span>
               </div>
               <h2>{blog.title}</h2>
               <p>{blog.description}</p>
@@ -55,7 +65,7 @@ const SingleBlog = ({ user }) => {
               }}
             />
 
-            <h2 className="ss-sectiontitle">More to read</h2>
+            <h2 className="ss-sectiontitle">Related articles</h2>
             <div className="ss-grid ss-grid--cards">
               {more.map((item) => (
                 <article className="ss-course-card" key={item.id}>
@@ -76,6 +86,7 @@ const SingleBlog = ({ user }) => {
             </div>
           </div>
         </section>
+        <DemoBand source="blog_cta" title="Enjoyed this article?" text="Book a free demo class and see how SharpStudy learning works." />
       </main>
       <Footer />
     </>

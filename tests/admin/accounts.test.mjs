@@ -135,9 +135,13 @@ test("requireRole rejects missing tokens (401), non-admins (403) and inactive ac
 	assert.match(rr, /res\.status\(403\)/);
 });
 
-test("sign-in refuses inactive accounts before checking the password", () => {
-	const src = read("pages/api/users/signin.js");
-	assert.ok(src.indexOf("!accountIsActive(user)") > -1 && src.indexOf("!accountIsActive(user)") < src.indexOf("bcrypt.compare"));
+test("sign-in never issues a token for an inactive account; it is only reported after the correct password (so it cannot be used to find accounts)", () => {
+	const guard = read("lib/auth/signinGuard.js");
+	assert.ok(guard.indexOf("!accountIsActive(user)") > guard.indexOf("deps.compare(password, user.password)"), "reported after the password is proven");
+	assert.match(guard, /throw new AuthError\(403, "account_disabled"/);
+	// the endpoint only mints a token from what authenticate() returned
+	const api = read("pages/api/users/signin.js");
+	assert.ok(api.indexOf("signSession(user)") > api.indexOf("await authenticate("));
 });
 
 test("an open session of a deactivated user is ended by the profile endpoint", () => {

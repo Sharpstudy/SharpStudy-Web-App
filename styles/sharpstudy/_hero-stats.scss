@@ -1,0 +1,76 @@
+@use "tokens" as *;
+
+// Hero background video (only rendered when lib/site/heroMedia.js configures one) and the four achievement statistics.
+
+.ss-app .ss-hero--video {
+	min-height: clamp(440px, 62vh, 640px);
+	display: flex;
+	align-items: center;
+	&::before, &::after { display: none; }
+	.ss-hero__grid { grid-template-columns: 1fr; position: relative; z-index: 2; }
+	.ss-hero__copy { max-width: 760px; }
+}
+.ss-hero__media {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	overflow: hidden;
+	background: var(--ss-primary);
+	.ss-hero__poster, .ss-hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+	// Dark indigo overlay: keeps the headline, lead text and buttons readable over any footage.
+	.ss-hero__shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(38, 35, 95, 0.9) 0%, rgba(38, 35, 95, 0.7) 55%, rgba(38, 35, 95, 0.45) 100%); }
+}
+.ss-hero__pause {
+	position: absolute;
+	right: 16px;
+	bottom: 16px;
+	z-index: 3;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.9);
+	color: var(--ss-primary);
+	font-size: 22px;
+	cursor: pointer;
+}
+
+.ss-stats-wrap { position: relative; z-index: 3; margin-top: -48px; padding-bottom: var(--ss-space-8); }
+.ss-stats {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--ss-space-4);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	@include up($bp-lg) { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--ss-space-6); }
+}
+.ss-stats__note { margin: var(--ss-space-3) 0 0; text-align: center; font-size: var(--ss-fs-xs); color: var(--ss-muted); }
+.ss-stat {
+	--_c: var(--ss-orange);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 6px;
+	padding: var(--ss-space-6) var(--ss-space-4);
+	background: #fff;
+	border-radius: var(--ss-radius-lg);
+	border-bottom: 8px solid var(--_c);
+	box-shadow: var(--ss-shadow-md);
+	&--sky { --_c: var(--ss-sky-btn); }
+	&--green { --_c: var(--ss-green); }
+	&--pink { --_c: var(--ss-pink); }
+	&__value { font: 800 clamp(2rem, 1.3rem + 3vw, 3.25rem) / 1 var(--ss-font-display); color: var(--ss-primary); }
+	&__label { font-weight: 800; font-size: var(--ss-fs-sm); color: var(--ss-muted); max-width: 20ch; }
+}
+// Restrained reveal: armed only after the page has loaded (so nothing is hidden before JavaScript runs) and never with reduced motion.
+.ss-stats.is-armed .ss-stat { opacity: 0; transform: translateY(18px); }
+.ss-stats.is-armed.is-seen .ss-stat {
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.6s var(--ss-ease), transform 0.6s var(--ss-spring);
+	transition-delay: calc(var(--i) * 90ms);
+}

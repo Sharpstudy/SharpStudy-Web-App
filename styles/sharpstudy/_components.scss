@@ -362,6 +362,9 @@
 
 /* ---------- Tables ---------- */
 .ss-table-wrap {
+	// position: relative makes the wrapper the containing block of absolutely positioned content inside the table (visually-hidden
+	// .ss-sr-only labels). Without it those labels sit at their far-right static position OUTSIDE the clipped box and widen the page.
+	position: relative;
 	width: 100%;
 	overflow-x: auto;
 	border: 1px solid var(--ss-border);

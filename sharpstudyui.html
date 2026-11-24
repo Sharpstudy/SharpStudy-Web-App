@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#26235F">
+<title>SharpStudy – Project Based Learning | Workshops | Skills</title>
+<meta name="description" content="SharpStudy makes youth into world class tech and business leaders through project based learning, interning and problem solving.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* =====================================================================
+   SHARPSTUDY · LEAP WAVES
+   Palette from the "LeapWaters" reference: deep indigo, sunny orange,
+   sky blue, leaf green, buttery yellow and candy pink on a warm cream.
+   Edit the variables once; the whole page follows.
+   ===================================================================== */
+:root{
+  --indigo:#26235F;       /* hero, footer, headings, text on colour */
+  --indigo-2:#35317F;     /* raised indigo surfaces                 */
+  --orange:#F5A000;       /* course card 1, accents                 */
+  --orange-2:#FFB52E;     /* primary button                         */
+  --sky:#1FAEEB;          /* secondary button                       */
+  --blue:#3B8FF3;         /* course card 2                          */
+  --green:#7CC242;        /* course card 3                          */
+  --sun:#FBE19A;          /* wave band, title underline             */
+  --sun-soft:#FDF0C4;
+  --pink:#F9AFC8;         /* call-to-action band                    */
+  --pink-soft:#FDDDE8;
+  --sky-soft:#D7ECFC;
+  --green-soft:#E1F3D2;
+  --cream:#FBF7EE;        /* alternate background                   */
+  --muted:#55537D;        /* body text                              */
+  --head:'Baloo 2','Nunito',system-ui,sans-serif;
+  --body:'Nunito',system-ui,sans-serif;
+  --spring:cubic-bezier(.34,1.56,.64,1);
+  --shadow:0 22px 40px -24px rgba(38,35,95,.5);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{margin:0;font-family:var(--body);color:var(--muted);background:#fff;font-size:17px;line-height:1.65;font-weight:600;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--head);color:var(--indigo);margin:0;font-weight:800;line-height:1.1}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+ul{list-style:none;margin:0;padding:0}
+svg{max-width:100%}
+.container{width:min(1200px,100% - 48px);margin-inline:auto;position:relative}
+:focus-visible{outline:3px dashed var(--indigo);outline-offset:4px}
+.on-dark :focus-visible{outline-color:var(--orange-2)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--orange-2);color:var(--indigo);padding:10px 16px;border-radius:12px;font-weight:800;z-index:200}
+.skip:focus{left:8px}
+
+/* ---------- section shell with wavy top edge ---------- */
+.sec{position:relative;padding:170px 0 110px;background:var(--bg,#fff);overflow:hidden}
+.wv{position:absolute;left:0;top:-1px;width:100%;height:84px;overflow:hidden;color:var(--prev,#fff);pointer-events:none;z-index:1}
+.wv svg{position:absolute;left:0;top:0;width:200%;height:100%;animation:waveMove 22s linear infinite}
+.wv svg.b{opacity:.45;animation-duration:15s;animation-direction:reverse;height:112%}
+@keyframes waveMove{to{transform:translateX(-50%)}}
+.title{display:inline-block;font:800 clamp(30px,3.6vw,46px)/1.15 var(--head);color:var(--indigo);padding:0 12px;background:linear-gradient(transparent 62%,var(--sun) 62% 94%,transparent 94%)}
+.head-c{text-align:center;margin-bottom:54px;position:relative;z-index:2}
+.head-c p{max-width:560px;margin:14px auto 0}
+
+/* ---------- buttons ---------- */
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;min-height:54px;padding:0 30px;border-radius:999px;border:0;cursor:pointer;font:800 15px/1 var(--body);letter-spacing:.05em;text-transform:uppercase;background:var(--orange-2);color:var(--indigo);outline:2px dashed rgba(38,35,95,.5);outline-offset:-6px;transition:transform .35s var(--spring),box-shadow .3s,background .3s}
+.btn:hover{transform:translateY(-4px) rotate(-1.5deg) scale(1.04);box-shadow:0 14px 0 -6px rgba(38,35,95,.25)}
+.btn:active{transform:scale(.96)}
+.btn-sky{background:var(--sky)}
+.btn-white{background:#fff}
+.btn-indigo{background:var(--indigo);color:#fff;outline-color:rgba(255,255,255,.55)}
+.btn-sm{min-height:44px;padding:0 22px;font-size:13px}
+.btn svg{flex:none;transition:transform .35s var(--spring)}
+.btn:hover svg{transform:translateX(4px) scale(1.15)}
+.confetti{position:fixed;width:10px;height:10px;border-radius:3px;pointer-events:none;z-index:500;animation:burst .9s cubic-bezier(.2,.8,.3,1) forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+
+/* ---------- header ---------- */
+.header{position:sticky;top:0;z-index:100;background:#fff;transition:box-shadow .3s}
+.header.scrolled{box-shadow:0 14px 30px -20px rgba(38,35,95,.55)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:80px}
+.logo{display:inline-flex;align-items:center;gap:10px}
+.logo b{font:800 26px/1 var(--head);color:var(--indigo)}
+.logo svg{transition:transform .5s var(--spring)}
+.logo:hover svg{transform:rotate(-12deg) scale(1.12)}
+.nav{display:flex;align-items:center;gap:4px}
+.nav a{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;font:800 13px/1 var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--indigo);transition:background .25s,transform .3s var(--spring)}
+.nav a:hover{background:var(--sun-soft);transform:translateY(-2px)}
+.nav a.active{background:var(--orange-2)}
+.burger{display:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--sun-soft);color:var(--indigo);cursor:pointer;place-items:center}
+@media (max-width:980px){
+  .nav{position:absolute;left:0;right:0;top:80px;flex-direction:column;align-items:stretch;padding:14px 24px 24px;background:#fff;box-shadow:0 24px 30px -20px rgba(38,35,95,.5);display:none}
+  .nav.open{display:flex;animation:drop .3s ease}
+  .burger{display:grid}
+  .head-cta{display:none}
+}
+@keyframes drop{from{opacity:0;transform:translateY(-10px)}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:var(--indigo);color:#fff;overflow:hidden;padding:96px 0 150px;text-align:center}
+.sq{position:absolute;border-radius:22%;background:rgba(255,255,255,.07);animation:drift var(--t,16s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+.sq.c1{background:var(--orange-2);opacity:.9}.sq.c2{background:var(--sky);opacity:.9}.sq.c3{background:var(--green);opacity:.9}.sq.c4{background:var(--pink);opacity:.9}
+@keyframes drift{0%,100%{transform:translate(0,0) rotate(var(--r0,0deg))}50%{transform:translate(var(--dx,18px),-26px) rotate(calc(var(--r0,0deg) + 24deg))}}
+.hero .container{z-index:2}
+.hero h1{color:#fff;font-size:clamp(40px,6vw,84px);line-height:1.02;letter-spacing:-.01em}
+.hero h1 .w{display:inline-block;animation:wordPop .9s var(--spring) both;animation-delay:calc(var(--i,0) * .09s + .1s)}
+.hero h1 .o{color:var(--orange-2);display:block;margin-top:6px}
+@keyframes wordPop{from{opacity:0;transform:translateY(46px) scale(.7) rotate(-4deg)}}
+.hero p.lead{max-width:640px;margin:26px auto 36px;font-size:19px;color:rgba(255,255,255,.9);font-weight:600}
+.rise{animation:rise .9s var(--spring) both;animation-delay:var(--d,.7s)}
+@keyframes rise{from{opacity:0;transform:translateY(30px)}}
+.hero-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+.plane{position:absolute;right:8%;top:70px;width:70px;animation:fly 9s ease-in-out infinite;z-index:1}
+@keyframes fly{0%,100%{transform:translate(0,0) rotate(-6deg)}50%{transform:translate(-40px,22px) rotate(8deg)}}
+.doodle{fill:none;stroke:#fff;stroke-opacity:.5;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.dd{fill:none;stroke:var(--indigo);stroke-opacity:.4;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- courses ---------- */
+.tabs{display:inline-flex;flex-wrap:wrap;justify-content:center;max-width:100%;gap:6px;padding:8px;border-radius:999px;background:#fff;box-shadow:0 12px 30px -18px rgba(38,35,95,.5);margin-top:24px}
+.tabbtn{border:0;background:transparent;cursor:pointer;min-height:42px;padding:0 20px;border-radius:999px;font:800 13px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);transition:background .25s,color .25s,transform .3s var(--spring)}
+.tabbtn:hover{transform:translateY(-2px);color:var(--indigo)}
+.tabbtn[aria-pressed="true"]{background:var(--orange-2);color:var(--indigo)}
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;position:relative;z-index:2}
+.course{position:relative;border-radius:24px;background:var(--c);padding:0 0 22px;transition:transform .45s var(--spring);height:100%;display:flex;flex-direction:column;color:var(--indigo)}
+.course::after{content:"";position:absolute;left:40px;bottom:-13px;width:48px;height:15px;background:var(--c);border-radius:0 0 14px 14px}
+.course:hover{transform:translateY(-12px) rotate(-1deg)}
+.course:nth-child(2):hover{transform:translateY(-12px) rotate(1deg)}
+.course.popin{animation:popin .6s var(--spring)}
+@keyframes popin{from{opacity:0;transform:scale(.8)}}
+.thumb{position:relative;height:210px;border-radius:24px 24px 0 0;overflow:hidden;background:var(--indigo);display:grid;place-items:center}
+.thumb .g{position:relative;font:800 58px/1 var(--head);transition:transform .6s var(--spring)}
+.course:hover .thumb .g{transform:scale(1.15) rotate(-4deg)}
+.thumb i{position:absolute;border-radius:24%;animation:drift 12s ease-in-out infinite}
+.go{position:absolute;right:16px;bottom:16px;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--indigo);display:grid;place-items:center;transition:transform .5s var(--spring)}
+.course:hover .go{transform:rotate(-45deg) scale(1.1)}
+.cbody{padding:22px 24px 0;display:flex;flex-direction:column;gap:6px;flex:1}
+.cbody h3{font-size:27px}
+.chip{align-self:flex-start;background:#fff;color:var(--indigo);font:800 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;padding:7px 12px;border-radius:999px}
+.price{font:800 22px/1.2 var(--head);color:var(--indigo)}
+.price s{font:700 16px var(--body);opacity:.8;margin-left:8px}
+.by{font-size:15px;color:var(--indigo);font-weight:700}
+.cbtn{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:16px}
+.cbtn .btn{background:#fff}
+.blocks{position:absolute;right:max(3%,20px);bottom:70px;display:grid;grid-template-columns:repeat(2,58px);gap:6px;z-index:3;animation:bob 5s ease-in-out infinite}
+.blk{width:58px;height:58px;border-radius:12px;display:grid;place-items:center;font:800 26px var(--head);color:var(--indigo);box-shadow:inset -5px -5px 0 rgba(0,0,0,.12),inset 4px 4px 0 rgba(255,255,255,.35)}
+.blk:first-child{grid-column:1 / span 2;justify-self:center;transform:rotate(-8deg)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ---------- how it works / features ---------- */
+.features-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;z-index:2}
+.fcard{position:relative;background:#fff;border-radius:22px;padding:30px 24px 28px;outline:3px dashed var(--fc,var(--sky));outline-offset:-10px;transition:transform .45s var(--spring);text-align:left}
+.fcard:hover{transform:translateY(-10px) rotate(-1.5deg)}
+.fcard .ic{width:60px;height:60px;border-radius:50%;background:var(--fc);color:var(--indigo);display:grid;place-items:center;margin-bottom:18px;transition:transform .5s var(--spring)}
+.fcard:hover .ic{transform:rotate(360deg) scale(1.1)}
+.fcard h3{font-size:22px;margin-bottom:8px}
+.fcard p{font-size:15.5px;line-height:1.55}
+.cloud{position:absolute;z-index:1;animation:cloud var(--t,22s) ease-in-out infinite alternate}
+@keyframes cloud{to{transform:translateX(var(--dx,60px))}}
+
+/* ---------- approach ---------- */
+.approach-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;position:relative;z-index:2}
+.approach-grid p.in{margin:20px 0 26px;max-width:540px}
+.checks{display:flex;flex-direction:column;gap:12px;margin-bottom:34px}
+.checks li{display:flex;align-items:center;gap:14px;font:800 18px/1.3 var(--body);color:var(--indigo)}
+.checks .ck{flex:none;width:32px;height:32px;border-radius:50%;background:var(--green);display:grid;place-items:center;transition:transform .4s var(--spring)}
+.checks li:hover .ck{transform:scale(1.25) rotate(-10deg)}
+.photo{position:relative;width:min(440px,100%);aspect-ratio:1;margin-inline:auto}
+.blob{position:absolute;inset:6%;background:var(--indigo);overflow:hidden;border-radius:58% 42% 52% 48%/52% 46% 54% 48%;animation:morph 11s ease-in-out infinite}
+@keyframes morph{0%,100%{border-radius:58% 42% 52% 48%/52% 46% 54% 48%}33%{border-radius:44% 56% 42% 58%/58% 42% 58% 42%}66%{border-radius:52% 48% 60% 40%/44% 58% 42% 56%}}
+.blob svg{position:absolute;inset:0;width:100%;height:100%}
+.ph{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);background:#fff;color:var(--indigo);font:800 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:999px;outline:2px dashed var(--indigo);outline-offset:-5px;white-space:nowrap}
+.dot{position:absolute;border-radius:50%;animation:bob 4s ease-in-out infinite}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:84px;position:relative;z-index:2}
+.skill{position:relative;border-radius:22px;padding:28px 24px;background:var(--c);color:var(--indigo);transition:transform .45s var(--spring)}
+.skill::after{content:"";position:absolute;left:30px;bottom:-12px;width:42px;height:14px;background:var(--c);border-radius:0 0 12px 12px}
+.skill:hover{transform:translateY(-10px) rotate(1.5deg)}
+.skill .ic{width:54px;height:54px;border-radius:16px;background:#fff;display:grid;place-items:center;margin-bottom:16px}
+.skill h3{font-size:24px;margin-bottom:6px}
+.skill p{font-size:15px;line-height:1.5;color:var(--indigo)}
+
+/* ---------- stories ---------- */
+.stories-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;position:relative;z-index:2}
+.bubble{position:relative;border-radius:26px;padding:40px 36px;background:var(--c);color:var(--indigo);transition:transform .45s var(--spring)}
+.bubble::after{content:"";position:absolute;left:44px;bottom:-13px;width:48px;height:15px;background:var(--c);border-radius:0 0 14px 14px}
+.bubble:hover{transform:translateY(-8px) rotate(-1deg)}
+.bubble blockquote{margin:0;font:700 clamp(24px,2.4vw,32px)/1.25 var(--head)}
+.bubble .q{display:block;font:700 90px/.7 Georgia,'Times New Roman',serif;height:44px;opacity:.55}
+.who{display:flex;align-items:center;gap:14px;margin:30px 0 0 36px}
+.who i{width:56px;height:56px;border-radius:50%;background:var(--indigo);color:#fff;display:grid;place-items:center;font:800 17px var(--body);font-style:normal;border:4px solid #fff;box-shadow:var(--shadow)}
+.who strong{display:block;font:800 17px var(--body);color:var(--indigo)}
+.who span{font-size:14px}
+.doodle-abs{position:absolute;z-index:1;animation:bob 6s ease-in-out infinite}
+
+/* ---------- instructors ---------- */
+.instr-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:2}
+.instr-grid p.in{margin:20px 0 32px;max-width:520px}
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ben{position:relative;border-radius:22px;padding:26px 22px 24px;background:var(--c);color:var(--indigo);transition:transform .45s var(--spring)}
+.ben::after{content:"";position:absolute;left:26px;bottom:-11px;width:38px;height:13px;background:var(--c);border-radius:0 0 11px 11px}
+.ben:hover{transform:translateY(-8px) rotate(-2deg)}
+.ben .ic{width:48px;height:48px;border-radius:50%;background:#fff;display:grid;place-items:center;margin-bottom:14px;transition:transform .5s var(--spring)}
+.ben:hover .ic{transform:scale(1.2) rotate(-12deg)}
+.ben h3{font-size:20px}
+
+/* ---------- call-to-action ---------- */
+.cta{text-align:center;padding:170px 0 120px}
+.cta h2{font-size:clamp(34px,4.6vw,60px);margin-bottom:12px}
+.cta p{font:800 clamp(20px,2.2vw,28px)/1.3 var(--head);color:var(--indigo);margin-bottom:30px}
+.cta p a{text-decoration:underline;text-decoration-style:wavy;text-underline-offset:6px}
+
+/* ---------- business ---------- */
+.biz-card{position:relative;overflow:hidden;background:var(--indigo);border-radius:34px;padding:68px 60px;display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center;color:rgba(255,255,255,.9)}
+.biz-card h2{color:#fff;font-size:clamp(30px,3.6vw,48px)}
+.biz-card p{margin:20px 0 32px;max-width:540px;font-size:18px}
+.biz-art{position:relative;height:300px}
+.biz-art .o{position:absolute;display:grid;place-items:center;border-radius:28%;color:var(--indigo);animation:bob 6s ease-in-out infinite}
+
+/* ---------- footer ---------- */
+.footer{background:var(--indigo);color:rgba(255,255,255,.88);padding:170px 0 0;position:relative;overflow:hidden}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1.3fr;gap:56px}
+.foot-grid h4{color:#fff;font-size:22px;margin-bottom:18px;position:relative;display:inline-block}
+.foot-grid h4::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:5px;border-radius:3px;background:var(--orange-2);opacity:.9;z-index:-1}
+.foot-grid a,.foot-grid p{display:block;padding:5px 0;font-size:16px}
+.foot-grid a{transition:color .2s,transform .3s var(--spring)}
+.foot-grid a:hover{color:var(--orange-2);transform:translateX(6px)}
+.foot-grid a.logo{display:inline-flex;padding:0;transform:none}
+.ci{display:flex;align-items:flex-start;gap:14px;padding:6px 0}
+.ci i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--indigo);font-style:normal}
+.ci a,.ci p{padding:0;display:block;font-size:16px}
+.copy{margin-top:56px;padding:26px 0;border-top:2px dashed rgba(255,255,255,.2);text-align:center;font-size:14.5px}
+.totop{position:fixed;right:22px;bottom:22px;z-index:150;width:56px;height:56px;border-radius:50%;border:0;background:var(--orange-2);color:var(--indigo);display:grid;place-items:center;cursor:pointer;box-shadow:0 14px 24px -10px rgba(38,35,95,.6);outline:2px dashed rgba(38,35,95,.5);outline-offset:-6px;opacity:0;transform:translateY(30px) scale(.6);pointer-events:none;transition:opacity .3s,transform .5s var(--spring)}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{transform:translateY(-6px) scale(1.08)}
+
+/* ---------- reveal ---------- */
+.js [data-reveal]{opacity:0;transform:translateY(46px) scale(.95);transition:opacity .7s ease,transform .9s var(--spring);transition-delay:var(--d,0s)}
+.js [data-reveal="left"]{transform:translateX(-60px)}
+.js [data-reveal="right"]{transform:translateX(60px)}
+.js [data-reveal].in{opacity:1;transform:none}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .sec{padding:140px 0 90px}
+  .courses-grid,.features-grid{grid-template-columns:1fr 1fr}
+  .approach-grid,.instr-grid,.stories-grid,.biz-card{grid-template-columns:1fr}
+  .skills{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .biz-card{padding:48px 28px}
+  .biz-art{height:240px}
+  .blocks{display:none}
+}
+@media (max-width:640px){
+  .courses-grid,.features-grid,.skills,.benefits,.foot-grid{grid-template-columns:1fr}
+  .hero{padding:70px 0 120px}
+  .hero-cta .btn{width:100%;justify-content:center}
+  .plane{display:none}
+  .doodle-abs{display:none}
+  .tabs{border-radius:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .js [data-reveal]{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- doodle symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="d-pencil" viewBox="0 0 64 64"><path d="M12 52l4-14L42 12l10 10-26 26zM38 16l10 10M16 38l10 10M12 52l14-4"/></symbol>
+  <symbol id="d-bulb" viewBox="0 0 64 64"><path d="M32 8a16 16 0 0 0-8 30v6h16v-6A16 16 0 0 0 32 8zM26 50h12M28 56h8M32 0v3M10 14l3 3M54 14l-3 3"/></symbol>
+  <symbol id="d-plane" viewBox="0 0 64 64"><path d="M6 30L58 8 44 56 30 38zM30 38l28-30M30 38v14l8-8"/></symbol>
+  <symbol id="d-star" viewBox="0 0 64 64"><path d="M32 6l7 17 18 2-14 12 5 18-16-10-16 10 5-18L7 25l18-2z"/></symbol>
+  <symbol id="d-rocket" viewBox="0 0 64 64"><path d="M32 6c10 8 14 20 10 34H22C18 26 22 14 32 6zM22 40l-8 8 4-14M42 40l8 8-4-14M28 44l4 12 4-12"/><circle cx="32" cy="26" r="4"/></symbol>
+  <symbol id="d-ruler" viewBox="0 0 64 64"><path d="M8 40L40 8l16 16L24 56zM18 38l6 6M26 30l6 6M34 22l6 6"/></symbol>
+  <symbol id="d-cloud" viewBox="0 0 120 60"><path d="M26 52a20 20 0 0 1-2-40 24 24 0 0 1 44-6 22 22 0 0 1 32 18 17 17 0 0 1 4 28z"/></symbol>
+</svg>
+
+<!-- ================= HEADER ================= -->
+<header class="header" id="header">
+  <div class="container nav-wrap">
+    <a class="logo" href="#top" aria-label="SharpStudy home">
+      <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" rx="13" fill="#26235F"/><path d="M8 18c5-5 8 5 13 0s8 5 13 0" stroke="#FFB52E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M8 26c5-5 8 5 13 0s8 5 13 0" stroke="#1FAEEB" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M8 34c5-5 8 5 13 0s8 5 13 0" stroke="#7CC242" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+      <b>SharpStudy</b>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a class="active" href="#top">Home</a>
+      <a href="#courses">Courses</a>
+      <a href="#features">Features</a>
+      <a href="#approach">Approach</a>
+      <a href="#stories">Students</a>
+      <a href="#instructors">Instructors</a>
+      <a href="#business">Business</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a class="btn btn-sm head-cta" href="#contact">Schedule a call</a>
+      <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero on-dark" id="top">
+  <span class="sq" style="left:6%;top:14%;width:92px;height:92px;--t:18s;--r0:-12deg"></span>
+  <span class="sq" style="left:24%;top:60%;width:64px;height:64px;--t:14s;--dl:-3s;--r0:10deg"></span>
+  <span class="sq" style="left:12%;top:76%;width:40px;height:40px;--t:20s;--dl:-6s"></span>
+  <span class="sq" style="right:7%;top:22%;width:110px;height:110px;--t:19s;--dl:-2s;--r0:14deg"></span>
+  <span class="sq" style="right:22%;top:68%;width:70px;height:70px;--t:15s;--dl:-8s"></span>
+  <span class="sq" style="left:44%;top:8%;width:36px;height:36px;--t:13s;--dl:-4s"></span>
+  <span class="sq c1" style="left:16%;top:34%;width:20px;height:20px;--t:9s"></span>
+  <span class="sq c2" style="right:14%;top:50%;width:22px;height:22px;--t:11s;--dl:-2s"></span>
+  <span class="sq c3" style="left:33%;top:82%;width:18px;height:18px;--t:10s;--dl:-5s"></span>
+  <span class="sq c4" style="right:34%;top:16%;width:18px;height:18px;--t:12s;--dl:-7s"></span>
+  <svg class="plane doodle" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-plane"/></svg>
+
+  <div class="container">
+    <h1>
+      <span class="w" style="--i:0">Creating</span> <span class="w" style="--i:1">Leaders</span> <span class="w" style="--i:2">and</span> <span class="w" style="--i:3">Visionaries</span>
+      <span class="o"><span class="w" style="--i:4">of</span> <span class="w" style="--i:5">Tomorrow</span></span>
+    </h1>
+    <p class="lead rise" style="--d:.8s">Making the world future-ready by imparting critical cognitive, technical and business skills to the next generation of leaders.</p>
+    <div class="hero-cta rise" style="--d:1s">
+      <a class="btn" href="#contact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#26235F"/><path d="M10 8l6 4-6 4z" fill="#FFB52E"/></svg>Schedule a call</a>
+      <a class="btn btn-sky" href="#approach"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#26235F"/><path d="M8 12h8M13 8l4 4-4 4" stroke="#1FAEEB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Find out how</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COURSES ================= -->
+<section class="sec" id="courses" style="--bg:#fff;--prev:#26235F;padding-top:150px">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="doodle-abs dd" style="left:3%;top:200px;width:64px" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-ruler"/></svg>
+
+  <div class="container">
+    <div class="head-c" data-reveal="up">
+      <h2 class="title">Explore Our Courses</h2>
+      <p>Expand your career opportunity with our popular courses.</p>
+      <div class="tabs" role="group" aria-label="Filter courses">
+        <button class="tabbtn" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="tabbtn" type="button" data-filter="math" aria-pressed="false">Mathematics</button>
+        <button class="tabbtn" type="button" data-filter="physics" aria-pressed="false">Physics</button>
+        <button class="tabbtn" type="button" data-filter="speaking" aria-pressed="false">Public Speaking</button>
+        <button class="tabbtn" type="button" data-filter="personality" aria-pressed="false">Personality Development</button>
+        <button class="tabbtn" type="button" data-filter="leadership" aria-pressed="false">Leadership</button>
+        <button class="tabbtn" type="button" data-filter="explorers" aria-pressed="false">Math Explorers</button>
+      </div>
+    </div>
+
+    <div class="courses-grid" id="courseGrid">
+      <div data-reveal="up" style="--d:.05s" data-cat="math">
+        <article class="course" style="--c:var(--orange)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;right:-30px;top:-34px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;left:24px;bottom:26px;background:var(--orange-2);--t:9s"></i>
+            <span class="g" style="color:var(--orange-2)" aria-hidden="true">x² + y</span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Mathematics</span>
+            <h3>Algebra Fundamentals</h3>
+            <p class="price">$49.99 <s>$79.99</s></p>
+            <p class="by">By Isaac Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.18s" data-cat="physics">
+        <article class="course" style="--c:var(--blue)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;left:-34px;top:-30px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;right:30px;top:26px;background:var(--sky);--t:10s"></i>
+            <span class="g" style="color:var(--sky)" aria-hidden="true">F = ma</span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Physics</span>
+            <h3>Physics 101: Mechanics</h3>
+            <p class="price">$54.99 <s>$89.99</s></p>
+            <p class="by">By Isabella Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.31s" data-cat="speaking">
+        <article class="course" style="--c:var(--pink)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;left:-34px;bottom:-40px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;right:30px;top:26px;background:var(--pink);--t:10s"></i>
+            <span class="g" style="color:var(--pink)" aria-hidden="true"><svg style="display:block" width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg></span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Public Speaking</span>
+            <h3>Communication Skills</h3>
+            <p class="price">$54.99 <s>$89.99</s></p>
+            <p class="by">By Isabella Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.05s" data-cat="personality">
+        <article class="course" style="--c:var(--sky)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;right:-34px;top:-30px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;left:26px;bottom:26px;background:var(--sky);--t:9s"></i>
+            <span class="g" style="color:var(--sky)" aria-hidden="true"><svg style="display:block" width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Personality Development</span>
+            <h3>Confidence &amp; Personality Building</h3>
+            <p class="price">$39.99 <s>$64.99</s></p>
+            <p class="by">By Ivy Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.18s" data-cat="leadership">
+        <article class="course" style="--c:var(--green)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;right:-34px;bottom:-40px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;left:28px;top:26px;background:var(--green);--t:10s"></i>
+            <span class="g" style="color:var(--green)" aria-hidden="true"><svg style="display:block" width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 5h11l-2.5 4L17 13H6"/></svg></span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Leadership</span>
+            <h3>Leadership &amp; Teamwork</h3>
+            <p class="price">$44.99 <s>$74.99</s></p>
+            <p class="by">By Liam Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.31s" data-cat="explorers">
+        <article class="course" style="--c:var(--orange-2)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;left:-34px;top:-30px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:46px;height:46px;right:30px;top:26px;background:var(--orange-2);--t:10s"></i>
+            <span class="g" style="color:var(--orange-2)" aria-hidden="true"><svg style="display:block" width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg></span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">Math Explorers</span>
+            <h3>Math Explorers: Puzzles &amp; Patterns</h3>
+            <p class="price">$34.99 <s>$59.99</s></p>
+            <p class="by">By Maya Instructor</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Enroll</a><a class="btn btn-sm" href="#courses">Explore</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div data-reveal="up" style="--d:.18s" data-cat="*">
+        <article class="course" style="--c:var(--green)">
+          <div class="thumb">
+            <i style="width:120px;height:120px;right:-30px;bottom:-40px;background:rgba(255,255,255,.08)"></i>
+            <i style="width:40px;height:40px;left:30px;top:30px;background:var(--green);--t:11s"></i>
+            <span class="g" style="color:var(--green);font-size:46px;text-align:center" aria-hidden="true">+ more</span>
+            <span class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="chip">All courses</span>
+            <h3>Find the course that fits your goals</h3>
+            <p class="by">Browse every course, taught by instructors from around the world.</p>
+            <div class="cbtn"><a class="btn btn-sm" href="#courses">Browse courses</a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="blocks" aria-hidden="true">
+    <span class="blk" style="background:var(--pink)">π</span>
+    <span class="blk" style="background:var(--orange-2)">x²</span>
+    <span class="blk" style="background:var(--sky)">∑</span>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section class="sec" id="features" style="--bg:var(--sun);--prev:#fff">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="cloud" style="left:4%;top:150px;width:120px;--dx:50px" viewBox="0 0 120 60" aria-hidden="true"><use href="#d-cloud" fill="#fff"/></svg>
+  <svg class="cloud" style="right:5%;top:130px;width:150px;--dx:-60px;--t:26s" viewBox="0 0 120 60" aria-hidden="true"><use href="#d-cloud" fill="#fff"/></svg>
+
+  <div class="container">
+    <div class="head-c" data-reveal="up">
+      <h2 class="title" style="background:linear-gradient(transparent 62%,#fff 62% 94%,transparent 94%)">Why You Should Choose SharpStudy</h2>
+    </div>
+    <div class="features-grid">
+      <div data-reveal="up" style="--d:.05s">
+        <article class="fcard" style="--fc:var(--sky)">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg></div>
+          <h3>Project Based Learning</h3>
+          <p>Experience immersive education where real-world challenges inspire innovation and hands-on learning.</p>
+        </article>
+      </div>
+      <div data-reveal="up" style="--d:.15s">
+        <article class="fcard" style="--fc:var(--pink)">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></div>
+          <h3>Adaptive Learning</h3>
+          <p>Tailored learning roadmaps designed to align with each student's unique capabilities and educational background.</p>
+        </article>
+      </div>
+      <div data-reveal="up" style="--d:.25s">
+        <article class="fcard" style="--fc:var(--orange-2)">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></div>
+          <h3>Microlearning</h3>
+          <p>Engaging, concise training modules designed to captivate learners with ongoing micro lessons.</p>
+        </article>
+      </div>
+      <div data-reveal="up" style="--d:.35s">
+        <article class="fcard" style="--fc:var(--green)">
+          <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 01-8 0V4zM8 6H5a3 3 0 003 4M16 6h3a3 3 0 01-3 4M12 13v4M8 20h8M10 17h4"/></svg></div>
+          <h3>Gamify learning</h3>
+          <p>Use leaderboards and contests to motivate learners, enhance team building, and drive performance!</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APPROACH ================= -->
+<section class="sec" id="approach" style="--bg:var(--cream);--prev:var(--sun)">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="doodle-abs dd" style="left:2%;top:260px;width:70px;animation-delay:-2s" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-pencil"/></svg>
+
+  <div class="container">
+    <div class="approach-grid">
+      <div data-reveal="left">
+        <h2 class="title" style="padding-left:0">Our approach</h2>
+        <h3 style="font-size:clamp(26px,2.8vw,36px);margin-top:20px">SharpStudy makes youth into world class tech &amp; business leaders</h3>
+        <p class="in">Students team up to learn and apply tech, communication and presentation skills, and to create businesses in real time, using advanced and practical learning methods.</p>
+        <ul class="checks">
+          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>Project based learning</li>
+          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>Interning</li>
+          <li><span class="ck"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>Problem solving</li>
+        </ul>
+        <a class="btn" href="#contact">Schedule a call</a>
+      </div>
+      <div class="photo" data-reveal="right">
+        <div class="blob">
+          <svg viewBox="0 0 440 440" aria-hidden="true"><circle cx="220" cy="190" r="74" fill="#FBE19A"/><path d="M70 440c0-104 68-164 150-164s150 60 150 164z" fill="#35317F"/></svg>
+          <span class="ph">Students photo</span>
+        </div>
+        <span class="dot" style="width:46px;height:46px;right:2%;top:12%;background:var(--orange-2)"></span>
+        <span class="dot" style="width:30px;height:30px;left:2%;bottom:24%;background:var(--sky);animation-delay:-1.5s"></span>
+        <span class="dot" style="width:22px;height:22px;right:20%;bottom:2%;background:var(--pink);animation-delay:-2.5s"></span>
+      </div>
+    </div>
+
+    <div class="skills">
+      <div data-reveal="up" style="--d:.05s"><article class="skill" style="--c:var(--orange-2)">
+        <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></div>
+        <h3>Tech</h3><p>Design, build and ship real projects while learning the technical foundations.</p>
+      </article></div>
+      <div data-reveal="up" style="--d:.15s"><article class="skill" style="--c:var(--sky)">
+        <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/></svg></div>
+        <h3>Communication</h3><p>Clear writing and confident speaking, practiced inside team projects.</p>
+      </article></div>
+      <div data-reveal="up" style="--d:.25s"><article class="skill" style="--c:var(--green)">
+        <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18M5 4v11h14V4M12 15v5M8 20h8"/></svg></div>
+        <h3>Presentation</h3><p>Every project ends with a pitch: structure ideas and tell the story.</p>
+      </article></div>
+      <div data-reveal="up" style="--d:.35s"><article class="skill" style="--c:var(--pink)">
+        <div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg></div>
+        <h3>Business</h3><p>Create real businesses in real time, from first idea to first customer.</p>
+      </article></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STORIES ================= -->
+<section class="sec" id="stories" style="--bg:#fff;--prev:var(--cream)">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="doodle-abs dd" style="left:3%;top:210px;width:60px" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-plane"/></svg>
+  <svg class="doodle-abs dd" style="right:4%;top:200px;width:56px;animation-delay:-3s" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-bulb"/></svg>
+  <div class="container">
+    <div class="head-c" data-reveal="up">
+      <h2 class="title">Our Students Are Our Strength</h2>
+      <p>See what they say about us.</p>
+    </div>
+    <div class="stories-grid">
+      <div data-reveal="up" style="--d:.05s">
+        <figure style="margin:0">
+          <div class="bubble" style="--c:var(--orange-2)"><span class="q" aria-hidden="true">“</span><blockquote>SharpStudy helped me finally understand algebra!</blockquote></div>
+          <figcaption class="who"><i>SS</i><span><strong>Sam Student</strong><span>College Freshman</span></span></figcaption>
+        </figure>
+      </div>
+      <div data-reveal="up" style="--d:.2s">
+        <figure style="margin:0">
+          <div class="bubble" style="--c:var(--sky)"><span class="q" aria-hidden="true">“</span><blockquote>The physics course made mechanics click for me.</blockquote></div>
+          <figcaption class="who"><i>SS</i><span><strong>Sara Student</strong><span>High School Senior</span></span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INSTRUCTORS ================= -->
+<section class="sec" id="instructors" style="--bg:var(--cream);--prev:#fff">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="doodle-abs dd" style="right:3%;top:190px;width:64px" viewBox="0 0 64 64" aria-hidden="true"><use href="#d-rocket"/></svg>
+  <div class="container">
+    <div class="instr-grid">
+      <div data-reveal="left">
+        <h2 class="title" style="padding-left:0;font-size:clamp(28px,3.2vw,42px)">Become An Instructor Today And Start Teaching</h2>
+        <p class="in">Instructors from around the world teach millions of students on SharpStudy. We provide the tools and skills to teach what you love. And you can also achieve your goal with us.</p>
+        <a class="btn" href="#instructors">Become An Instructor<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="benefits" data-reveal="right">
+        <div class="ben" style="--c:var(--pink-soft)"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.8 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.3l1.1-6.2L3 9.7l6.2-.9z"/></svg></div><h3>Expert Instruction</h3></div>
+        <div class="ben" style="--c:var(--sky-soft)"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h3>Remote Learning</h3></div>
+        <div class="ben" style="--c:var(--sun-soft)"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18.4 6.6a7 7 0 1 0 0 10.8M12 8v4l3 2M20 4v4h-4"/></svg></div><h3>Lifetime Access</h3></div>
+        <div class="ben" style="--c:var(--green-soft)"><div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M12 9c0-4 3-6 7-6 0 4-2 6-7 6zM12 13c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg></div><h3>Self Development</h3></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="sec cta" id="cta" style="--bg:var(--pink);--prev:var(--cream)">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <svg class="cloud" style="left:7%;top:200px;width:150px;--dx:60px" viewBox="0 0 120 60" aria-hidden="true"><use href="#d-cloud" fill="#fff"/></svg>
+  <svg class="cloud" style="right:8%;top:170px;width:120px;--dx:-50px;--t:25s" viewBox="0 0 120 60" aria-hidden="true"><use href="#d-cloud" fill="#fff"/></svg>
+  <div class="container" data-reveal="up">
+    <h2>Ready to sharpen your future?</h2>
+    <p>Call us <a href="tel:+16047670944">1-604-767-0944</a> or</p>
+    <a class="btn btn-white" href="#contact">Schedule a call</a>
+  </div>
+</section>
+
+<!-- ================= BUSINESS ================= -->
+<section class="sec" id="business" style="--bg:#fff;--prev:var(--pink);padding-bottom:130px">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <div class="container">
+    <div class="biz-card on-dark" data-reveal="up">
+      <span class="sq" style="left:-30px;top:-30px;width:120px;height:120px;--t:18s"></span>
+      <span class="sq" style="right:30%;bottom:-40px;width:90px;height:90px;--t:15s;--dl:-4s"></span>
+      <div style="position:relative">
+        <h2>Empower and upskill your employees with our corporate training workshops</h2>
+        <p>Elevate your team's performance with our dynamic corporate training workshops. Tailored to enhance skills and boost confidence, our program equips employees to tackle modern technical and business challenges efficiently.</p>
+        <a class="btn" href="#contact">Get SharpStudy Business</a>
+      </div>
+      <div class="biz-art" aria-hidden="true">
+        <div class="o" style="left:4%;top:50px;width:170px;height:170px;background:var(--orange-2)"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></svg></div>
+        <div class="o" style="left:50%;top:0;width:120px;height:120px;background:var(--sky);animation-delay:-2s"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"/></svg></div>
+        <div class="o" style="left:46%;top:150px;width:130px;height:130px;background:var(--green);animation-delay:-4s"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#26235F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></div>
+        <div class="o" style="left:0;bottom:0;width:70px;height:70px;background:var(--pink);animation-delay:-3s"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer on-dark" id="contact" style="--prev:#fff">
+  <div class="wv" aria-hidden="true">
+    <svg class="b" viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+    <svg viewBox="0 0 2400 90" preserveAspectRatio="none"><path fill="currentColor" d="M0 0V44C150 4 450 4 600 44S1050 84 1200 44S1650 4 1800 44S2250 84 2400 44V0Z"/></svg>
+  </div>
+  <span class="sq" style="right:6%;top:150px;width:80px;height:80px;--t:17s"></span>
+  <span class="sq" style="left:40%;bottom:60px;width:50px;height:50px;--t:14s;--dl:-3s"></span>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#top" aria-label="SharpStudy home" style="margin-bottom:18px">
+          <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" rx="13" fill="#fff"/><path d="M8 18c5-5 8 5 13 0s8 5 13 0" stroke="#F5A000" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M8 26c5-5 8 5 13 0s8 5 13 0" stroke="#1FAEEB" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M8 34c5-5 8 5 13 0s8 5 13 0" stroke="#7CC242" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+          <b style="color:#fff">SharpStudy</b>
+        </a>
+        <p style="max-width:360px">SharpStudy Learning Inc. is a project based cognitive skills development company which uses advanced pedagogy for practical and enhanced learning.</p>
+      </div>
+      <div>
+        <h4>Important Links</h4>
+        <a href="#courses">Courses</a>
+        <a href="#approach">About Us</a>
+        <a href="#terms">Terms &amp; Conditions</a>
+        <a href="#help">Help Center</a>
+        <a href="#help">Get Help</a>
+        <a href="#privacy">Privacy Policy</a>
+      </div>
+      <div>
+        <h4>Contact Us</h4>
+        <div class="ci"><i style="background:var(--orange-2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></i><a href="tel:+16047670944">1-604-767-0944</a></div>
+        <div class="ci"><i style="background:var(--sky)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></i><a href="mailto:hello@sharpstudy.io">hello@sharpstudy.io</a></div>
+        <div class="ci"><i style="background:var(--green)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.800-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></i><p>151 West Hasting St, Vancouver, B.C. V3C 4L8 Canada</p></div>
+      </div>
+    </div>
+    <div class="copy">© SharpStudy 2026 is proudly owned by Hypervers Solutions Inc.</div>
+  </div>
+</footer>
+
+<button class="totop" id="totop" type="button" aria-label="Back to top"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* header shadow + back to top */
+  var header = $('#header'), totop = $('#totop');
+  function onScroll(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    header.classList.toggle('scrolled', y > 8);
+    totop.classList.toggle('show', y > 700);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  totop.addEventListener('click', function(){ window.scrollTo({top:0, behavior: reduce ? 'auto' : 'smooth'}); });
+
+  /* mobile menu */
+  var burger = $('#burger'), nav = $('#nav');
+  burger.addEventListener('click', function(){
+    var o = nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', o ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function(e){
+    if(e.target.tagName === 'A'){ nav.classList.remove('open'); burger.setAttribute('aria-expanded','false'); }
+  });
+
+  /* scroll reveal */
+  var items = $$('[data-reveal]');
+  if(reduce || !('IntersectionObserver' in window)){
+    items.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {threshold:.12, rootMargin:'0px 0px -5% 0px'});
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  /* active nav link */
+  var links = $$('.nav a');
+  if('IntersectionObserver' in window){
+    var so = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id); });
+        }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px'});
+    links.forEach(function(l){ var t = $(l.getAttribute('href')); if(t) so.observe(t); });
+  }
+
+  /* course filter */
+  var tabs = $$('.tabbtn'), cards = $$('#courseGrid > div');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      var f = t.getAttribute('data-filter');
+      tabs.forEach(function(x){ x.setAttribute('aria-pressed', x === t ? 'true' : 'false'); });
+      cards.forEach(function(c){
+        var cat = c.getAttribute('data-cat');
+        var show = f === 'all' || cat === f || cat === '*';
+        c.hidden = !show;
+        c.classList.add('in');
+        var art = c.firstElementChild;
+        if(show && art){ art.classList.remove('popin'); void art.offsetWidth; art.classList.add('popin'); }
+      });
+    });
+  });
+
+  /* confetti burst on button click */
+  if(!reduce){
+    var colors = ['#FFB52E','#1FAEEB','#7CC242','#F9AFC8','#FBE19A','#3B8FF3'];
+    document.addEventListener('click', function(e){
+      var b = e.target.closest('.btn');
+      if(!b) return;
+      var r = b.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2;
+      for(var i = 0; i < 14; i++){
+        var s = document.createElement('span');
+        s.className = 'confetti';
+        var a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 70;
+        s.style.left = cx + 'px'; s.style.top = cy + 'px';
+        s.style.background = colors[i % colors.length];
+        s.style.setProperty('--x', Math.cos(a) * d + 'px');
+        s.style.setProperty('--y', Math.sin(a) * d - 30 + 'px');
+        s.style.setProperty('--r', (Math.random() * 360) + 'deg');
+        document.body.appendChild(s);
+        setTimeout(function(el){ el.remove(); }, 950, s);
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>

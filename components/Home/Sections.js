@@ -43,8 +43,8 @@ export const Categories = ({ categories }) => {
 const steps = [
 	{
 		icon: "ri-compass-3-line",
-		title: "Choose a course",
-		text: "Explore the catalogue by subject and pick a course or workshop that fits your goals.",
+		title: "Choose a program",
+		text: "Explore the four programs and pick the one that fits your goals.",
 	},
 	{
 		icon: "ri-play-circle-line",
@@ -205,11 +205,11 @@ export const FinalCta = ({ user }) => (
 			<div className="ss-cta">
 				<div>
 					<h2>Ready to start learning?</h2>
-					<p>Pick a course today and learn at your own pace, on any device.</p>
+					<p>Explore our programs and learn at your own pace, on any device.</p>
 				</div>
 				<div className="ss-cta__actions">
-					<Button href="/courses/" variant="light" size="lg">
-						Browse courses
+					<Button href="/programs/" variant="light" size="lg">
+						Explore programs
 					</Button>
 					{!user && (
 						<Button href="/auth" size="lg" className="ss-btn--outline-light">
